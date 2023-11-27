@@ -23,9 +23,9 @@ def submit():
 #def send_request(prompt):
     #response = client.Completion.create(
      #   model="text-davinci-003",  # Replace with your desired model
-        prompt=prompt,
-        temperature=0.7,
-        max_tokens=150
+        #prompt=prompt,
+        #temperature=0.7,
+        #max_tokens=150
     #)
     #return response
 
