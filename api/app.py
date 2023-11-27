@@ -21,11 +21,15 @@ def send_request(mood):
             #prompt=f"ONLY generate values for valency, danceability, and energy based on the mood: {mood}",
             model='gpt-3.5-turbo',
             messages=[
-                {'role': 'user', 'content': 'Hello!'}
+                {'role': 'system', 'content': 'You are a helpful assistant.'},
+                {'role': 'user',
+                 'content': f'I am feeling {mood}. Can you suggest music characteristics like valency, danceability, and energy that would suit my mood?'}
             ],
             max_tokens=60
         )
-        return response.choices[0].text.strip()
+        last_message = response.choices[0].message.content
+        return last_message
+        #return response.choices[0].text.strip()
     except Exception as e:
         return f"Error: {e}"
 
