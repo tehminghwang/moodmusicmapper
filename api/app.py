@@ -7,7 +7,7 @@ app = Flask(__name__)
 client = OpenAI(
     # defaults to os.environ.get("OPENAI_API_KEY")
     #api_key=os.environ.get("OPENAI_API_KEY")
-    api_key= "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"
+    api_key= "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"
 )
 
 @app.route("/")
