@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request
-from openai import OpenAI
+import openai
+import os
+import requests
 app = Flask(__name__)
 
-client = OpenAI(
-  organization='org-1gHuUe4SMTUG6aFFAeNWgMrd',
-)
-client.models.list()
+openai.api_key = os.environ.get("OPENAI_API_KEY")
+client = openai.Client()
 
 @app.route("/")
 def hello_world():
@@ -20,19 +20,12 @@ def submit():
 
 
 def send_request(prompt):
-    api_key = "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"  # Replace with your OpenAI API key
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json"
-    }
-    payload = {
-        "model": "gpt-3.5-turbo",
-        "messages": [{"role": "user", "content": "Say this is a test!"}],
-        "temperature": 0.7
-        "max_tokens": 150
-        #"model": "gpt-4.0-turbo",  # or another model version
-        #"prompt": prompt,
-    }
-    response = requests.post("https://api.openai.com/v1/engines/gpt-4.0-turbo/completions", json=payload, headers=headers)
-    return response.json()
+    response = client.Completion.create(
+        model="text-davinci-003",  # Replace with your desired model
+        prompt=prompt,
+        temperature=0.7,
+        max_tokens=150
+    )
+    return response
+
 
