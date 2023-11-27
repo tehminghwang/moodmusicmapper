@@ -22,7 +22,7 @@ def send_request(mood):
             messages=[
                 {'role': 'system', 'content': 'You are a helpful assistant.'},
                 {'role': 'user',
-                 'content': f'I am feeling {mood}. Can you suggest music characteristics like valency, danceability, and energy that would suit my mood?'}
+                 'content': f'I am feeling {mood}. Can you suggest music characteristics like valency (value from 0.0 to 1.0 with 1.0 being more positive (e.g. happy, cheerful, euphoric)), danceability (value of 0.0 is least danceable and 1.0 is most danceable based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity), and energy (from 0.0 to 1.0 and represents a perceptual measure of intensity and activity) that would suit my mood, and describe my mood in 1 word? Reply only with three values and a word.'}
             ],
             max_tokens=60
         )
