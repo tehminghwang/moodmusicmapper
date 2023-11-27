@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request
-import openai
-import os
+#import openai
+#import os
 import requests
 app = Flask(__name__)
 
-openai.api_key = os.environ.get("OPENAI_API_KEY")
-client = openai.Client()
+#openai.api_key = os.environ.get("OPENAI_API_KEY")
+#client = openai.Client()
 
 @app.route("/")
 def hello_world():
