@@ -14,7 +14,8 @@ def hello_world():
 
 @app.route("/submit", methods=["POST"])
 def submit():
-    input_mood = "ONLY generate values for valency, danceability and enegery based on the mood: " + request.form.get("mood")
+    input_mood = request.form.get("mood")
+    #input_mood = "ONLY generate values for valency, danceability and enegery based on the mood: " + request.form.get("mood")
     #reply = send_request(input_mood)
     #return render_template("mood.html", mood=reply)
     return render_template("mood.html", mood=input_mood)
