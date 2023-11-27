@@ -1,10 +1,13 @@
 from flask import Flask, render_template, request
-import openai
+from openai import OpenAI
 import os
 app = Flask(__name__)
 
-openai.api_key = os.environ.get("OPENAI_API_KEY")
-#client = openai.Client()
+
+client = OpenAI(
+    # defaults to os.environ.get("OPENAI_API_KEY")
+    api_key=os.environ.get("OPENAI_API_KEY")
+)
 
 @app.route("/")
 def hello_world():
@@ -12,8 +15,8 @@ def hello_world():
 
 def send_request(mood):
     try:
-        response = openai.Completion.create(
-            engine="text-davinci-004",
+        response = client.chat.completions.create(
+            engine="gpt-4",
             prompt=f"ONLY generate values for valency, danceability, and energy based on the mood: {mood}",
             max_tokens=60
         )
