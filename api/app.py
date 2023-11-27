@@ -16,8 +16,12 @@ def hello_world():
 def send_request(mood):
     try:
         response = client.chat.completions.create(
-            engine="gpt-4",
-            prompt=f"ONLY generate values for valency, danceability, and energy based on the mood: {mood}",
+            #engine="gpt-4",
+            #prompt=f"ONLY generate values for valency, danceability, and energy based on the mood: {mood}",
+            model='gpt-3.5-turbo',
+            messages=[
+                {'role': 'user', 'content': 'Hello!'}
+            ],
             max_tokens=60
         )
         return response.choices[0].text.strip()
