@@ -3,7 +3,7 @@ import requests
 app = Flask(__name__)
 
 
-@app.route('/')
+#@app.route('/')
 def get_city_from_ip():
 
     ip_address = request.headers.get('x-real-ip') or request.headers.get('x-forwarded-for', request.remote_addr)
