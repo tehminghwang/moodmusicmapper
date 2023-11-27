@@ -15,17 +15,18 @@ def hello_world():
 @app.route("/submit", methods=["POST"])
 def submit():
     input_mood = "ONLY generate values for valency, danceability and enegery based on the mood: " + request.form.get("mood")
-    reply = send_request(input_mood)
-    return render_template("mood.html", mood=reply)
+    #reply = send_request(input_mood)
+    #return render_template("mood.html", mood=reply)
+    return render_template("mood.html", mood=input_mood)
 
 
-def send_request(prompt):
-    response = client.Completion.create(
-        model="text-davinci-003",  # Replace with your desired model
+#def send_request(prompt):
+    #response = client.Completion.create(
+     #   model="text-davinci-003",  # Replace with your desired model
         prompt=prompt,
         temperature=0.7,
         max_tokens=150
-    )
-    return response
+    #)
+    #return response
 
 
