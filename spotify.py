@@ -40,7 +40,7 @@ def get_spotify_recommendations(access_token, valence, danceability, energy):
 
     return tracks
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
     # Replace 'YOUR_CLIENT_ID' and 'YOUR_CLIENT_SECRET' with your actual Spotify API credentials
     client_id = 'bc4a63dca78b417db515f5b70813b986'
     client_secret = 'd5cc981f4fc84e0d82aea910397645df'
