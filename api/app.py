@@ -1,5 +1,11 @@
 from flask import Flask, render_template, request
+from openai import OpenAI
 app = Flask(__name__)
+
+client = OpenAI(
+  organization='org-1gHuUe4SMTUG6aFFAeNWgMrd',
+)
+client.models.list()
 
 @app.route("/")
 def hello_world():
@@ -20,9 +26,12 @@ def send_request(prompt):
         "Content-Type": "application/json"
     }
     payload = {
-        "model": "gpt-4.0-turbo",  # or another model version
-        "prompt": prompt,
+        "model": "gpt-3.5-turbo",
+        "messages": [{"role": "user", "content": "Say this is a test!"}],
+        "temperature": 0.7
         "max_tokens": 150
+        #"model": "gpt-4.0-turbo",  # or another model version
+        #"prompt": prompt,
     }
     response = requests.post("https://api.openai.com/v1/engines/gpt-4.0-turbo/completions", json=payload, headers=headers)
     return response.json()
