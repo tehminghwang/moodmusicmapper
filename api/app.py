@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 from openai import OpenAI
 import os
-from spotify import spotify_main
+from spotify_mod import spotify_main
 from ipfinder import get_city_from_ip
 import re
 app = Flask(__name__)
