@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 from openai import OpenAI
 import os
 import re
-from modules import spotify_mod, database, ipfinder
+import spotify_mod, database, ipfinder
 app = Flask(__name__)
 
 
