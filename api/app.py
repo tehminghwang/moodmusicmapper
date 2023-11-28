@@ -9,8 +9,7 @@ app = Flask(__name__)
 
 client = OpenAI(
     # defaults to os.environ.get("OPENAI_API_KEY")
-    api_key='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'
-    #api_key=os.environ.get('OPENAI_API_KEY')
+    api_key=os.environ.get('OPENAI_API_KEY')
     #api_key=os.environ.get("API_URL")
 )
 
