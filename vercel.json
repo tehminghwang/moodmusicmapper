@@ -2,13 +2,11 @@
   "functions": {
     "api": {
       "runtime": "python3.8",
-      "includeFiles": [
-        "modules/spotify_mod.py",
-        "modules/database.py",
-        "modules/ipfinder.py"
-      ]
-    }
-  },
+      "includeFiles":
+        "modules/*.py"
+      }
+    },
+
   "rewrites": [
     { "source": "/(.*)", "destination": "/api/app" }
   ]
