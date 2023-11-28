@@ -9,8 +9,8 @@ app = Flask(__name__)
 
 client = OpenAI(
     #api_key=""
-    #api_key=os.environ.get('OPENAI_API_KEY')
-    api_key=os.environ.get("API_URL")
+    api_key=os.environ.get('OPENAI_API_KEY')
+    #api_key=os.environ.get("API_URL")
 )
 
 @app.route("/")
@@ -53,7 +53,7 @@ def submit():
     playlist = spotify_main(valency, danceability, energy)
     city = get_city_from_ip()
     country=time=cookies = "123abc" # temp placeholder
-    insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
+    #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
     return render_template("mood.html", mood=playlist, response=response, reply=reply, city=city)
 
 if __name__ == "__main__":
