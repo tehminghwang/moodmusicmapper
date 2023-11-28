@@ -8,12 +8,10 @@ app = Flask(__name__)
 
 
 client = OpenAI(
-    # defaults to os.environ.get("OPENAI_API_KEY")
     #api_key=""
     api_key=os.environ.get('OPENAI_API_KEY')
     #api_key=os.environ.get("API_URL")
 )
-
 
 @app.route("/")
 def hello_world():
