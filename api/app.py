@@ -32,17 +32,14 @@ def send_request(mood):
         valency = result[0]
         dance = result[1]
         energy = result[2]
-        summary = lastWord(last_message)
+
+        # finding the index of last space
+        index = string.rfind(" ")
+        summary = string[index + 1:]
         return last_message + str(valency) + str(dance) + str(energy) + summary
         #return response.choices[0].text.strip()
     except Exception as e:
         return f"Error: {e}"
-
-def lastWord(string):
-    # finding the index of last space
-    index = string.rfind(" ")
-    # last word
-    return string[index + 1:]
 
 @app.route("/submit", methods=["POST"])
 def submit():
