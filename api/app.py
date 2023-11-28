@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, re
 from openai import OpenAI
 import os
 app = Flask(__name__)
@@ -28,10 +28,21 @@ def send_request(mood):
             max_tokens=60
         )
         last_message = response.choices[0].message.content
-        return last_message
+        result = re.findall(r"[-+]?\d*\.\d+|\d+", last_message)
+        valency = result[0]
+        dance = result[1]
+        energy = result[2]
+        summary = lastWord(last_message)
+        return last_message + str(valency) + str(dance) + str(energy) + summary
         #return response.choices[0].text.strip()
     except Exception as e:
         return f"Error: {e}"
+
+def lastWord(string):
+    # finding the index of last space
+    index = string.rfind(" ")
+    # last word
+    return string[index + 1:]
 
 @app.route("/submit", methods=["POST"])
 def submit():
