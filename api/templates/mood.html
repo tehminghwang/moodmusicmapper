@@ -1,4 +1,31 @@
-<body>
+<!--<body>
 <h1>How are you feeling today?</h1>
 <p>Mood: {{ mood }}</p>
 </body>
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mood Playlist</title>
+    <style>
+        /* Add your CSS styling here */
+    </style>
+</head>
+<body>
+    <h1>Playlist Recommendations</h1>
+    {% if mood %}
+        <ul>
+            {% for track in mood %}
+                <li>{{ track.name }} by {{ track.artist }} (URI: {{ track.uri }})</li>
+            {% endfor %}
+        </ul>
+        <p>Robot says you like music that is: {{ response }}</p>
+        <p>Robot thinks: {{ reply }}</p>
+        <p>We know you are in: {{ city }}</p>
+    {% else %}
+        <p>No recommendations available.</p>
+    {% endif %}
+</body>
+</html>
