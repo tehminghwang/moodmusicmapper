@@ -51,10 +51,11 @@ def submit():
     valency, danceability, energy, mood, song, singer = extract_values(reply)
     response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}, Song: {song}, Singer: {singer}"
     playlist = spotify_mod.spotiy_main(valency, danceability, energy)
-    city = ipfinder.get_city_from_ip()
+    return playlist
+    #city = ipfinder.get_city_from_ip()
     #country=time=cookies = "123abc" # temp placeholder
     #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
-    return render_template("mood.html", mood=playlist, response=response, reply=reply, city=city)
+    #return render_template("mood.html", mood=playlist, response=response, reply=reply, city=city)
 
 if __name__ == "__main__":
     app.run(debug=True)
