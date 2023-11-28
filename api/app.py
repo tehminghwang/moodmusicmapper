@@ -9,8 +9,8 @@ app = Flask(__name__)
 
 client = OpenAI(
     #api_key=""
-    api_key=os.environ.get('OPENAI_API_KEY')
-    #api_key=os.environ.get("API_URL")
+    #api_key=os.environ.get('OPENAI_API_KEY')
+    api_key=os.environ.get("API_URL")
 )
 
 @app.route("/")
