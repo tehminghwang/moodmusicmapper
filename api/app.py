@@ -87,3 +87,4 @@ def extract_values(text):
     return valency, danceability, energy, mood, song, singer
 
 #"handler": "app.app",
+#"runtime": "python3.8",
