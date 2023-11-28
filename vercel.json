@@ -1,7 +1,7 @@
 {
   "functions": {
     "api": {
-      "handler": "main.app",
+      "handler": "app.app",
       "runtime": "python3.8",
       "includeFiles": [
         "modules/spotify_mod.py",
