@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 from openai import OpenAI
 import os
 import re
-import spotify_mod, database, ipfinder
+#import spotify_mod, database, ipfinder
 app = Flask(__name__)
 
 
@@ -85,6 +85,8 @@ def extract_values(text):
     singer = singer.group(1) if singer else None
 
     return valency, danceability, energy, mood, song, singer
+
+
 
 #"handler": "app.app",
 #"runtime": "python3.8",
