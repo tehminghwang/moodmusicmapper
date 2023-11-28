@@ -43,7 +43,7 @@ def get_spotify_recommendations(access_token, seed_genre, valence, danceability,
 
 def spotify_main(valence, danceability, energy):    # Replace 'YOUR_CLIENT_ID' and 'YOUR_CLIENT_SECRET' with your actual Spotify API credentials
     client_id = 'bc4a63dca78b417db515f5b70813b986'
-    client_secret = os.environ.get('SPOTIFY_KEY')
+    client_secret = os.environ.get("SPOTIFY_KEY")
     #client_secret = ''
 
     access_token = get_spotify_access_token(client_id, client_secret)
