@@ -14,6 +14,7 @@ client = OpenAI(
     #api_key=os.environ.get("API_URL")
 )
 
+
 @app.route("/")
 def hello_world():
     return render_template("index.html")
