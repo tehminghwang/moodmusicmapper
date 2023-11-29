@@ -1,5 +1,5 @@
 from flask import request, current_app
-from docenv import load_dotenv
+from dotenv import load_dotenv
 import requests
 import os
 
@@ -13,7 +13,7 @@ def get_city_from_ip():
     else:
     # Load environment variables from the .env file
         load_dotenv()
-        access_key= current_app.config["IP_FINDER"]
+        access_key= os.environ.get("IP_FINDER")
 
     #url = f"http://api.ipstack.com/2a0c:5bc0:40:11c4:631c:ac68:22c6:440?access_key={access_key}"
     url = f"http://api.ipstack.com/{ip_address}?access_key={access_key}"

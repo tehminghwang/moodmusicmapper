@@ -51,7 +51,7 @@ def spotify_main(valence, danceability, energy):    # Replace 'YOUR_CLIENT_ID' a
     else:
     # Load environment variables from the .env file
         load_dotenv()
-        client_secret= current_app.config["SPOTIFY"]
+        client_secret= os.environ.get("SPOTIFY")
 
     access_token = get_spotify_access_token(client_id, client_secret)
 

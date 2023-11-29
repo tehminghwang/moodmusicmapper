@@ -3,8 +3,12 @@ from dotenv import load_dotenv
 from openai import OpenAI
 import os
 import re
-from api import spotify_mod, database, ipfinder
-#import spotify_mod, database, ipfinder
+
+if os.getenv("VERCEL"):
+    from api import spotify_mod, database, ipfinder
+else:
+    import spotify_mod, database, ipfinder
+
 app = Flask(__name__)
 
 # Check if running on Vercel
@@ -14,7 +18,7 @@ if os.getenv("VERCEL"):
 else:
     # Load environment variables from the .env file
     load_dotenv()
-    open_ai_key= current_app.config["VERCEL_ENV"]
+    open_ai_key= os.environ.get("OPEN_AI")
 
 
 
