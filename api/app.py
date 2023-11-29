@@ -2,8 +2,8 @@ from flask import Flask, render_template, request
 from openai import OpenAI
 import os
 import re
-from api import spotify_mod, database, ipfinder
-#import spotify_mod, database, ipfinder
+#from api import spotify_mod, database, ipfinder
+import spotify_mod, database, ipfinder
 app = Flask(__name__)
 
 
@@ -44,13 +44,14 @@ def submit():
     valency, danceability, energy, mood, song, singer = extract_values(reply)
     response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}, Song: {song}, Singer: {singer}"
     playlist = spotify_mod.spotify_main(valency, danceability, energy)
+    
     city = 'Place'
     ip_address = '123.4556.345'
     country = "Place"
     #city = ipfinder.get_city_from_ip()
     #ipfinder.get_from_ip(city, country, ip_address)
     database.insert_into_table(valency, danceability, energy, mood, ip_address, city, country)
-    return render_template("mood.html", mood=playlist, response=response, reply=reply, city=city)
+    return render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city)
 
 if __name__ == "__main__":
     app.run(debug=True)

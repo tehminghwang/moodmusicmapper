@@ -1,31 +1,79 @@
-<!--<body>
-<h1>How are you feeling today?</h1>
-<p>Mood: {{ mood }}</p>
-</body>
--->
+<!DOCTYPE html> 
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Mood Playlist</title>
-    <style>
-        /* Add your CSS styling here */
-    </style>
-</head>
-<body>
-    <h1>Playlist Recommendations</h1>
-    {% if mood %}
-        <ul>
-            {% for track in mood %}
-                <li>{{ track.name }} by {{ track.artist }} (URI: {{ track.uri }})</li>
-            {% endfor %}
-        </ul>
-        <p>Robot says you like music that is: {{ response }}</p>
-        <p>Robot thinks: {{ reply }}</p>
-        <p>We know you are in: {{ city }}</p>
-    {% else %}
-        <p>No recommendations available.</p>
-    {% endif %}
-</body>
-</html>
+<html> 
+  <head> 
+    <title>Mood Music Mapper</title> 
+    <style> 
+      body {
+        background-color: #1DB954; /* Spotify green */
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        color: white; /* Set text color to white for visibility */
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center horizontally */
+        justify-content: center; /* Center vertically */
+      }
+
+      .grid-container {
+        display: grid;
+        grid-template-areas: 'left left right right';
+        grid-column-gap: 100px;
+        padding: 50px;
+        width: 100%;
+        box-sizing: border-box; /* Include padding in the width */
+        place-content: center; /* Center both horizontally and vertically */
+      }
+
+      .left,
+      .right {
+        width: 750px;
+        height: 1500px;
+        background-color: #ffffff69;
+        color: black;
+        border-radius: 15px;
+        margin: 10px;
+        text-align: center;
+        padding: 25px;
+      }
+
+      .left {
+        grid-area: left;
+      }
+
+      .right {
+        grid-area: right;
+      }
+      
+    </style> 
+  </head> 
+  <body> 
+    
+    <div class = "header">
+      <h1>How are you feeling today?</h1> 
+      <p>You are feeling {{ input_mood }} today.</p>
+    </div>
+    <br>
+    
+    <div class = "grid-container">
+      
+      <div class = "left">
+        <p>Based on your mood, below are some songs you might want to listen to:<br><br><br></p>
+        {% for track in mood %}
+        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/{{ track.uri }}"
+        width="100%" height="100" frameBorder="0" allowfullscreen="" 
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        {% endfor %}
+      </div>
+
+      <div class = "right">
+        <p>Others in {{ city }} are feeling {{ city_mood }}, <br>if you also share the same mood, <br>you may also want to listen to:</p>
+        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/6kex4EBAj0WHXDKZMEJaaF" 
+        width="100%" height="352" frameBorder="0" allowfullscreen="" 
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      </div>
+            
+    </div>  
+  </body> 
+</html> 
