@@ -9,7 +9,7 @@ def insert_into_table(valency, dance, energy, summary, ip_address, city, country
     conn = db.connect(**config['connection'])
     curs = conn.cursor()
 
-    curs.execute("""INSERT INTO location VALUES ('123.567.1252', 'London', 'United Kingdom')"""
+    curs.execute("""INSERT INTO location VALUES ('123.567.1252', 'London', 'United Kingdom')""")
 
     #curs.execute("""INSERT INTO mood VALUES (%s, %s, %s, %s, TIMESTAMP(NOW()), %s)""", (valency, dance, energy, summary, ip_address))
     #curs.execute("""INSERT INTO location VALUES (%s, %s, %s)""", (ip_address, city, country))
