@@ -1,6 +1,6 @@
 import psycopg as db
 import configparser
-import request
+from api import dbtool.ini
 
 def insert_into_table(valency, dance, energy, summary, ip_address, city, country):
     # read in configuration file parameters from dbtool.ini
