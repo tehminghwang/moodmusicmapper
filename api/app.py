@@ -3,8 +3,8 @@ from dotenv import load_dotenv
 from openai import OpenAI
 import os
 import re
-#from api import spotify_mod, database, ipfinder
-import spotify_mod, database, ipfinder
+from api import spotify_mod, database, ipfinder
+#import spotify_mod, database, ipfinder
 app = Flask(__name__)
 
 # Check if running on Vercel
@@ -58,7 +58,7 @@ def submit():
     ip_address = '123.4556.345'
     country = "Place"
     #city = ipfinder.get_city_from_ip()
-    ipfinder.get_from_ip(city, country, ip_address)
+    #ipfinder.get_from_ip(city, country, ip_address)
     database.insert_into_table(valency, danceability, energy, mood, ip_address, city, country)
     return render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city)
 
