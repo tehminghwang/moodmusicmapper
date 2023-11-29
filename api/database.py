@@ -12,7 +12,6 @@ def insert_into_table(valency, dance, energy, summary, city, country):
     conn = db.connect(∗∗config[’connection’])
     curs = conn.cursor()
 
-    # Inserting into one table first for trial
     curs.execute(”INSERT INTO mood VALUES (%s, %s, %s, %s, TIMESTAMP(NOW()), %s)”, (valency, dance, energy, summary, ipaddress))
     curs.execute(”INSERT INTO location VALUES (%s, %s, %s)”, (ipaddress, city, country))
 

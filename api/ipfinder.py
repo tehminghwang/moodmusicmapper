@@ -2,7 +2,7 @@ from flask import request
 import requests
 import os
 
-def get_city_from_ip():
+def get_city_from_ip(city, country):
 
     ip_address = request.headers.get('x-real-ip') or request.headers.get('x-forwarded-for', request.remote_addr)
     #access_key = "c35f452278b88715ee4c2190eba7d401"
@@ -16,9 +16,12 @@ def get_city_from_ip():
         data = response.json()
 
         if 'city' in data:
-            return data['city']
-        else:
-            return "City information not found for this IP address"
+            city = data['city']
+            if 'country' in data:
+                country = data['country']
+            #return city
+        #else:
+            #return "City information not found for this IP address"
 
-    except requests.RequestException as e:
-        return f"Error: {e}"
+    #except requests.RequestException as e:
+        #return f"Error: {e}"
