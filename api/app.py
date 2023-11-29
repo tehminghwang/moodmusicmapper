@@ -44,8 +44,11 @@ def submit():
     valency, danceability, energy, mood, song, singer = extract_values(reply)
     response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}, Song: {song}, Singer: {singer}"
     playlist = spotify_mod.spotify_main(valency, danceability, energy)
+    city = 'Place'
+    ip_address = '123.4556.345'
+    country = "Place"
     #city = ipfinder.get_city_from_ip()
-    ipfinder.get_city_from_ip(ref city, ref country, ref ip_address)
+    ipfinder.get_from_ip(city, country, ip_address)
     database.insert_into_table(valency, danceability, energy, mood, ip_address, city, country)
     return render_template("mood.html", mood=playlist, response=response, reply=reply, city=city)
 
