@@ -1,12 +1,19 @@
-from flask import request
+from flask import request, current_app
+from docenv import load_dotenv
 import requests
 import os
 
 def get_from_ip(city, country, ip_address):
 
     ip_address = request.headers.get('x-real-ip') or request.headers.get('x-forwarded-for', request.remote_addr)
-    #access_key = "c35f452278b88715ee4c2190eba7d401"
-    access_key = os.environ.get('IP_KEY')
+    
+    if os.getenv("VERCEL"):
+    # Load environment variables from Vercel secrets
+        access_key = os.environ.get('IP_KEY')
+    else:
+    # Load environment variables from the .env file
+        load_dotenv()
+        access_key= current_app.config["IP_FINDER"]
 
     #url = f"http://api.ipstack.com/2a0c:5bc0:40:11c4:631c:ac68:22c6:440?access_key={access_key}"
     url = f"http://api.ipstack.com/{ip_address}?access_key={access_key}"

@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, current_app
+from dotenv import load_dotenv
 from openai import OpenAI
 import os
 import re
@@ -6,11 +7,19 @@ import re
 import spotify_mod, database, ipfinder
 app = Flask(__name__)
 
+# Check if running on Vercel
+if os.getenv("VERCEL"):
+    # Load environment variables from Vercel secrets
+    open_ai_key=os.environ.get('OPENAI_API_KEY')
+else:
+    # Load environment variables from the .env file
+    load_dotenv()
+    open_ai_key= current_app.config["VERCEL_ENV"]
+
+
 
 client = OpenAI(
-    #api_key=""
-    api_key=os.environ.get('OPENAI_API_KEY')
-    #api_key=os.environ.get("API_URL")
+    api_key = open_ai_key
 )
 
 @app.route("/")
