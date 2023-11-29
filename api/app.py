@@ -31,15 +31,8 @@ def send_request(mood):
             max_tokens=60
         )
         last_message = response.choices[0].message.content
-        #result = re.findall(r"[-+]?\d*\.\d+|\d+", last_message)
-        #valency = result[0]
-        #dance = result[1]
-        #energy = result[2]
 
-        # finding the index of last space
-        #index = string.rfind(" ")
-        #summary = string[index + 1:]
-        return last_message #+ str(valency) + str(dance) + str(energy) + summary
+        return last_message
         #return response.choices[0].text.strip()
     except Exception as e:
         return f"Error: {e}"
@@ -51,9 +44,13 @@ def submit():
     valency, danceability, energy, mood, song, singer = extract_values(reply)
     response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}, Song: {song}, Singer: {singer}"
     playlist = spotify_mod.spotify_main(valency, danceability, energy)
-    city = ipfinder.get_city_from_ip()
-    #country=time=cookies = "123abc" # temp placeholder
-    #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
+    
+    city = 'Place'
+    ip_address = '123.4556.345'
+    country = "Place"
+    #city = ipfinder.get_city_from_ip()
+    ipfinder.get_from_ip(city, country, ip_address)
+    database.insert_into_table(valency, danceability, energy, mood, ip_address, city, country)
     return render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city)
 
 if __name__ == "__main__":
