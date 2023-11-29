@@ -53,7 +53,7 @@ def submit():
     playlist = spotify_mod.spotify_main(valency, danceability, energy)
     city = ipfinder.get_city_from_ip()
     #country=time=cookies = "123abc" # temp placeholder
-    #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
+    database.insert_into_table(valency, danceability, energy, mood, city, country)
     return render_template("mood.html", mood=playlist, response=response, reply=reply, city=city)
 
 if __name__ == "__main__":
