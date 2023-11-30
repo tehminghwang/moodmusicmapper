@@ -24,6 +24,8 @@
         <p>Robot says you like music that is: {{ response }}</p>
         <p>Robot thinks: {{ reply }}</p>
         <p>We know you are in: {{ city }}</p>
+        <!-- Displaying the map -->
+        <div id="map">{{ map_html|safe }}</div>
     {% else %}
         <p>No recommendations available.</p>
     {% endif %}

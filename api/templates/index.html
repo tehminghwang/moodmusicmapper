@@ -10,5 +10,15 @@
         <input type="text" id="moodfield" name="mood">
         <input type="submit" value="Submit">
     </form>
+    <h1>Previous Playlist</h1>
+    {% if mood %}
+        <ul>
+            {% for track in mood %}
+                <li>{{ track.name }} by {{ track.artist }} (URI: {{ track.uri }})</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No recommendations available.</p>
+    {% endif %}
 </body>
 </html>
