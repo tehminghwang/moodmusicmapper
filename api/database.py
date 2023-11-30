@@ -1,4 +1,4 @@
-import psycopg as db
+import psycopg2 as db
 import configparser
 
 def insert_into_table(valency, dance, energy, summary, ip_address, city, country):
@@ -24,6 +24,16 @@ def test_table():
     conn = db.connect(**config['connection'])
     curs = conn.cursor()
 
-    curs.execute("""INSERT INTO test VALUES (%s, %s, %s);""", ("Bob Andy", 24, 1999))
+    try:
+        print("Executing SQL query...")
+        curs.execute("""INSERT INTO test VALUES (%s, %s, %s);""", ("Bob Andy", 24, 1999))
 
-    conn.close()
+        print("Committing transaction...")
+        conn.commit()
+
+    except Exception as e:
+        print(f"Error: {e}")
+
+    finally:
+        print("Closing connection...")
+        conn.close()
