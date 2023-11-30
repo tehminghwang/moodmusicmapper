@@ -1,7 +1,7 @@
 import psycopg2 as db
 import configparser
 
-def insert_into_table(valency, dance, energy, summary, ip_address, city, country):
+def insert_into_table(valency, danceability, energy, mood, city):
     # read in configuration file parameters from dbtool.ini
     config = configparser.ConfigParser()
     config.read('dbtool.ini')
@@ -9,12 +9,19 @@ def insert_into_table(valency, dance, energy, summary, ip_address, city, country
     conn = db.connect(**config['connection'])
     curs = conn.cursor()
 
-    curs.execute("""INSERT INTO location VALUES ('123.567.1252', 'London', 'United Kingdom')""")
+    try:
+        print("Executing SQL query...")
+        curs.execute("""INSERT INTO mood VALUES (NOW(), %s, %s, %s, %s, %s);""", (city, mood, valency, danceability, energy))
 
-    #curs.execute("""INSERT INTO mood VALUES (%s, %s, %s, %s, TIMESTAMP(NOW()), %s)""", (valency, dance, energy, summary, ip_address))
-    #curs.execute("""INSERT INTO location VALUES (%s, %s, %s)""", (ip_address, city, country))
+        print("Committing transaction...")
+        conn.commit()
 
-    conn.close()
+    except Exception as e:
+        print(f"Error: {e}")
+
+    finally:
+        print("Closing connection...")
+        conn.close()
 
 def test_table():
     # read in configuration file parameters from dbtool.ini
