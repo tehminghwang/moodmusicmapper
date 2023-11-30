@@ -63,7 +63,7 @@ def submit():
     country = "Place"
     #city = ipfinder.get_city_from_ip()
     #ipfinder.get_from_ip(city, country, ip_address)
-    database.insert_into_table(valency, danceability, energy, mood, ip_address, city, country)
+    #database.insert_into_table(valency, danceability, energy, mood, ip_address, city, country)
     return render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city)
 
 if __name__ == "__main__":
