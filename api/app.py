@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, make_response, current_app
+from flask import Flask, render_template, request, redirect, url_for, make_response, current_app
 from dotenv import load_dotenv
 from openai import OpenAI
 import os
 import re
 import folium
 import json
+import time
 from branca.colormap import LinearColormap
 if os.getenv("VERCEL"):
     from api import spotify_mod, database, ipfinder
@@ -120,6 +121,8 @@ def create_map(mood_data):
     return m
 
 
+
+
 @app.route("/submit", methods=["POST"])
 def submit():
     input_mood = request.form.get("mood")
@@ -147,6 +150,8 @@ def submit():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
 
 def get_coordinates(city_name):
     geolocator = Nominatim(user_agent="moodmusicmapper")

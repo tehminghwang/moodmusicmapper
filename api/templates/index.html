@@ -1,24 +1,90 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
-<head>
-    <title>My Page</title>
-</head>
-<body>
-    <h1>How are you feeling today?</h1>
-    <form action="/submit" method="post">
-        <label for="moodfield">How are you feeling today?</label>
-        <input type="text" id="moodfield" name="mood">
-        <input type="submit" value="Submit">
-    </form>
-    <h1>Previous Playlist</h1>
-    {% if mood %}
-        <ul>
+  <head>
+    <title>Magic Music Mapper</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}" />
+
+    <style>
+        /* Add keyframes for typing animation */
+        @keyframes typing {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+        /* Apply typing animation to h1 */
+        h1 {
+            overflow: hidden;
+            white-space: nowrap;
+            animation: typing 2.5s steps(30, end);
+        }
+
+    </style>
+  </head>
+  <body class="homepage is-preload">
+    <div id="page-wrapper">
+
+      <!-- Header -->
+      <div id="header">
+
+	<!-- Inner -->
+	<div class="inner">
+	  <header><center>
+
+          <h1>Rediscover your music with AI</h1>
+	      <h2><br>Share a glimpse of your day and unveil a personalized
+		Spotify playlist<h2>
+	  </header>
+	  <footer>
+	    <form action="/submit" method="post">
+	      <p>
+		<label for="moodfield"></label>
+		<input type="text" id="moodfield" name="mood">
+		<br><input type="submit" value="Click Me!">
+	      </p>
+	  </form></center>
+	  </footer>
+	</div>
+
+	<!-- Banner -->
+	<section id="banner">
+	  <header>
+	    <h3 style="font-size: 40px;">Replay your magic moments</h3>
+	  </header>
+	</section>
+
+	<!-- Carousel -->
+	<div class="container">
+	  <div class="carousel-view">
+	    <button id="prev-btn" class="prev-btn">
+	      <svg viewBox="0 0 512 512" width="20" title="chevron-circle-left">
+		<path d="M256 504C119 504 8 393 8 256S119 8 256 8s248 111 248 248-111 248-248 248zM142.1 273l135.5 135.5c9.4 9.4 24.6 9.4 33.9 0l17-17c9.4-9.4 9.4-24.6 0-33.9L226.9 256l101.6-101.6c9.4-9.4 9.4-24.6 0-33.9l-17-17c-9.4-9.4-24.6-9.4-33.9 0L142.1 239c-9.4 9.4-9.4 24.6 0 34z" />
+	      </svg>
+	    </button>
+	    <div id="item-list" class="item-list">
+	      {% if mood %}
             {% for track in mood %}
-                <li>{{ track.name }} by {{ track.artist }} (URI: {{ track.uri }})</li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No recommendations available.</p>
-    {% endif %}
-</body>
+                <iframe id="item" class="item" style="border-radius12px"
+		        src="https://open.spotify.com/embed/track/{{ track.uri }}"
+		        width="100%" height="200px" frameBorder="0"
+		        allowfullscreen="" allow="autoplay; clipboard-write;
+						encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+	        {% endfor %}
+          {% else %}
+              <p>No recommendations available.</p>
+          {% endif %}
+	    </div>
+	    <button id="next-btn" class="next-btn">
+	      <svg viewBox="0 0 512 512" width="20" title="chevron-circle-right">
+		<path d="M256 8c137 0 248 111 248 248S393 504 256 504 8 393 8 256 119 8 256 8zm113.9 231L234.4 103.5c-9.4-9.4-24.6-9.4-33.9 0l-17 17c-9.4 9.4-9.4 24.6 0 33.9L285.1 256 183.5 357.6c-9.4 9.4-9.4 24.6 0 33.9l17 17c9.4 9.4 24.6 9.4 33.9 0L369.9 273c9.4-9.4 9.4-24.6 0-34z" />
+	      </svg>
+	    </button>
+	  </div>
+	</div>
+	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </body>
 </html>
