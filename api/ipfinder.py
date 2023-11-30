@@ -19,6 +19,8 @@ def get_location_from_ip(ip_address):
     #url = f"http://api.ipstack.com/2a0c:5bc0:40:11c4:631c:ac68:22c6:440?access_key={access_key}"
     url = f"http://api.ipstack.com/{ip_address}?access_key={access_key}"
 
+    http://api.ipstack.com/146.169.195.215?access_key=c35f452278b88715ee4c2190eba7d401
+
     try:
         response = requests.get(url)
         data = response.json()
@@ -30,8 +32,8 @@ def get_location_from_ip(ip_address):
         else:
             location_info['city'] = "City information not found for this IP address"
 
-        if 'country' in data:
-            location_info['country'] = data['country']
+        if 'country_name' in data:
+            location_info['country'] = data['country_name']
         else:
             location_info['country'] = "Country information not found for this IP address"
 
