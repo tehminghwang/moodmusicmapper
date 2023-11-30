@@ -133,6 +133,7 @@ def submit():
 
     playlist = spotify_mod.spotify_main(valency, danceability, energy)
     playlist_json = json.dumps(playlist)
+    print(playlist_json)
     #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
 
     ipaddress = ipfinder.get_ip()
@@ -140,7 +141,7 @@ def submit():
     city = location_info['city']
     country = location_info['country']
 
-    database.insert_into_table(ipaddress, input_mood, mood, valency, danceability, energy, city, country)
+    database.insert_into_table(ipaddress, input_mood, mood, valency, danceability, energy, city, country, playlist)
 
     # Generate the map with mood data
     folium_map = create_map(mood_data)
