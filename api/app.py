@@ -133,7 +133,6 @@ def submit():
 
     playlist = spotify_mod.spotify_main(valency, danceability, energy)
     playlist_json = json.dumps(playlist)
-    print(playlist_json)
     #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
 
     ipaddress = ipfinder.get_ip()
