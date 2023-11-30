@@ -54,7 +54,7 @@ def get_country_from_ip(ip_address):
         data = response.json()
 
         if 'country' in data:
-            country = data['city']
+            country = data['country']
             return country
         else:
             return "City information not found for this IP address"
