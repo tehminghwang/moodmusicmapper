@@ -14,6 +14,9 @@ def insert_into_table(ipaddress, input_mood, mood, valency, danceability, energy
         curs.execute("""INSERT INTO mood VALUES (NOW(), %s, %s, %s, %s, %s, %s);""", (ipaddress, input_mood, mood, valency, danceability, energy))
         curs.execute("""INSERT INTO location VALUES (%s, %s, %s);""", (ipaddress, city, country))
 
+        for item in playlist:
+            curs.execute("""INSERT INTO spotify VALUES (NOW(), %s, %s, %s, %s);""", (ipaddress, item['name'], item['artist'], item['uri']))
+
         print("Committing transaction...")
         conn.commit()
 
