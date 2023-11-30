@@ -1,98 +1,122 @@
-<!DOCTYPE html> 
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Mood Music Mapper</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="static/css/mood.css" />
+  </head>
+  <body class="homepage is-preload">
+    <div id="page-wrapper">
 
-<html> 
-  <head> 
-    <title>Mood Music Mapper</title> 
-    <style> 
-      body {
-        background-color: #1DB954; /* Spotify green */
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-        color: white; /* Set text color to white for visibility */
-        display: flex;
-        flex-direction: column;
-        align-items: center; /* Center horizontally */
-        justify-content: center; /* Center vertically */
-      }
+      <!-- Header -->
+      <div id="header">
 
-      .grid-container {
-        display: grid;
-        grid-template-areas: 'left left left right right right';
-        grid-column-gap: 100px;
-        padding: 50px;
-        width: 100%;
-        box-sizing: border-box; /* Include padding in the width */
-        place-content: center; /* Center both horizontally and vertically */
-      }
+	<!-- Inner -->
+	<div class="inner">
+	  <header><center>
+	      <h1>You are feeling {{ input_mood }} today.</h1>
+		  <h2><br>Would you have a new feeling?</h2>
+	  </header>
+	  <footer>
+	    <form action="/submit" method="post">
+	      <p>
+		<label for="moodfield"></label>
+		<input type="text" id="moodfield" name="mood">
+		<br><input type="submit" value="Submit">
+	      </p>
+	  </form></center>
+	  </footer>
+	</div>
 
-      .left,
-      .right {
-        width: 100%;
-        height: 100%;
-        background-color: #ffffff69;
-        color: black;
-        border-radius: 15px;
-        margin: 10px;
-        text-align: center;
-        padding: 25px;
-      }
+	<!-- Banner -->
+	<section id="banner">
+	  <header>
+	    <h3 style="font-size: 40px;">Based on your mood, below are some songs you might want to listen to:</h3>
+	  </header>
+	</section>
 
-      .left {
-        grid-area: left;
-      }
+	<!-- Carousel -->
+	<div class="container">
+	  <div class="carousel-view">
+	    <button id="prev-btn" class="prev-btn">
+	      <svg viewBox="0 0 512 512" width="20" title="chevron-circle-left">
+		<path d="M256 504C119 504 8 393 8 256S119 8 256 8s248 111 248 248-111 248-248 248zM142.1 273l135.5 135.5c9.4 9.4 24.6 9.4 33.9 0l17-17c9.4-9.4 9.4-24.6 0-33.9L226.9 256l101.6-101.6c9.4-9.4 9.4-24.6 0-33.9l-17-17c-9.4-9.4-24.6-9.4-33.9 0L142.1 239c-9.4 9.4-9.4 24.6 0 34z" />
+	      </svg>
+	    </button>
+	    <div id="item-list" class="item-list">
+	      {% for track in mood %}
+		  <div class = "song">
+	      	<iframe id="item" class="item" style="border-radius12px"
+		      src="https://open.spotify.com/embed/track/{{ track.uri }}"
+		      width="100%" height="200px" frameBorder="0"
+		      allowfullscreen="" allow="autoplay; clipboard-write;
+						encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+			<a href="#" id="share">
+			  <svg id = "share" xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-share">
+				<path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"/>
+			  </svg>
+			</a>
+			<a href="https://www.facebook.com/sharer/sharer.php?quote=Mood Music Mapper recommended me to listen to this!\n\nGet your recommendation:\nhttps://moodmusicmapper.vercel.app/\n&u=https://open.spotify.com/track/{{ track.uri }}" 
+			  target="_blank"id="facebook">
+			  <svg xmlns="http://www.w3.org/2000/svg" class="hidden" viewBox="0 0 30 30" width="30px" height="30px">    
+				<path d="M15,3C8.373,3,3,8.373,3,15c0,6.016,4.432,10.984,10.206,11.852V18.18h-2.969v-3.154h2.969v-2.099c0-3.475,1.693-5,4.581-5 c1.383,0,2.115,0.103,2.461,0.149v2.753h-1.97c-1.226,0-1.654,1.163-1.654,2.473v1.724h3.593L19.73,18.18h-3.106v8.697 C22.481,26.083,27,21.075,27,15C27,8.373,21.627,3,15,3z"/>
+			  </svg>
+			</a>
+			<a href="https://twitter.com/intent/tweet?text=Mood Music Mapper recommended me to listen to this!%0A%0AGet your recommendation:%0Ahttps://moodmusicmapper.vercel.app/%0A%0A&url=https://open.spotify.com/track/{{ track.uri }}" 
+			  target="_blank" id = "twitter_x"> 
+			  <svg xmlns="http://www.w3.org/2000/svg" class="hidden" width="30px" height="30px">
+				<path d="M 6.9199219 6 L 21.136719 26.726562 L 6.2285156 44 L 9.40625 44 L 22.544922 28.777344 L 32.986328 44 L 43 44 L 28.123047 22.3125 L 42.203125 6 L 39.027344 6 L 26.716797 20.261719 L 16.933594 6 L 6.9199219 6 z"/>
+			  </svg>
+		</a>
+		  </div>
+	      {% endfor %}
+	    </div>
+	    <button id="next-btn" class="next-btn">
+	      <svg viewBox="0 0 512 512" width="20" title="chevron-circle-right">
+		<path d="M256 8c137 0 248 111 248 248S393 504 256 504 8 393 8 256 119 8 256 8zm113.9 231L234.4 103.5c-9.4-9.4-24.6-9.4-33.9 0l-17 17c-9.4 9.4-9.4 24.6 0 33.9L285.1 256 183.5 357.6c-9.4 9.4-9.4 24.6 0 33.9l17 17c9.4 9.4 24.6 9.4 33.9 0L369.9 273c9.4-9.4 9.4-24.6 0-34z" />
+	      </svg>
+	    </button>
+	  </div>
+	</div>
 
-      .right {
-        grid-area: right;
-      }
-      
-      @media (max-width: 1000px) {
-    .grid-container  {
-      grid-template-areas: 
-      'left left left' 
-      'right right right' 
-  }
-}
-    </style> 
-  </head> 
-  <body> 
-    
-    <div class = "header">
-      <h1>How are you feeling today?</h1> 
-      <p>You are feeling {{ input_mood }} today.</p>
+	<!-- Banner -->
+	<section id="banner">
+		<header>
+			<h3 style="font-size: 40px;">We have been recommending this song to other people in { city } recently:</h3>
+		</header>
+		</section>
+	
+	<!-- Carousel -->
+	<div class="container">
+	  <div class="carousel-view">
+		<button id="prev-btn" class="prev-btn">
+		  <svg viewBox="0 0 512 512" width="20" title="chevron-circle-left">
+		<path d="M256 504C119 504 8 393 8 256S119 8 256 8s248 111 248 248-111 248-248 248zM142.1 273l135.5 135.5c9.4 9.4 24.6 9.4 33.9 0l17-17c9.4-9.4 9.4-24.6 0-33.9L226.9 256l101.6-101.6c9.4-9.4 9.4-24.6 0-33.9l-17-17c-9.4-9.4-24.6-9.4-33.9 0L142.1 239c-9.4 9.4-9.4 24.6 0 34z" />
+		  </svg>
+		</button>
+		<div id="item-list" class="item-list">
+		  <div class = "song">
+			<iframe id="item" class="item" style="border-radius:12px" 
+			src="https://open.spotify.com/embed/track/6kex4EBAj0WHXDKZMEJaaF" 
+			width="100%" height="200px" frameBorder="0" allowfullscreen="" 
+			allow="autoplay; clipboard-write; 
+			encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+			<a href="https://www.facebook.com/sharer/sharer.php?quote=Mood Music Mapper recommended me to listen to this!\n\nGet your recommendation:\nhttps://moodmusicmapper.vercel.app/\n&u=https://open.spotify.com/track/6kex4EBAj0WHXDKZMEJaaF" 
+				target="_blank">Share on Facebook</a>
+			<a href="https://twitter.com/intent/tweet?text=Mood Music Mapper recommended me to listen to this!%0A%0AGet your recommendation:%0Ahttps://moodmusicmapper.vercel.app/%0A%0A&url=https://open.spotify.com/track/6kex4EBAj0WHXDKZMEJaaF" 
+				target="_blank">Share on X</a>
+		  </div>	
+		<button id="next-btn" class="next-btn">
+		  <svg viewBox="0 0 512 512" width="20" title="chevron-circle-right">
+		<path d="M256 8c137 0 248 111 248 248S393 504 256 504 8 393 8 256 119 8 256 8zm113.9 231L234.4 103.5c-9.4-9.4-24.6-9.4-33.9 0l-17 17c-9.4 9.4-9.4 24.6 0 33.9L285.1 256 183.5 357.6c-9.4 9.4-9.4 24.6 0 33.9l17 17c9.4 9.4 24.6 9.4 33.9 0L369.9 273c9.4-9.4 9.4-24.6 0-34z" />
+		  </svg>
+		</button>
+	  </div>
+	</div>
 
-      <form action="/submit" method="post">
-        <label for="moodfield">Would you have a new feeling?</label>
-        <input type="text" id="moodfield" name="mood">
-        <input type="submit" value="Submit">
-      </form>
-
-    </div>
-    <br>
-    
-    <div class = "grid-container">
-      
-      <div class = "left">
-        <p>Based on your mood, below are some songs you might want to listen to:<br><br><br></p>
-        {% for track in mood %}
-        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/{{ track.uri }}"
-        width="50%" height="100px" frameBorder="0" allowfullscreen="" 
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-        {% endfor %}
-      </div>
-
-      <div class = "right">
-        <p>Others in {{ city }} are feeling {{ city_mood }}, <br>if you also share the same mood, <br>you may also want to listen to:</p>
-        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/6kex4EBAj0WHXDKZMEJaaF" 
-        width="100%" height="352" frameBorder="0" allowfullscreen="" 
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-      </div>
-            
-    </div>  
-  <p>Robot says you like music that is: {{ response }}</p>
-  <p>Robot thinks: {{ reply }}</p>
-  <p>We know you are in: {{ city }}</p>
-  <!-- Displaying the map -->
-  <div id="map">{{ map_html|safe }}</div>  
-</body> 
-</html> 
+	<div id="map">{{ map_html|safe }}</div>  
+	
+	<script src="static/js/main.js"></script>
+  </body>
+</html>

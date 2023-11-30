@@ -122,6 +122,7 @@ def create_map(mood_data):
 
 
 
+
 @app.route("/submit", methods=["POST"])
 def submit():
     input_mood = request.form.get("mood")
@@ -149,16 +150,24 @@ def response_page(input_mood):
     reply = send_request(input_mood)
     valency, danceability, energy, mood, song, singer = extract_values(reply)
     response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}, Song: {song}, Singer: {singer}"
+
     playlist = spotify_mod.spotify_main(valency, danceability, energy)
     playlist_json = json.dumps(playlist)
+    #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
 
-    city = ipfinder.get_city_from_ip()
-    database.insert_into_table(valency, danceability, energy, mood, city)
+    ipaddress = ipfinder.get_ip()
+    location_info = ipfinder.get_location_from_ip(ipaddress)
+    city = location_info['city']
+    country = location_info['country']
+
+    database.insert_into_table(ipaddress, input_mood, mood, valency, danceability, energy, city, country, playlist)
 
     # Generate the map with mood data
     folium_map = create_map(mood_data)
     map_html = folium_map._repr_html_()
 
+    #country=time=cookies = "123abc" # temp placeholder
+    #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
     response_html = render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city, map_html=map_html)
     # Create a response object from the rendered HTML
     response = make_response(response_html)

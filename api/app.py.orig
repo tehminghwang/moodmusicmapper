@@ -1,28 +1,18 @@
-<<<<<<< HEAD
-from flask import Flask, render_template, request, make_response
+from flask import Flask, render_template, request, redirect, url_for, make_response, current_app
+from dotenv import load_dotenv
 from openai import OpenAI
 import os
 import re
 import folium
 import json
+import time
 from branca.colormap import LinearColormap
-#from api import spotify_mod, database, ipfinder
-import spotify_mod, database, ipfinder
-import geopy
-from geopy.geocoders import Nominatim
-=======
-from flask import Flask, render_template, request, current_app
-from dotenv import load_dotenv
-from openai import OpenAI
-import os
-import re
-
 if os.getenv("VERCEL"):
     from api import spotify_mod, database, ipfinder
 else:
     import spotify_mod, database, ipfinder
-
->>>>>>> 9e9b5be05a94741c56e300f1d5df16b098faa783
+import geopy
+from geopy.geocoders import Nominatim
 app = Flask(__name__)
 
 # Check if running on Vercel
@@ -37,13 +27,7 @@ else:
 
 
 client = OpenAI(
-<<<<<<< HEAD
-    api_key="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"
-    #api_key=os.environ.get('OPENAI_API_KEY')
-    #api_key=os.environ.get("API_URL")
-=======
     api_key = open_ai_key
->>>>>>> 9e9b5be05a94741c56e300f1d5df16b098faa783
 )
 
 @app.route("/")
@@ -73,6 +57,7 @@ def send_request(mood):
             max_tokens=60
         )
         last_message = response.choices[0].message.content
+
 
         return last_message
         #return response.choices[0].text.strip()
@@ -136,47 +121,72 @@ def create_map(mood_data):
     return m
 
 
+
 @app.route("/submit", methods=["POST"])
 def submit():
     input_mood = request.form.get("mood")
+
+    # Simulate a delay (2 seconds) to simulate a background task
+    #time.sleep(2)
+
+    # Redirect to the loading page before going to the response page
+    return redirect(url_for("loading_page", input_mood=input_mood))
+
+
+@app.route("/loading/<input_mood>")
+def loading_page(input_mood):
+    # Render the loading page
+
+    return render_template("loading.html", input_mood=input_mood)
+
+
+@app.route("/response/<input_mood>")
+def response_page(input_mood):
+
+    # Process the request and prepare the response here
+    # You can use the 'input_mood' parameter to generate the response
+    print("Hello, World!")
     reply = send_request(input_mood)
+
     valency, danceability, energy, mood, song, singer = extract_values(reply)
     response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}, Song: {song}, Singer: {singer}"
+
     playlist = spotify_mod.spotify_main(valency, danceability, energy)
-<<<<<<< HEAD
     playlist_json = json.dumps(playlist)
-    #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
+<<<<<<< HEAD
+
     city = ipfinder.get_city_from_ip()
+    database.insert_into_table(valency, danceability, energy, mood, city)
+=======
+    #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
+
+    ipaddress = ipfinder.get_ip()
+    location_info = ipfinder.get_location_from_ip(ipaddress)
+    city = location_info['city']
+    country = location_info['country']
+
+    database.insert_into_table(ipaddress, input_mood, mood, valency, danceability, energy, city, country, playlist)
+>>>>>>> 52b5759ec7550186d060ccd700c08ae41663d277
 
     # Generate the map with mood data
     folium_map = create_map(mood_data)
     map_html = folium_map._repr_html_()
 
-    #country=time=cookies = "123abc" # temp placeholder
-    #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
-    response_html = render_template("mood.html", mood=playlist, response=response, reply=reply, city=city, map_html=map_html)
+    response_html = render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city, map_html=map_html)
     # Create a response object from the rendered HTML
     response = make_response(response_html)
     # Set a cookie in the response object
     response.set_cookie('playlist', playlist_json, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
     return response
-=======
-    
-    city = 'Place'
-    ip_address = '123.4556.345'
-    country = "Place"
-    database.test_table()
-    #city = ipfinder.get_city_from_ip()
-    #ipfinder.get_from_ip(city, country, ip_address)
-    #database.insert_into_table(valency, danceability, energy, mood, ip_address, city, country)
-    return render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city)
->>>>>>> 9e9b5be05a94741c56e300f1d5df16b098faa783
+
 
 if __name__ == "__main__":
     app.run(debug=True)
 
+
+
 def get_coordinates(city_name):
-    geolocator = Nominatim(user_agent="geoapiExercises")
+    geolocator = Nominatim(user_agent="moodmusicmapper")
     location = geolocator.geocode(city_name)
     if location:
         return location.latitude, location.longitude
