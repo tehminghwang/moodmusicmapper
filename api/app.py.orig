@@ -1,17 +1,28 @@
-from flask import Flask, render_template, request, make_response, current_app
-from dotenv import load_dotenv
+<<<<<<< HEAD
+from flask import Flask, render_template, request, make_response
 from openai import OpenAI
 import os
 import re
 import folium
 import json
 from branca.colormap import LinearColormap
+#from api import spotify_mod, database, ipfinder
+import spotify_mod, database, ipfinder
+import geopy
+from geopy.geocoders import Nominatim
+=======
+from flask import Flask, render_template, request, current_app
+from dotenv import load_dotenv
+from openai import OpenAI
+import os
+import re
+
 if os.getenv("VERCEL"):
     from api import spotify_mod, database, ipfinder
 else:
     import spotify_mod, database, ipfinder
-import geopy
-from geopy.geocoders import Nominatim
+
+>>>>>>> 9e9b5be05a94741c56e300f1d5df16b098faa783
 app = Flask(__name__)
 
 # Check if running on Vercel
@@ -26,7 +37,13 @@ else:
 
 
 client = OpenAI(
+<<<<<<< HEAD
+    api_key="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"
+    #api_key=os.environ.get('OPENAI_API_KEY')
+    #api_key=os.environ.get("API_URL")
+=======
     api_key = open_ai_key
+>>>>>>> 9e9b5be05a94741c56e300f1d5df16b098faa783
 )
 
 @app.route("/")
@@ -56,7 +73,6 @@ def send_request(mood):
             max_tokens=60
         )
         last_message = response.choices[0].message.content
-
 
         return last_message
         #return response.choices[0].text.strip()
@@ -127,6 +143,7 @@ def submit():
     valency, danceability, energy, mood, song, singer = extract_values(reply)
     response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}, Song: {song}, Singer: {singer}"
     playlist = spotify_mod.spotify_main(valency, danceability, energy)
+<<<<<<< HEAD
     playlist_json = json.dumps(playlist)
     #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
     city = ipfinder.get_city_from_ip()
@@ -137,12 +154,23 @@ def submit():
 
     #country=time=cookies = "123abc" # temp placeholder
     #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
-    response_html = render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city, map_html=map_html)
+    response_html = render_template("mood.html", mood=playlist, response=response, reply=reply, city=city, map_html=map_html)
     # Create a response object from the rendered HTML
     response = make_response(response_html)
     # Set a cookie in the response object
     response.set_cookie('playlist', playlist_json, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
     return response
+=======
+    
+    city = 'Place'
+    ip_address = '123.4556.345'
+    country = "Place"
+    database.test_table()
+    #city = ipfinder.get_city_from_ip()
+    #ipfinder.get_from_ip(city, country, ip_address)
+    #database.insert_into_table(valency, danceability, energy, mood, ip_address, city, country)
+    return render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city)
+>>>>>>> 9e9b5be05a94741c56e300f1d5df16b098faa783
 
 if __name__ == "__main__":
     app.run(debug=True)
