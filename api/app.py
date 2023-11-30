@@ -61,6 +61,7 @@ def submit():
     city = 'Place'
     ip_address = '123.4556.345'
     country = "Place"
+    test_table()
     #city = ipfinder.get_city_from_ip()
     #ipfinder.get_from_ip(city, country, ip_address)
     #database.insert_into_table(valency, danceability, energy, mood, ip_address, city, country)
