@@ -149,7 +149,7 @@ if __name__ == "__main__":
     app.run(debug=True)
 
 def get_coordinates(city_name):
-    geolocator = Nominatim(user_agent="geoapiExercises")
+    geolocator = Nominatim(user_agent="moodmusicmapper")
     location = geolocator.geocode(city_name)
     if location:
         return location.latitude, location.longitude
