@@ -134,7 +134,8 @@ def submit():
     #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
     ipaddress = ipfinder.get_ip()
     city = ipfinder.get_city_from_ip(ipaddress)
-    database.insert_into_table(ipaddress, input_mood, mood, valency, danceability, energy)
+    country = ipfinder.get_country_from_ip(ipaddress)
+    database.insert_into_table(ipaddress, input_mood, mood, valency, danceability, energy, city, country)
 
     # Generate the map with mood data
     folium_map = create_map(mood_data)
