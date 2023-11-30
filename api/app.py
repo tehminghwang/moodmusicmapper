@@ -127,14 +127,19 @@ def create_map(mood_data):
 def submit():
     input_mood = request.form.get("mood")
     reply = send_request(input_mood)
+
     valency, danceability, energy, mood, song, singer = extract_values(reply)
     response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}, Song: {song}, Singer: {singer}"
+
     playlist = spotify_mod.spotify_main(valency, danceability, energy)
     playlist_json = json.dumps(playlist)
     #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
+
     ipaddress = ipfinder.get_ip()
-    city = ipfinder.get_city_from_ip(ipaddress)
-    country = ipfinder.get_country_from_ip(ipaddress)
+    location_info = ipfinder.get_location_from_ip(ipaddress)
+    city = location_info['city']
+    country = location_info['country']
+
     database.insert_into_table(ipaddress, input_mood, mood, valency, danceability, energy, city, country)
 
     # Generate the map with mood data
