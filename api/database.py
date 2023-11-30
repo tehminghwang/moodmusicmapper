@@ -11,7 +11,7 @@ def insert_into_table(valency, danceability, energy, mood, city):
 
     try:
         print("Executing SQL query...")
-        curs.execute("""INSERT INTO mood VALUES (NOW(), %s, %s, %s, %s, %s);""", (city, mood, valency, danceability, energy))
+        curs.execute("""INSERT INTO mood VALUES (%s, %s, %s, %s, %s);""", (city, mood, valency, danceability, energy))
 
         print("Committing transaction...")
         conn.commit()
