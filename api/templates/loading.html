@@ -1,16 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Minting your playlist right now...</title>
-    <!-- Add styles for your loading message or spinner here -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading</title>
+    <style>
+        /* Center the content vertically and horizontally */
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background-image: url('../static/music.png'); /* Path to background image */
+            background-size: cover; /* Cover the entire page */
+            background-repeat: no-repeat; /* Do not repeat the image */
+            background-position: center; /* Center the image */
+        }
+
+        /* Container for Spotify Iframe */
+        .spotify-container {
+            width: 400px; /* Match the width of the iframe */
+            height: 200px; /* Match the height of the iframe */
+            margin-bottom: 20px; /* Space between the iframe and the GIF */
+        }
+
+        /* Apply typing animation to h1 */
+        h1 {
+            color: #87CEEB;
+            font-family: 'Roboto', sans-serif;
+            overflow: hidden;
+            white-space: nowrap;
+            animation: typing 2.5s steps(30, end);
+        }
+
+        /* Keyframes for typing animation */
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+    </style>
 </head>
 <body>
-    <div class="loading-container">
-        <div class="loading-spinner"></div>
-        <p>Loading...</p>
+    <!-- Spotify Iframe -->
+    <h1>Harmonizing Your Mood with Music...</h1>
+
+    <div class="spotify-container">
+        <iframe src="https://open.spotify.com/embed/track/6kex4EBAj0WHXDKZMEJaaF" width="400" height="200" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
     </div>
+
+    <!-- Loading GIF -->
+    <div class="loading-gif">
+        <iframe src="https://giphy.com/embed/qVokTrSmUh1rW" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/stickers/snow-qVokTrSmUh1rW">via GIPHY</a></p>
+    </div>
+
     <script>
-        // You can add JavaScript to customize the loading animation here
+        setTimeout(function() {
+            window.location.href = "{{ url_for('response_page', input_mood=input_mood) }}";
+        }, 2000); // Delay for redirect
     </script>
 </body>
 </html>

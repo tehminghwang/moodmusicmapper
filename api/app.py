@@ -122,16 +122,36 @@ def create_map(mood_data):
 
 
 
-
 @app.route("/submit", methods=["POST"])
 def submit():
     input_mood = request.form.get("mood")
+
+    # Simulate a delay (2 seconds) to simulate a background task
+    #time.sleep(2)
+
+    # Redirect to the loading page before going to the response page
+    return redirect(url_for("loading_page", input_mood=input_mood))
+
+
+@app.route("/loading/<input_mood>")
+def loading_page(input_mood):
+    # Render the loading page
+
+    return render_template("loading.html", input_mood=input_mood)
+
+
+@app.route("/response/<input_mood>")
+def response_page(input_mood):
+
+    # Process the request and prepare the response here
+    # You can use the 'input_mood' parameter to generate the response
+    print("Hello, World!")
     reply = send_request(input_mood)
     valency, danceability, energy, mood, song, singer = extract_values(reply)
     response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}, Song: {song}, Singer: {singer}"
     playlist = spotify_mod.spotify_main(valency, danceability, energy)
     playlist_json = json.dumps(playlist)
-    #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
+
     city = ipfinder.get_city_from_ip()
     database.insert_into_table(valency, danceability, energy, mood, city)
 
@@ -139,14 +159,13 @@ def submit():
     folium_map = create_map(mood_data)
     map_html = folium_map._repr_html_()
 
-    #country=time=cookies = "123abc" # temp placeholder
-    #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
     response_html = render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city, map_html=map_html)
     # Create a response object from the rendered HTML
     response = make_response(response_html)
     # Set a cookie in the response object
     response.set_cookie('playlist', playlist_json, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
     return response
+
 
 if __name__ == "__main__":
     app.run(debug=True)
