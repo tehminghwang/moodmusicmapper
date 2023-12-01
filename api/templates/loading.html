@@ -58,7 +58,7 @@
 
     <script>
         setTimeout(function() {
-            window.location.href = "{{ url_for('response_page', input_mood=input_mood) }}";
+            window.location.href = "{{ url_for('response_page', input_mood=input_mood, ipaddress=ipaddress, city=city) }}";
         }, 2000); // Delay for redirect
     </script>
 </body>
