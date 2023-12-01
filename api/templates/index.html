@@ -46,14 +46,23 @@
 		<input type="text" id="moodfield" name="mood">
 		<br><input type="submit" value="Click Me!">
 	      </p>
+	      <br><br><br><br><br>
 	  </form></center>
 	  </footer>
 	</div>
+	
+	<!-- Navigation Bar -->
+	<nav id="nav">
+	  <ul>
+	    <li><a href="index.html">Home</a></li>
+	    <li><a href="#about">About</a></li>
+	  </ul>
+	</nav>
 
 	<!-- Banner -->
 	<section id="banner">
 	  <header>
-	    <h3 style="font-size: 40px;">Replay your magical moments</h3>
+	    <h3 style="color: white; font-size: 50px;">Replay your magical moments</h3>
 	  </header>
 	</section>
 
@@ -75,7 +84,7 @@
 						encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 	        {% endfor %}
           {% else %}
-              <p>No recommendations available.</p>
+              <p><center>No recommendations available.</center></p>
           {% endif %}
 	    </div>
 	    <button id="next-btn" class="next-btn">
@@ -85,6 +94,51 @@
 	    </button>
 	  </div>
 	</div>
+	
+	<!-- About -->
+	<div class="about">
+	  <section id="about">
+	    <img src="{{ url_for('static', filename='css/logo.png')" alt="Magic Music Mapper Logo"
+		 width="200" height = "200">
+	    <br><br>
+	  <header>
+	    <h3 style="color: white; font-size: 50px;">Magic Music Mapper</h3>
+	  </header>
+	  <br><br>
+	  <p>
+	    <strong>Magic Music Mapper</strong> is your personalized musical journey
+	    through emotions. Seamlessly blending technology and
+	    emotions, our innovative web application harnesses the power
+	    of your feelings to curate a bespoke Spotify playlist
+	    tailored just for you.
+	    <br><br>
+	    Unravel the sonic landscape of your emotions by simply sharing how you
+	    feel. Whether you're riding high on exuberance, seeking
+	    solace in tranquility, embracing nostalgia, or reveling in
+	    any emotion in between, <strong>Magic Music Mapper</strong> intuitively
+	    deciphers your mood and translates it into a handcrafted
+	    musical experience.
+	    <br><br>
+	    Powered by cutting-edge algorithms, our app discerns the intricate
+	    nuances of your emotions, translating them into a curated
+	    selection of tracks from Spotify's extensive library. Each
+	    playlist is a symphony of emotions, a musical portrayal
+	    designed to complement your current state of mind.
+	    <br><br>
+	    Discover new tunes that resonate with your feelings or rediscover old
+	    favorites in a whole new light. <strong>Magic Music Mapper</strong> is your
+	    gateway to a personalized musical voyage, synchronizing
+	    seamlessly with your emotional landscape, ensuring that
+	    every note resonates with your heartstrings.
+	    <br><br>
+	    Embrace the fusion of technology and sentiment with <strong>Magic Music
+	    Mapper</strong> and let the melodies seamlessly serenade your soul,
+	    transforming the way you experience music based on your
+	    ever-changing emotions.
+	  </p>
+	  </section>
+	</div>
+	
 	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
   </body>
 </html>

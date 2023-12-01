@@ -44,7 +44,7 @@ def get_spotify_recommendations(access_token, seed_genre, valence, danceability,
     return tracks
 
 def spotify_main(valence, danceability, energy):    # Replace 'YOUR_CLIENT_ID' and 'YOUR_CLIENT_SECRET' with your actual Spotify API credentials
-    client_id = 'bc4a63dca78b417db515f5b70813b986'
+    client_id = 'e7f726d8be8f4c49820046043edc2e79'
 
     if os.getenv("VERCEL"):
     # Load environment variables from Vercel secrets
