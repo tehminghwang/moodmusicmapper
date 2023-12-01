@@ -161,10 +161,13 @@ def response_page(input_mood):
         print("Hello, World!")
         reply = send_request(input_mood)
         valency, danceability, energy, mood, genre, song1, singer1, song2, singer2, song3, singer3 = extract_values(reply)
-        #response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}, Song: {song}, Singer: {singer}"
+        response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}"
         recommended_playlist = spotify_mod.spotify_main(valency, danceability, energy, genre)
         playlist_json = json.dumps(recommended_playlist)
         #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
+
+        playlist = recommended_playlist
+
 
         ipaddress = request.cookies.get('ipaddress')
         print(ipaddress)
@@ -179,14 +182,6 @@ def response_page(input_mood):
 
         #country=time=cookies = "123abc" # temp placeholder
         #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
-        response_html = render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city, map_html=map_html)
-        # Create a response object from the rendered HTML
-        response = make_response(response_html)
-        # Set a cookie in the response object
-        response.set_cookie('playlist', playlist_json, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
-
-        #country=time=cookies = "123abc" # temp placeholder
-        #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
         city = request.cookies.get('city')
         response_html = render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city, map_html=map_html)
         # Create a response object from the rendered HTML
@@ -194,7 +189,8 @@ def response_page(input_mood):
         # Set a cookie in the response object
         response.set_cookie('playlist', playlist_json, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
     
-    except Exception:
+    except Exception as e:
+        print("Error", e)
         response = error_page()
 
     return response
@@ -249,8 +245,6 @@ def extract_values(text):
     energy = float(energy.group(1)) if energy else None
     mood = mood.group(1) if mood else None
     genre = genre.group(1) if genre else None
-    song = song.group(1) if song else None
-    singer = singer.group(1) if singer else None
     song1 = song1.group(1) if song1 else None
     singer1 = singer1.group(1) if singer1 else None
     song2 = song2.group(1) if song2 else None

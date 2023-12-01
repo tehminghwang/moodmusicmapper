@@ -44,7 +44,7 @@ def get_spotify_recommendations(access_token, seed_genre, valence, danceability,
     return tracks
 
 def spotify_main(valence, danceability, energy, genre):    # Replace 'YOUR_CLIENT_ID' and 'YOUR_CLIENT_SECRET' with your actual Spotify API credentials
-    client_id = 'e7f726d8be8f4c49820046043edc2e79'
+    client_id = 'bc4a63dca78b417db515f5b70813b986'
 
     if os.getenv("VERCEL"):
     # Load environment variables from Vercel secrets
@@ -73,18 +73,16 @@ def spotify_main(valence, danceability, energy, genre):    # Replace 'YOUR_CLIEN
     #for i, track in enumerate(recommendations, start=1):
         #print(f"{i}. {track['name']} by {track['artist']} (URI: {track['uri']})")
 
-client_id = 'e7f726d8be8f4c49820046043edc2e79'
-
 def get_spotify_genres(access_token):
 
     # Get list of genres
-    base_url = 'https://api.spotify.com/v1/browse/categories'
+    base_url = 'https://api.spotify.com/v1/recommendations/available-genre-seeds'
     headers = {'Authorization': f'Bearer {access_token}'}
     genres_response = requests.get(base_url, headers=headers)
     genres_data = genres_response.json()
 
     # Extract genre names
-    genres = [category['name'] for category in genres_data['categories']['items']]
+    genres = genres_data['genres']
     
     return genres
 
