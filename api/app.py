@@ -160,10 +160,10 @@ def response_page(input_mood):
         # You can use the 'input_mood' parameter to generate the response
         print("Hello, World!")
         reply = send_request(input_mood)
-        valency, danceability, energy, mood, song, singer = extract_values(reply)
-        response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}, Song: {song}, Singer: {singer}"
-        playlist = spotify_mod.spotify_main(valency, danceability, energy)
-        playlist_json = json.dumps(playlist)
+        valency, danceability, energy, mood, genre, song1, singer1, song2, singer2, song3, singer3 = extract_values(reply)
+        #response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}, Song: {song}, Singer: {singer}"
+        recommended_playlist = spotify_mod.spotify_main(valency, danceability, energy, genre)
+        playlist_json = json.dumps(recommended_playlist)
         #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
 
         ipaddress = request.cookies.get('ipaddress')
@@ -221,6 +221,7 @@ def extract_values(text):
     danceability_pattern = r"Danceability:\s([0-9.]+)"
     energy_pattern = r"Energy:\s([0-9.]+)"
     mood_pattern = r"Mood:\s(\w+)(?!.*Mood:)"
+    genre_pattern = r"Genre:\s([^\]]+)"
     song_pattern = r"Song:\s\"([^\"]+)\""
     singer_pattern = r"Singer:\s([^\]]+)"
 
@@ -229,18 +230,31 @@ def extract_values(text):
     danceability = re.search(danceability_pattern, text)
     energy = re.search(energy_pattern, text)
     mood = re.search(mood_pattern, text)
-    song = re.search(song_pattern, text)
-    singer = re.search(singer_pattern, text)
+    genre = re.search(genre_pattern, text)
+    song1 = re.search(song_pattern.replace('\d+', '1'), text)
+    singer1 = re.search(singer_pattern.replace('\d+', '1'), text)
+    song2 = re.search(song_pattern.replace('\d+', '2'), text)
+    singer2 = re.search(singer_pattern.replace('\d+', '2'), text)
+    song3 = re.search(song_pattern.replace('\d+', '3'), text)
+    singer3 = re.search(singer_pattern.replace('\d+', '3'), text)
+
 
     # Assigning to variables and converting to appropriate types
     valency = float(valency.group(1)) if valency else None
     danceability = float(danceability.group(1)) if danceability else None
     energy = float(energy.group(1)) if energy else None
     mood = mood.group(1) if mood else None
+    genre = genre.group(1) if genre else None
     song = song.group(1) if song else None
     singer = singer.group(1) if singer else None
+    song1 = song1.group(1) if song1 else None
+    singer1 = singer1.group(1) if singer1 else None
+    song2 = song2.group(1) if song2 else None
+    singer2 = singer2.group(1) if singer2 else None
+    song3 = song3.group(1) if song3 else None
+    singer3 = singer3.group(1) if singer3 else None
 
-    return valency, danceability, energy, mood, song, singer
+    return valency, danceability, energy, mood, genre, song1, singer1, song2, singer2, song3, singer3
 
 
 
