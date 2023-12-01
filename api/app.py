@@ -144,36 +144,48 @@ def loading_page(input_mood):
 @app.route("/response/<input_mood>")
 def response_page(input_mood):
 
-    # Process the request and prepare the response here
-    # You can use the 'input_mood' parameter to generate the response
-    print("Hello, World!")
-    reply = send_request(input_mood)
-    valency, danceability, energy, mood, song, singer = extract_values(reply)
-    response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}, Song: {song}, Singer: {singer}"
+    try:
+        # Process the request and prepare the response here
+        # You can use the 'input_mood' parameter to generate the response
+        print("Hello, World!")
+        reply = send_request(input_mood)
+        valency, danceability, energy, mood, song, singer = extract_values(reply)
+        response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}, Song: {song}, Singer: {singer}"
+        playlist = spotify_mod.spotify_main(valency, danceability, energy)
+        playlist_json = json.dumps(playlist)
+        #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
 
-    playlist = spotify_mod.spotify_main(valency, danceability, energy)
-    playlist_json = json.dumps(playlist)
-    #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
+        ipaddress = ipfinder.get_ip()
+        location_info = ipfinder.get_location_from_ip(ipaddress)
+        city = location_info['city']
+        country = location_info['country']
 
-    ipaddress = ipfinder.get_ip()
-    location_info = ipfinder.get_location_from_ip(ipaddress)
-    city = location_info['city']
-    country = location_info['country']
+        database.insert_into_table(ipaddress, input_mood, mood, valency, danceability, energy, city, country, playlist)
 
-    database.insert_into_table(ipaddress, input_mood, mood, valency, danceability, energy, city, country, playlist)
+        # Generate the map with mood data
+        folium_map = create_map(mood_data)
+        map_html = folium_map._repr_html_()
 
-    # Generate the map with mood data
-    folium_map = create_map(mood_data)
-    map_html = folium_map._repr_html_()
+        #country=time=cookies = "123abc" # temp placeholder
+        #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
+        response_html = render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city, map_html=map_html)
+        # Create a response object from the rendered HTML
+        response = make_response(response_html)
+        # Set a cookie in the response object
+        response.set_cookie('playlist', playlist_json, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
 
-    #country=time=cookies = "123abc" # temp placeholder
-    #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
-    response_html = render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city, map_html=map_html)
-    # Create a response object from the rendered HTML
-    response = make_response(response_html)
-    # Set a cookie in the response object
-    response.set_cookie('playlist', playlist_json, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
+        return response
+    
+    except Exception:
+        response = error_page
+
     return response
+
+@app.route("/error")
+def error_page():
+    
+    return render_template("error.html")
+    
 
 
 if __name__ == "__main__":

@@ -28,7 +28,7 @@ def get_spotify_recommendations(access_token, seed_genre, valence, danceability,
     }
 
     response = requests.get(recommendations_url, headers=headers, params=params)
- 
+    
     recommendations = response.json()['tracks']
 
     # Extract relevant information from recommendations
@@ -61,7 +61,6 @@ def spotify_main(valence, danceability, energy):    # Replace 'YOUR_CLIENT_ID' a
     #valence = 0.8  # Range: 0.0 to 1.0
     #danceability = 0.7  # Range: 0.0 to 1.0
     #energy = 0.8  # Range: 0.0 to 1.0
-
     recommendations = get_spotify_recommendations(access_token, seed_genre, valence, danceability, energy)
 
     return recommendations
