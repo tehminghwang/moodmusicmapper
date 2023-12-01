@@ -179,14 +179,6 @@ def response_page(input_mood):
 
         #country=time=cookies = "123abc" # temp placeholder
         #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
-        response_html = render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city, map_html=map_html)
-        # Create a response object from the rendered HTML
-        response = make_response(response_html)
-        # Set a cookie in the response object
-        response.set_cookie('playlist', playlist_json, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
-
-        #country=time=cookies = "123abc" # temp placeholder
-        #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
         city = request.cookies.get('city')
         response_html = render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city, map_html=map_html)
         # Create a response object from the rendered HTML
