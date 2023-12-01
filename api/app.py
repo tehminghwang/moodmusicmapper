@@ -58,7 +58,6 @@ def send_request(mood):
         )
         last_message = response.choices[0].message.content
 
-
         return last_message
         #return response.choices[0].text.strip()
     except Exception as e:
@@ -127,20 +126,18 @@ def create_map(mood_data):
 def submit():
     input_mood = request.form.get("mood")
 
-    city_cookie = request.cookies.get('city')
-    saved_playlist = None  # Initialize saved_playlist to None
-    if city_cookie:
-        city = city_cookie
-    else:
+    if not request.cookies.get('city'):
         ipaddress = ipfinder.get_ip()
         location_info = ipfinder.get_location_from_ip(ipaddress)
+        # IP address not stored if using remote server
         if location_info['city']:
             city = location_info['city']
             country = location_info['country']
+            database.location_into_table(ipaddress, city, country)
+            # Also stores values in a cookie
             response = make_response("Cookie set")
             response.set_cookie('ipaddress', ipaddress, max_age=60 * 60 * 24 * 30)
             response.set_cookie('city', city, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
-            database.location_into_table(ipaddress, city, country)
 
     # Simulate a delay (2 seconds) to simulate a background task
     #time.sleep(2)
@@ -148,13 +145,13 @@ def submit():
     return redirect(url_for("loading_page", input_mood=input_mood))
 
 
-@app.route("/loading/<input_mood>/")
+@app.route("/loading/<input_mood>")
 def loading_page(input_mood):
     # Render the loading page
     return render_template("loading.html", input_mood=input_mood)
 
 
-@app.route("/response/<input_mood>/")
+@app.route("/response/<input_mood>")
 def response_page(input_mood):
 
     # Process the request and prepare the response here
