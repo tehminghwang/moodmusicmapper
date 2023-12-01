@@ -126,26 +126,24 @@ def create_map(mood_data):
 def submit():
     input_mood = request.form.get("mood")
 
-    if request.cookies.get('ipaddress'):
+    if request.cookies.get('ipaddress') is not None:
+        print("IP address in Cookie")
         return redirect(url_for("loading_page", input_mood=input_mood))
     else:
         ipaddress = ipfinder.get_ip()
-        response = make_response("Cookie set")
+        response = make_response(redirect(url_for("loading_page", input_mood=input_mood)))
         response.set_cookie('ipaddress', ipaddress, max_age=60 * 60 * 24 * 30)
-
-    if not request.cookies.get('city'):
         location_info = ipfinder.get_location_from_ip(ipaddress)
-        if location_info:
+        if location_info['city'] is not None:
             city = location_info['city']
             country = location_info['country']
             database.location_into_table(ipaddress, city, country)
-            response.set_cookie('ipaddress', ipaddress, max_age=60 * 60 * 24 * 30)
             response.set_cookie('city', city, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
 
     # Simulate a delay (2 seconds) to simulate a background task
     #time.sleep(2)
     # Redirect to the loading page before going to the response page
-    return redirect(url_for("loading_page", input_mood=input_mood))
+    return response
 
 
 @app.route("/loading/<input_mood>")
@@ -156,19 +154,6 @@ def loading_page(input_mood):
 
 @app.route("/response/<input_mood>")
 def response_page(input_mood):
-
-<<<<<<< HEAD
-    # Process the request and prepare the response here
-    # You can use the 'input_mood' parameter to generate the response
-    print(input_mood)
-    reply = send_request(input_mood)
-    valency, danceability, energy, mood, song, singer = extract_values(reply)
-    response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}, Song: {song}, Singer: {singer}"
-    playlist = spotify_mod.spotify_main(valency, danceability, energy)
-    playlist_json = json.dumps(playlist)
-    #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
-=======
->>>>>>> 3fdfe713bf46027b72da0a389aa2ed3050f65a75
 
     try:
         # Process the request and prepare the response here
@@ -182,6 +167,10 @@ def response_page(input_mood):
         #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
 
         ipaddress = request.cookies.get('ipaddress')
+        print(ipaddress)
+        print(input_mood)
+        print(mood)
+        print(valency)
         database.mood_into_table(ipaddress, input_mood, mood, valency, danceability, energy, playlist)
 
         # Generate the map with mood data
@@ -206,7 +195,7 @@ def response_page(input_mood):
         response.set_cookie('playlist', playlist_json, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
     
     except Exception:
-        response = error_page
+        response = error_page()
 
     return response
 
