@@ -126,28 +126,36 @@ def create_map(mood_data):
 @app.route("/submit", methods=["POST"])
 def submit():
     input_mood = request.form.get("mood")
-    ipaddress = ipfinder.get_ip()
-    location_info = ipfinder.get_location_from_ip(ipaddress)
-    if location_info['city']:
-        city = location_info['city']
+
+    city_cookie = request.cookies.get('city')
+    saved_playlist = None  # Initialize saved_playlist to None
+    if city_cookie:
+        city = city_cookie
     else:
-        city = "Local server"
-    country = location_info['country']
-    database.location_into_table(ipaddress, city, country)
+        ipaddress = ipfinder.get_ip()
+        location_info = ipfinder.get_location_from_ip(ipaddress)
+        if location_info['city']:
+            city = location_info['city']
+            country = location_info['country']
+            response = make_response("Cookie set")
+            response.set_cookie('ipaddress', ipaddress, max_age=60 * 60 * 24 * 30)
+            response.set_cookie('city', city, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
+            database.location_into_table(ipaddress, city, country)
+
     # Simulate a delay (2 seconds) to simulate a background task
     #time.sleep(2)
     # Redirect to the loading page before going to the response page
-    return redirect(url_for("loading_page", input_mood=input_mood, ipaddress=ipaddress, city=city))
+    return redirect(url_for("loading_page", input_mood=input_mood))
 
 
-@app.route("/loading/<input_mood>/<ipaddress>/<city>")
-def loading_page(input_mood, ipaddress, city):
+@app.route("/loading/<input_mood>/")
+def loading_page(input_mood):
     # Render the loading page
-    return render_template("loading.html", input_mood=input_mood, ipaddress=ipaddress, city=city)
+    return render_template("loading.html", input_mood=input_mood)
 
 
-@app.route("/response/<input_mood>/<ipaddress>/<city>")
-def response_page(input_mood, ipaddress, city):
+@app.route("/response/<input_mood>/")
+def response_page(input_mood):
 
     # Process the request and prepare the response here
     # You can use the 'input_mood' parameter to generate the response
@@ -159,6 +167,7 @@ def response_page(input_mood, ipaddress, city):
     playlist_json = json.dumps(playlist)
     #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
 
+    ipaddress = request.cookies.get('ipaddress')
     database.mood_into_table(ipaddress, input_mood, mood, valency, danceability, energy, playlist)
 
     # Generate the map with mood data
@@ -167,6 +176,7 @@ def response_page(input_mood, ipaddress, city):
 
     #country=time=cookies = "123abc" # temp placeholder
     #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
+    city = request.cookies.get('city')
     response_html = render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city, map_html=map_html)
     # Create a response object from the rendered HTML
     response = make_response(response_html)
