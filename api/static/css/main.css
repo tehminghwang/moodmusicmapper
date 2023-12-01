@@ -27,8 +27,8 @@ section, summary, time, mark, audio, video {
 	}
 
 	body {
-		background: #f0f4f4;
-		color: #5b5b5b;
+		background: #fff;
+		color: #fff;
 		font-size: 15pt;
 		line-height: 1.85em;
 		font-family: 'Roboto', sans-serif;
@@ -136,7 +136,7 @@ section, summary, time, mark, audio, video {
 		background-attachment: fixed;
 		color: #fff;
 		text-align: center;
-		padding: 7.5em 0 2em 0;
+		padding: 14em 0 0em 0;
 		cursor: default;
 	}
 
@@ -196,16 +196,16 @@ section, summary, time, mark, audio, video {
 				background: rgba(192, 192, 192, 0.35);
 			}
 
-	body.homepage #header {
-		height: 80vh;
+/*	body.homepage #header {
+		height: 70vh;
 		min-height: 40em;
 	}
 
 		body.homepage #header h1 {
 			font-size: 4em;
-		}
+		} */
 
-		body.homepage #header:after {
+	/*	body.homepage #header:after {
 			content: '';
 			background: #1C0920;
 			display: block;
@@ -227,15 +227,15 @@ section, summary, time, mark, audio, video {
 
 	body.homepage.is-preload #header:after {
 		opacity: 1;
-	}
+	} */
 
 /* Banner */
 
 	#banner {
-		background: #fff;
 		text-align: center;
-		padding: 0.5em 0 0em 0;
+		padding: 3em 0 1em 0;
 		margin-bottom: 0;
+		background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
 	}
 
 		#banner header > p {
@@ -244,23 +244,23 @@ section, summary, time, mark, audio, video {
 
 /* Main */
 
-	#main {
+/*	#main {
 		margin-bottom: 0;
 	}
 
 		#main section:first-of-type {
 			padding-top: 2em;
-		} 
+		} */
 
 /* Carousel */
 
-button{
+/* button{
     border: none;
     cursor: pointer;
     color: blue;
     background: none;
     transition: all .3s ease-in-out;
-}
+} */
 
 .container {
   width: 100%;
@@ -269,7 +269,7 @@ button{
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 1.0));
 }
 
 .carousel-view {
@@ -293,6 +293,7 @@ button{
   scrollbar-width: none; /* Firefox */
   overflow: auto;
   scroll-snap-type: x mandatory;
+  background-color: transparent;
 }
 
 /* New Hover Effect */
