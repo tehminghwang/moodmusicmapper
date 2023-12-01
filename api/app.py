@@ -48,13 +48,20 @@ def send_request(mood):
         response = client.chat.completions.create(
             #engine="gpt-4",
             #prompt=f"ONLY generate values for valency, danceability, and energy based on the mood: {mood}",
-            model='gpt-3.5-turbo',
+            
+            #model='gpt-3.5-turbo',
+            #messages=[
+            #    {'role': 'system', 'content': 'You are a helpful assistant.'},
+            #    {'role': 'user',
+            #     'content': f'I am feeling {mood}. Can you suggest music characteristics like valency (value from 0.0 to 1.0 with 1.0 being more positive (e.g. happy, cheerful, euphoric)), danceability (value of 0.0 is least danceable and 1.0 is most danceable based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity), and energy (from 0.0 to 1.0 and represents a perceptual measure of intensity and activity) that would suit my mood, and describe my mood in 1 word, and recommend 1 song to suit my mood? Reply as [Valency: ??] [Danceability: ??] [Energy: ??] [Mood: ??] [Song: ??] [Singer: ??].'}
+            #],
+            #max_tokens=60
+            
+            model="ft:gpt-3.5-turbo-0613:personal::8R0aC6w3",
             messages=[
-                {'role': 'system', 'content': 'You are a helpful assistant.'},
-                {'role': 'user',
-                 'content': f'I am feeling {mood}. Can you suggest music characteristics like valency (value from 0.0 to 1.0 with 1.0 being more positive (e.g. happy, cheerful, euphoric)), danceability (value of 0.0 is least danceable and 1.0 is most danceable based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity), and energy (from 0.0 to 1.0 and represents a perceptual measure of intensity and activity) that would suit my mood, and describe my mood in 1 word, and recommend 1 song to suit my mood? Reply as [Valency: ??] [Danceability: ??] [Energy: ??] [Mood: ??] [Song: ??] [Singer: ??].'}
-            ],
-            max_tokens=60
+            {"role": "system", "content": "Assistant to identify valency, energy and danceability index (for song selection) based on description of user's narrative of their sentiment, mood, context, description, feelings, or events. The recommendations should be congruent to the user's current state, and tailored to the emotional tone and energy level described by the user."},
+            {"role": "user", "content": "i feel {mood} now"}
+        ]
         )
         last_message = response.choices[0].message.content
 
@@ -163,8 +170,8 @@ def response_page(input_mood):
         valency, danceability, energy, mood, genre, song1, singer1, song2, singer2, song3, singer3 = extract_values(reply)
         response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}"
         song_list = [song1, song2, song3]
-        recommended_playlist = spotify_mod.spotify_main(valency, danceability, energy, genre, song_list)
-        playlist_json = json.dumps(recommended_playlist)
+        playlist = spotify_mod.spotify_main(valency, danceability, energy, genre, song_list)
+        playlist_json = json.dumps(playlist)
         #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
     
         ipaddress = request.cookies.get('ipaddress')
@@ -220,8 +227,10 @@ def extract_values(text):
     energy_pattern = r"Energy:\s([0-9.]+)"
     mood_pattern = r"Mood:\s(\w+)(?!.*Mood:)"
     genre_pattern = r"Genre:\s([^\]]+)"
-    song_pattern = r"Song:\s\"([^\"]+)\""
-    singer_pattern = r"Singer:\s([^\]]+)"
+    song_pattern = r"Song\d+:\s\[([^\]]+)\]"
+    singer_pattern = r"Singer\d+:\s([^\]]+)"
+
+    print(text)
 
     # Extracting values
     valency = re.search(valency_pattern, text)
@@ -249,6 +258,9 @@ def extract_values(text):
     singer2 = singer2.group(1) if singer2 else None
     song3 = song3.group(1) if song3 else None
     singer3 = singer3.group(1) if singer3 else None
+
+    print(song1, song2, song3)
+
 
     return valency, danceability, energy, mood, genre, song1, singer1, song2, singer2, song3, singer3
 

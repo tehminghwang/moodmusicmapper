@@ -65,9 +65,11 @@ def spotify_main(valence, danceability, energy, genre, song_list):    # Replace 
     #energy = 0.8  # Range: 0.0 to 1.0
     recommendations = get_spotify_recommendations(access_token, seed_genre, valence, danceability, energy)
 
-    search_result = search_spotify_song(song_list)
+    search_result = search_spotify_song(song_list, access_token)
 
-    playlist = recommendations + search_result
+    playlist = search_result + recommendations 
+
+    print(playlist)
 
     return playlist
 
@@ -94,7 +96,7 @@ def search_spotify_song(query_list, access_token):
     headers = {'Authorization': f'Bearer {access_token}'}
 
     # Specify the type as 'track' for searching songs
-    tracks = []
+    song_list = []
 
     for query in query_list:    
         params = {'q': query, 'type': 'track'}
@@ -115,8 +117,8 @@ def search_spotify_song(query_list, access_token):
                 'uri': first_track['id']
                 }
                 
-                tracks.append(track_info)
+                song_list.append(track_info)
         
     
-    return tracks
+    return song_list
 
