@@ -126,16 +126,19 @@ def create_map(mood_data):
 def submit():
     input_mood = request.form.get("mood")
 
-    if not request.cookies.get('city'):
+    if request.cookies.get('ipaddress'):
+        return redirect(url_for("loading_page", input_mood=input_mood))
+    else:
         ipaddress = ipfinder.get_ip()
+        response = make_response("Cookie set")
+        response.set_cookie('ipaddress', ipaddress, max_age=60 * 60 * 24 * 30)
+
+    if not request.cookies.get('city'):
         location_info = ipfinder.get_location_from_ip(ipaddress)
-        # IP address not stored if using remote server
-        if location_info['city']:
+        if location_info:
             city = location_info['city']
             country = location_info['country']
             database.location_into_table(ipaddress, city, country)
-            # Also stores values in a cookie
-            response = make_response("Cookie set")
             response.set_cookie('ipaddress', ipaddress, max_age=60 * 60 * 24 * 30)
             response.set_cookie('city', city, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
 
@@ -156,7 +159,7 @@ def response_page(input_mood):
 
     # Process the request and prepare the response here
     # You can use the 'input_mood' parameter to generate the response
-    print("Hello, World!")
+    print(input_mood)
     reply = send_request(input_mood)
     valency, danceability, energy, mood, song, singer = extract_values(reply)
     response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}, Song: {song}, Singer: {singer}"
