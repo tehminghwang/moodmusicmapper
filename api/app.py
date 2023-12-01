@@ -157,19 +157,6 @@ def loading_page(input_mood):
 @app.route("/response/<input_mood>")
 def response_page(input_mood):
 
-<<<<<<< HEAD
-    # Process the request and prepare the response here
-    # You can use the 'input_mood' parameter to generate the response
-    print(input_mood)
-    reply = send_request(input_mood)
-    valency, danceability, energy, mood, song, singer = extract_values(reply)
-    response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}, Song: {song}, Singer: {singer}"
-    playlist = spotify_mod.spotify_main(valency, danceability, energy)
-    playlist_json = json.dumps(playlist)
-    #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
-=======
->>>>>>> 3fdfe713bf46027b72da0a389aa2ed3050f65a75
-
     try:
         # Process the request and prepare the response here
         # You can use the 'input_mood' parameter to generate the response

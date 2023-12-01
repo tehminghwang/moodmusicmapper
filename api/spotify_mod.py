@@ -73,7 +73,7 @@ def spotify_main(valence, danceability, energy, genre):    # Replace 'YOUR_CLIEN
     #for i, track in enumerate(recommendations, start=1):
         #print(f"{i}. {track['name']} by {track['artist']} (URI: {track['uri']})")
 
-
+client_id = 'e7f726d8be8f4c49820046043edc2e79'
 
 def get_spotify_genres(access_token):
 
