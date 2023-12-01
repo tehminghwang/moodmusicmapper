@@ -13,7 +13,7 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            background-image: url('../static/music.png'); /* Path to background image */
+            background-image: url('../static/background.png'); /* Path to background image */
             background-size: cover; /* Cover the entire page */
             background-repeat: no-repeat; /* Do not repeat the image */
             background-position: center; /* Center the image */
@@ -21,14 +21,14 @@
 
         /* Container for Spotify Iframe */
         .spotify-container {
-            width: 400px; /* Match the width of the iframe */
-            height: 200px; /* Match the height of the iframe */
+            width: 600px; /* Match the width of the iframe */
+            height: 300px; /* Match the height of the iframe */
             margin-bottom: 20px; /* Space between the iframe and the GIF */
         }
 
         /* Apply typing animation to h1 */
         h1 {
-            color: #87CEEB;
+            color: white;
             font-family: 'Roboto', sans-serif;
             overflow: hidden;
             white-space: nowrap;
@@ -47,13 +47,14 @@
     <h1>Harmonizing Your Mood with Music...</h1>
 
     <div class="spotify-container">
-        <iframe src="https://open.spotify.com/embed/track/6kex4EBAj0WHXDKZMEJaaF" width="400" height="200" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        <iframe src="https://open.spotify.com/embed/track/6kex4EBAj0WHXDKZMEJaaF" width="600" height="300" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
     </div>
 
     <!-- Loading GIF -->
     <div class="loading-gif">
-        <iframe src="https://giphy.com/embed/qVokTrSmUh1rW" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/stickers/snow-qVokTrSmUh1rW">via GIPHY</a></p>
+        <img src="../static/preloader.gif" alt="Loading">
     </div>
+
 
     <script>
         setTimeout(function() {
