@@ -36,7 +36,7 @@ list.addEventListener('mouseenter', (event) => {
   if (relativeX < listRect.width / 3) {
     startAutoScroll(-1); // Scrolls to the left
   } else if (relativeX > listRect.width * 2/3){
-    startAutoScroll(1); // Scrolls to the right
+      startAutoScroll(1); // Scrolls to the right
   }
 });
 
