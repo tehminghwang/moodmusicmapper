@@ -33,9 +33,9 @@ list.addEventListener('mouseenter', (event) => {
   const relativeX = event.clientX - listRect.left;
 
   // Check if the mouse is in the left or right half of the list
-  if (relativeX < listRect.width / 2) {
+  if (relativeX < listRect.width / 3) {
     startAutoScroll(-1); // Scrolls to the left
-  } else {
+  } else if (relativeX > listRect.width * 2/3){
     startAutoScroll(1); // Scrolls to the right
   }
 });

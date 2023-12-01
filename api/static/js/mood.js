@@ -42,7 +42,7 @@ list.addEventListener('mouseenter', (event) => {
 
 list.addEventListener('mouseleave', stopAutoScroll);
 
-
+/*
 
 //share button
 
@@ -56,3 +56,5 @@ document.getElementById("share").addEventListener("click", function(event) {
   document.getElementById("twitter_x").classList.toggle("hidden");
   
 });
+
+*/

@@ -166,7 +166,7 @@ section, summary, time, mark, audio, video {
 
 		#header h1 {
 			color: #fff;
-			font-size: 1em;
+			font-size: 2em;
 			line-height: 1em;
 		}
 
@@ -186,7 +186,7 @@ section, summary, time, mark, audio, video {
 				background: rgba(192, 192, 192, 0.35);
 			}
 
-	body.homepage #header {
+/*	body.homepage #header {
 		height: 50vh;
 		min-height: 20em;
 	}
@@ -217,15 +217,16 @@ section, summary, time, mark, audio, video {
 
 	body.homepage.is-preload #header:after {
 		opacity: 1;
-	}
+	} */
 
 /* Banner */
 
 	#banner {
-		background: #fff;
 		text-align: center;
 		padding: 4.5em 0 0.5em 0;
 		margin-bottom: 0;
+		background-color: rgba(192, 192, 192, 0.1);
+
 	}
 
 		#banner header > p {
@@ -244,13 +245,14 @@ section, summary, time, mark, audio, video {
 
 /* Carousel */
 
+/*
 button{
     border: none;
     cursor: pointer;
     color: blue;
     background: none;
     transition: all .3s ease-in-out;
-}
+} */
 
 .container {
   width: 100%;
@@ -258,7 +260,7 @@ button{
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background-color: rgba(192, 192, 192, 0.1);
 }
 
 .carousel-view {
@@ -285,11 +287,27 @@ button{
 	scroll-snap-type: x mandatory;
   }
 
-.carousel-view .item-list .song {
+.song {
 	display: flex;
+	align-items: center;
 	flex-direction: column;
 	margin: 0 auto;
 }
+
+.share:hover .shareto {
+	display: inline;
+  }
+
+.share {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+}
+
+.shareto {
+	display: none;
+}
+
 
 /* New Hover Effect */
 .carousel-view .item {
@@ -325,6 +343,28 @@ button{
 }
 
 /* hidden class */
-.carousel-view .item-list .song .hidden {
+ .hidden {
 	display: none;
+  }
+
+/* 2 columns container */
+
+  .two_col_container {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-template-rows: repeat(2, 1fr);
+	height: 100vh; /* Adjust the height as needed */
+	background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .left-column {
+	grid-column: 1 / 2;
+	grid-row: 1 / 3;
+	padding: 20px;
+  }
+
+  .right-column {
+	grid-column: 2 / 3;
+	grid-row: 1 / 3;
+	padding: 20px;
   }

@@ -4,21 +4,23 @@
     <title>Mood Music Mapper</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="static/mood.css" />
+    <style>
+      #header {
+        position: relative;
+        background-image: url("{{ url_for('static', filename='header.jpg') }}");
+        background-size: cover;
+        background-position: center center;
+        background-attachment: fixed;
+        color: #fff;
+        text-align: center;
+        font-size: 2em;
+        font-family: 'Roboto', sans-serif;
+        padding: 15em 0 15em 0;
+        cursor: default;
+      }
+    </style>
   </head>
-  <body class="homepage is-preload">
-    <div id="page-wrapper">
-
-      <!-- Header -->
-      <div id="header">
-
-	<!-- Inner -->
-	<div class="inner">
-	  <header><center>
-	      <h1>Sorry, we are not able to recommend you any music currently. Please try again later.</h1>
-	  </header>
-    </div>
-	
-	<script src="static/main.js"></script>
+  <body>
+    <header id="header">Sorry, we are not able to recommend you any music currently. Please try again later.</header>
   </body>
 </html>
