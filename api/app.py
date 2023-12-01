@@ -162,13 +162,11 @@ def response_page(input_mood):
         reply = send_request(input_mood)
         valency, danceability, energy, mood, genre, song1, singer1, song2, singer2, song3, singer3 = extract_values(reply)
         response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}"
-        recommended_playlist = spotify_mod.spotify_main(valency, danceability, energy, genre)
+        song_list = [song1, song2, song3]
+        recommended_playlist = spotify_mod.spotify_main(valency, danceability, energy, genre, song_list)
         playlist_json = json.dumps(recommended_playlist)
         #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
-
-        playlist = recommended_playlist
-
-
+    
         ipaddress = request.cookies.get('ipaddress')
         print(ipaddress)
         print(input_mood)

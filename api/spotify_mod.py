@@ -43,7 +43,7 @@ def get_spotify_recommendations(access_token, seed_genre, valence, danceability,
 
     return tracks
 
-def spotify_main(valence, danceability, energy, genre):    # Replace 'YOUR_CLIENT_ID' and 'YOUR_CLIENT_SECRET' with your actual Spotify API credentials
+def spotify_main(valence, danceability, energy, genre, song_list):    # Replace 'YOUR_CLIENT_ID' and 'YOUR_CLIENT_SECRET' with your actual Spotify API credentials
     client_id = 'bc4a63dca78b417db515f5b70813b986'
 
     if os.getenv("VERCEL"):
@@ -65,9 +65,11 @@ def spotify_main(valence, danceability, energy, genre):    # Replace 'YOUR_CLIEN
     #energy = 0.8  # Range: 0.0 to 1.0
     recommendations = get_spotify_recommendations(access_token, seed_genre, valence, danceability, energy)
 
-    print(recommendations)
+    search_result = search_spotify_song(song_list)
 
-    return recommendations
+    playlist = recommendations + search_result
+
+    return playlist
 
     # Print the recommendations
     #for i, track in enumerate(recommendations, start=1):
@@ -87,26 +89,34 @@ def get_spotify_genres(access_token):
     return genres
 
 
-def search_spotify_song(query, access_token):
+def search_spotify_song(query_list, access_token):
     base_url = 'https://api.spotify.com/v1/search'
     headers = {'Authorization': f'Bearer {access_token}'}
 
     # Specify the type as 'track' for searching songs
-    params = {'q': query, 'type': 'track'}
+    tracks = []
 
-    response = requests.get(base_url, headers=headers, params=params)
-    search_results = response.json()
+    for query in query_list:    
+        params = {'q': query, 'type': 'track'}
 
-    id = None
+        response = requests.get(base_url, headers=headers, params=params)
+        search_results = response.json()
 
-    # Check if there are tracks in the search results
-    if 'tracks' in search_results:
-        tracks = search_results['tracks']['items']
+        # Check if there are tracks in the search results
+        if 'tracks' in search_results:
+            tracks = search_results['tracks']['items']
 
-        if tracks:
-            # Extract information about the first track in the search results
-            first_track = tracks[0]
-            id = first_track['id']
+            if tracks:
+                # Extract information about the first track in the search results
+                first_track = tracks[0]
+                track_info = {
+                'name': first_track['name'],
+                'artist': first_track['artists'][0]['name'],
+                'uri': first_track['id']
+                }
+                
+                tracks.append(track_info)
+        
     
-    return id
+    return tracks
 
