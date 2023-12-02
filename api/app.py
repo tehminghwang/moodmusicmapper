@@ -60,7 +60,7 @@ def send_request(mood):
             model="ft:gpt-3.5-turbo-0613:personal::8R0aC6w3",
             messages=[
             {"role": "system", "content": "Assistant to identify valency, energy and danceability index (for song selection) based on description of user's narrative of their sentiment, mood, context, description, feelings, or events. The recommendations should be congruent to the user's current state, and tailored to the emotional tone and energy level described by the user."},
-            {"role": "user", "content": "i feel {mood} now"}
+            {"role": "user", "content": f'i feel {mood} now'}
         ]
         )
         last_message = response.choices[0].message.content
@@ -169,7 +169,8 @@ def response_page(input_mood):
         reply = send_request(input_mood)
         valency, danceability, energy, mood, genre, song1, singer1, song2, singer2, song3, singer3 = extract_values(reply)
         response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}"
-        song_list = [song1, song2, song3]
+        song_list = [song1 + " " + singer1, song2 + " " + singer2, song3 + " " + singer3]
+        print(song_list)
         playlist = spotify_mod.spotify_main(valency, danceability, energy, genre, song_list)
         playlist_json = json.dumps(playlist)
         #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
@@ -188,6 +189,7 @@ def response_page(input_mood):
         #country=time=cookies = "123abc" # temp placeholder
         #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
         city = request.cookies.get('city')
+        print(city)
         response_html = render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city, map_html=map_html)
         # Create a response object from the rendered HTML
         response = make_response(response_html)
@@ -227,10 +229,8 @@ def extract_values(text):
     energy_pattern = r"Energy:\s([0-9.]+)"
     mood_pattern = r"Mood:\s(\w+)(?!.*Mood:)"
     genre_pattern = r"Genre:\s([^\]]+)"
-    song_pattern = r"Song\d+:\s\[([^\]]+)\]"
+    song_pattern = r"Song\d+:\s([^\]]+)"
     singer_pattern = r"Singer\d+:\s([^\]]+)"
-
-    print(text)
 
     # Extracting values
     valency = re.search(valency_pattern, text)
@@ -245,7 +245,6 @@ def extract_values(text):
     song3 = re.search(song_pattern.replace('\d+', '3'), text)
     singer3 = re.search(singer_pattern.replace('\d+', '3'), text)
 
-
     # Assigning to variables and converting to appropriate types
     valency = float(valency.group(1)) if valency else None
     danceability = float(danceability.group(1)) if danceability else None
@@ -258,8 +257,6 @@ def extract_values(text):
     singer2 = singer2.group(1) if singer2 else None
     song3 = song3.group(1) if song3 else None
     singer3 = singer3.group(1) if singer3 else None
-
-    print(song1, song2, song3)
 
 
     return valency, danceability, energy, mood, genre, song1, singer1, song2, singer2, song3, singer3
