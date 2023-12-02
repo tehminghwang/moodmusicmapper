@@ -47,3 +47,30 @@ def mood_into_table(ipaddress, input_mood, mood, valency, danceability, energy, 
     finally:
         print("Closing connection...")
         conn.close()
+
+def song_of_day():
+    # read in configuration file parameters from dbtool.ini
+    config = configparser.ConfigParser()
+    config.read('dbtool.ini')
+
+    conn = db.connect(**config['connection'])
+    curs = conn.cursor()
+
+    try:
+        # Execute the SQL query
+        print("Executing SQL query...")
+        curs.execute("""SELECT DISTINCT uri, title, artist, COUNT(uri) OVER (PARTITION BY uri) AS frequency FROM spotify ORDER BY frequency DESC LIMIT 1;""")
+
+        # Fetch the result
+        result = curs.fetchone()
+
+        if result:
+            print(result)
+        else:
+            print("No result found")
+    finally:
+        # Close the cursor and connection
+        curs.close()
+        conn.close()
+
+        return result[0];

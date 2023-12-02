@@ -176,10 +176,7 @@ def response_page(input_mood):
         #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
     
         ipaddress = request.cookies.get('ipaddress')
-        print(ipaddress)
-        print(input_mood)
-        print(mood)
-        print(valency)
+        input_mood = input_mood.replace("%20", " ")
         database.mood_into_table(ipaddress, input_mood, mood, valency, danceability, energy, playlist)
 
         # Generate the map with mood data
