@@ -59,7 +59,11 @@ def song_of_day():
     try:
         # Execute the SQL query
         print("Executing SQL query...")
-        curs.execute("""SELECT DISTINCT uri, title, artist, COUNT(uri) OVER (PARTITION BY uri) AS frequency FROM spotify ORDER BY frequency DESC LIMIT 1;""")
+        curs.execute("""SELECT DISTINCT uri, title, artist, COUNT(uri) OVER (PARTITION BY uri) AS frequency 
+                    FROM spotify 
+                    WHERE time >= now() - interval '24 hours' 
+                    ORDER BY frequency DESC LIMIT 1;"""
+                     )
 
         # Fetch the result
         result = curs.fetchone()
