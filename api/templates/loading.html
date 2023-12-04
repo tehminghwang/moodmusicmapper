@@ -28,26 +28,26 @@
 
         /* Apply typing animation to h1 */
         h1 {
-            color: white;
+            color: black;
             font-family: 'Roboto', sans-serif;
-            overflow: hidden;
+            /* overflow: hidden; */
             white-space: nowrap;
-            animation: typing 2.5s steps(30, end);
+            /* animation: typing 2.5s steps(30, end); */
         }
 
         /* Keyframes for typing animation */
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
+        {#@keyframes typing {#}
+        {#    from { width: 0; }#}
+        {#    to { width: 100%; }#}
         }
     </style>
 </head>
 <body>
     <!-- Spotify Iframe -->
-    <h1>Harmonizing Your Mood with Music...</h1>
+    <h1>Top recommended song of the past 24 hours</h1>
 
     <div class="spotify-container">
-        <iframe src="https://open.spotify.com/embed/track/6kex4EBAj0WHXDKZMEJaaF" width="600" height="300" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        <iframe src="https://open.spotify.com/embed/track/{{ uri }}" width="600" height="300" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
     </div>
 
     <!-- Loading GIF -->

@@ -46,23 +46,19 @@ def hello_world():
 def send_request(mood):
     try:
         response = client.chat.completions.create(
-            #engine="gpt-4",
-            #prompt=f"ONLY generate values for valency, danceability, and energy based on the mood: {mood}",
-            
-            #model='gpt-3.5-turbo',
-            #messages=[
-            #    {'role': 'system', 'content': 'You are a helpful assistant.'},
-            #    {'role': 'user',
-            #     'content': f'I am feeling {mood}. Can you suggest music characteristics like valency (value from 0.0 to 1.0 with 1.0 being more positive (e.g. happy, cheerful, euphoric)), danceability (value of 0.0 is least danceable and 1.0 is most danceable based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity), and energy (from 0.0 to 1.0 and represents a perceptual measure of intensity and activity) that would suit my mood, and describe my mood in 1 word, and recommend 1 song to suit my mood? Reply as [Valency: ??] [Danceability: ??] [Energy: ??] [Mood: ??] [Song: ??] [Singer: ??].'}
-            #],
-            #max_tokens=60
-            
-            model="ft:gpt-3.5-turbo-0613:personal::8R0aC6w3",
+            model="ft:gpt-3.5-turbo-0613:personal::8S0F2gyx",
             messages=[
-            {"role": "system", "content": "Assistant to identify valency, energy and danceability index (for song selection) based on description of user's narrative of their sentiment, mood, context, description, feelings, or events. The recommendations should be congruent to the user's current state, and tailored to the emotional tone and energy level described by the user."},
-            {"role": "user", "content": f'i feel {mood} now'}
-        ]
+                {"role": "system",
+                 "content": "Assistant to recommend valency(songs with high valence sound more positive e.g. Happy, "
+                            "cheerful, euphoric)(0.0 to 1.0), energy(energetic tracks feel fast, loud, and noisy)"
+                            "(0.0 to 1.0), danceability(suitable for dancing based on musical elements including tempo, "
+                            "rhythm stability, beat strength)(0.0 to 1.0) and 3 recommended songs that resonates with a "
+                            "description of user's narrative of their sentiment, mood, context, description, feelings, "
+                            "or events."},
+                {"role": "user", "content":  f"i feel {mood} now"}
+            ]
         )
+
         last_message = response.choices[0].message.content
 
         return last_message
@@ -156,7 +152,8 @@ def submit():
 @app.route("/loading/<input_mood>")
 def loading_page(input_mood):
     # Render the loading page
-    return render_template("loading.html", input_mood=input_mood)
+    uri = database.song_of_day()
+    return render_template("loading.html", input_mood=input_mood, uri=uri)
 
 
 @app.route("/response/<input_mood>")
