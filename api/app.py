@@ -174,6 +174,7 @@ def response_page(input_mood):
         playlist = spotify_mod.spotify_main(valency, danceability, energy, genre, song_list)
         playlist_json = json.dumps(playlist)
         #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
+        song_of_day = database.song_of_day()
     
         ipaddress = request.cookies.get('ipaddress')
         input_mood = input_mood.replace("%20", " ")
@@ -186,12 +187,15 @@ def response_page(input_mood):
         #country=time=cookies = "123abc" # temp placeholder
         #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
         city = request.cookies.get('city')
+        print(request.cookies)
         print(city)
-        response_html = render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city, map_html=map_html)
+
+        response_html = render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city, map_html=map_html, song_of_day=song_of_day)
         # Create a response object from the rendered HTML
         response = make_response(response_html)
         # Set a cookie in the response object
         response.set_cookie('playlist', playlist_json, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
+
     
     except Exception as e:
         print("Error", e)
