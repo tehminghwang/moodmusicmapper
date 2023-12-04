@@ -1,6 +1,7 @@
 import psycopg2 as db
 import configparser
 from dotenv import load_dotenv
+import os
 
 def location_into_table(ipaddress, city, country):
     # read in configuration file parameters from dbtool.ini
@@ -13,7 +14,7 @@ def location_into_table(ipaddress, city, country):
     else:
     # Load environment variables from the .env file
         load_dotenv()
-        password= os.environ.get("DATABASE")
+        password = os.environ.get("DATABASE")
 
     config['connection']['password'] = password
 
@@ -39,6 +40,16 @@ def mood_into_table(ipaddress, input_mood, mood, valency, danceability, energy, 
     config = configparser.ConfigParser()
     config.read('dbtool.ini')
 
+    if os.getenv("VERCEL"):
+    # Load environment variables from Vercel secrets
+        password = os.environ.get('DATABASE_KEY')
+    else:
+    # Load environment variables from the .env file
+        load_dotenv()
+        password= os.environ.get("DATABASE")
+
+    config['connection']['password'] = password
+
     conn = db.connect(**config['connection'])
     curs = conn.cursor()
 
@@ -60,6 +71,47 @@ def mood_into_table(ipaddress, input_mood, mood, valency, danceability, energy, 
         conn.close()
 
 def song_of_day():
+    # read in configuration file parameters from dbtool.ini
+    config = configparser.ConfigParser()
+    config.read('dbtool.ini')
+
+    if os.getenv("VERCEL"):
+    # Load environment variables from Vercel secrets
+        password = os.environ.get('DATABASE_KEY')
+    else:
+    # Load environment variables from the .env file
+        load_dotenv()
+        password= os.environ.get("DATABASE")
+
+    config['connection']['password'] = password
+
+    conn = db.connect(**config['connection'])
+    curs = conn.cursor()
+
+    try:
+        # Execute the SQL query
+        print("Executing SQL query...")
+        curs.execute("""SELECT DISTINCT uri, title, artist, COUNT(uri) OVER (PARTITION BY uri) AS frequency 
+                    FROM spotify 
+                    WHERE time >= now() - interval '24 hours' 
+                    ORDER BY frequency DESC LIMIT 1;"""
+                     )
+
+        # Fetch the result
+        result = curs.fetchone()
+
+        if result:
+            print(result)
+        else:
+            print("No result found")
+    finally:
+        # Close the cursor and connection
+        curs.close()
+        conn.close()
+
+        return result[0];
+
+def city_song_of_day():
     # read in configuration file parameters from dbtool.ini
     config = configparser.ConfigParser()
     config.read('dbtool.ini')
