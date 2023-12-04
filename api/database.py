@@ -1,10 +1,21 @@
 import psycopg2 as db
 import configparser
+from dotenv import load_dotenv
 
 def location_into_table(ipaddress, city, country):
     # read in configuration file parameters from dbtool.ini
     config = configparser.ConfigParser()
     config.read('dbtool.ini')
+
+    if os.getenv("VERCEL"):
+    # Load environment variables from Vercel secrets
+        password = os.environ.get('DATABASE_KEY')
+    else:
+    # Load environment variables from the .env file
+        load_dotenv()
+        password= os.environ.get("DATABASE")
+
+    config['connection']['password'] = password
 
     conn = db.connect(**config['connection'])
     curs = conn.cursor()

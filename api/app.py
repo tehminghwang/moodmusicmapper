@@ -168,15 +168,20 @@ def response_page(input_mood):
         print("Hello, World!")
         reply = send_request(input_mood)
         valency, danceability, energy, mood, genre, song1, singer1, song2, singer2, song3, singer3 = extract_values(reply)
+        print(genre)
         response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}"
         song_list = [song1 + " " + singer1, song2 + " " + singer2, song3 + " " + singer3]
         print(song_list)
         playlist = spotify_mod.spotify_main(valency, danceability, energy, genre, song_list)
+        print(playlist)
         playlist_json = json.dumps(playlist)
         #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
+        print(playlist_json)
     
         ipaddress = request.cookies.get('ipaddress')
+        print(ipaddress)
         input_mood = input_mood.replace("%20", " ")
+        print(input_mood)
         database.mood_into_table(ipaddress, input_mood, mood, valency, danceability, energy, playlist)
 
         # Generate the map with mood data
@@ -225,7 +230,8 @@ def extract_values(text):
     danceability_pattern = r"Danceability:\s([0-9.]+)"
     energy_pattern = r"Energy:\s([0-9.]+)"
     mood_pattern = r"Mood:\s(\w+)(?!.*Mood:)"
-    genre_pattern = r"Genre:\s([^\]]+)"
+    #genre_pattern = r"Genre:\s([^\]]+)"
+    genre_pattern = r"Genre:\s(\w+)(?!.*Genre:)"
     song_pattern = r"Song\d+:\s([^\]]+)"
     singer_pattern = r"Singer\d+:\s([^\]]+)"
 
