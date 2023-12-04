@@ -57,11 +57,16 @@ def send_request(mood):
             #],
             #max_tokens=60
             
-            model="ft:gpt-3.5-turbo-0613:personal::8R0aC6w3",
+            #model="ft:gpt-3.5-turbo-0613:personal::8R0aC6w3",
+            #messages=[
+            #{"role": "system", "content": "Assistant to identify valency, energy and danceability index (for song selection) based on description of user's narrative of their sentiment, mood, context, description, feelings, or events. The recommendations should be congruent to the user's current state, and tailored to the emotional tone and energy level described by the user."},
+            #{"role": "user", "content": f'i feel {mood} now'}
+
+            model="ft:gpt-3.5-turbo-0613:personal::8S0F2gyx",
             messages=[
-            {"role": "system", "content": "Assistant to identify valency, energy and danceability index (for song selection) based on description of user's narrative of their sentiment, mood, context, description, feelings, or events. The recommendations should be congruent to the user's current state, and tailored to the emotional tone and energy level described by the user."},
-            {"role": "user", "content": f'i feel {mood} now'}
-        ]
+            {"role": "system", "content": "Assistant to recommend valency(songs with high valence sound more positive e.g. Happy, cheerful, euphoric)(0.0 to 1.0), energy(energetic tracks feel fast, loud, and noisy)(0.0 to 1.0), danceability(suitable for dancing based on musical elements including tempo, rhythm stability, beat strength)(0.0 to 1.0) and 3 recommended songs that resonates with a description of user's narrative of their sentiment, mood, context, description, feelings, or events."},
+            {"role": "user", "content": f'{mood}'}
+            ]
         )
         last_message = response.choices[0].message.content
 
@@ -102,10 +107,27 @@ def create_map(mood_data):
             html_content = f"""
             <div style="width: 250px; height: 150px;">
                 <strong>{city}</strong><br>
-                Mood: {info['mood']}<br>
-                Song: {info['song']}<br>
+                <br>
                 <iframe src="https://open.spotify.com/embed/track/6kex4EBAj0WHXDKZMEJaaF" width="250" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                <br>
+                <div class = "share">  
+			        <div class = "shareto">
+			            <a href="https://www.facebook.com/sharer/sharer.php?quote=Mood Music Mapper recommended me to listen to this!\n\nGet your recommendation:\nhttps://moodmusicmapper.vercel.app/\n&u=https://open.spotify.com/track/6kex4EBAj0WHXDKZMEJaaF" 
+				        target="_blank" class="facebook-button">
+				            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30px" height="30px">    
+					            <path d="M15,3C8.373,3,3,8.373,3,15c0,6.016,4.432,10.984,10.206,11.852V18.18h-2.969v-3.154h2.969v-2.099c0-3.475,1.693-5,4.581-5 c1.383,0,2.115,0.103,2.461,0.149v2.753h-1.97c-1.226,0-1.654,1.163-1.654,2.473v1.724h3.593L19.73,18.18h-3.106v8.697 C22.481,26.083,27,21.075,27,15C27,8.373,21.627,3,15,3z"/>
+				            </svg>
+			            </a>
+			            <a href="https://twitter.com/intent/tweet?text=Mood Music Mapper recommended me to listen to this!%0A%0AGet your recommendation:%0Ahttps://moodmusicmapper.vercel.app/%0A%0A&url=https://open.spotify.com/track/6kex4EBAj0WHXDKZMEJaaF" 
+				        target="_blank" id = "twitter_x-button"> 
+				            <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 30 30" width="30px" height="30px">
+					            <path d="M26.37,26l-8.795-12.822l0.015,0.012L25.52,4h-2.65l-6.46,7.48L11.28,4H4.33l8.211,11.971L12.54,15.97L3.88,26h2.65 l7.182-8.322L19.42,26H26.37z M10.23,6l12.34,18h-2.1L8.12,6H10.23z"/>
+				            </svg>
+			            </a>
+			        </div>
+			    </div>
             </div>
+            
             """
             iframe = folium.IFrame(html_content, width=270, height=200)
             popup = folium.Popup(iframe, parse_html=False)
@@ -168,16 +190,24 @@ def response_page(input_mood):
         print("Hello, World!")
         reply = send_request(input_mood)
         valency, danceability, energy, mood, genre, song1, singer1, song2, singer2, song3, singer3 = extract_values(reply)
+        print(genre)
         response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}"
         song_list = [song1 + " " + singer1, song2 + " " + singer2, song3 + " " + singer3]
         print(song_list)
         playlist = spotify_mod.spotify_main(valency, danceability, energy, genre, song_list)
+        print(playlist)
         playlist_json = json.dumps(playlist)
         #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
+
         song_of_day = database.song_of_day()
+        #singer_of_day = database.getysinger_of_day()
+        #singer_of_day_top_song = spotify_mod.search_artist_top_song(singer_of_day)
+        singer_of_day_top_song = None
     
         ipaddress = request.cookies.get('ipaddress')
+        print(ipaddress)
         input_mood = input_mood.replace("%20", " ")
+        print(input_mood)
         database.mood_into_table(ipaddress, input_mood, mood, valency, danceability, energy, playlist)
 
         # Generate the map with mood data
@@ -187,10 +217,11 @@ def response_page(input_mood):
         #country=time=cookies = "123abc" # temp placeholder
         #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
         city = request.cookies.get('city')
-        print(request.cookies)
-        print(city)
+        if city == None:
+            city = "your area"
 
-        response_html = render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city, map_html=map_html, song_of_day=song_of_day)
+        response_html = render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, 
+                                        city=city, map_html=map_html, song_of_day=song_of_day, singer_of_day_top_song=singer_of_day_top_song)
         # Create a response object from the rendered HTML
         response = make_response(response_html)
         # Set a cookie in the response object
@@ -229,7 +260,8 @@ def extract_values(text):
     danceability_pattern = r"Danceability:\s([0-9.]+)"
     energy_pattern = r"Energy:\s([0-9.]+)"
     mood_pattern = r"Mood:\s(\w+)(?!.*Mood:)"
-    genre_pattern = r"Genre:\s([^\]]+)"
+    #genre_pattern = r"Genre:\s([^\]]+)"
+    genre_pattern = r"Genre:\s(\w+)(?!.*Genre:)"
     song_pattern = r"Song\d+:\s([^\]]+)"
     singer_pattern = r"Singer\d+:\s([^\]]+)"
 

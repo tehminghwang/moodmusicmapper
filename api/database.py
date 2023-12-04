@@ -1,10 +1,21 @@
 import psycopg2 as db
 import configparser
+from dotenv import load_dotenv
 
 def location_into_table(ipaddress, city, country):
     # read in configuration file parameters from dbtool.ini
     config = configparser.ConfigParser()
     config.read('dbtool.ini')
+
+    if os.getenv("VERCEL"):
+    # Load environment variables from Vercel secrets
+        password = os.environ.get('DATABASE_KEY')
+    else:
+    # Load environment variables from the .env file
+        load_dotenv()
+        password= os.environ.get("DATABASE")
+
+    config['connection']['password'] = password
 
     conn = db.connect(**config['connection'])
     curs = conn.cursor()
@@ -36,7 +47,7 @@ def mood_into_table(ipaddress, input_mood, mood, valency, danceability, energy, 
         curs.execute("""INSERT INTO mood VALUES (NOW(), %s, %s, %s, %s, %s, %s);""", (ipaddress, input_mood, mood, valency, danceability, energy))
 
         for item in playlist:
-            curs.execute("""INSERT INTO spotify VALUES (NOW(), %s, %s, %s, %s);""", (ipaddress, item['name'], item['artist'], item['uri']))
+            curs.execute("""INSERT INTO spotify VALUES (NOW(), %s, %s, %s, %s);""", (ipaddress, item['name'], item['artist'], item['artist_uri']))
 
         print("Committing transaction...")
         conn.commit()
