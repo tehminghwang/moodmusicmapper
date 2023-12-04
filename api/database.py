@@ -3,6 +3,7 @@ import configparser
 from dotenv import load_dotenv
 import os
 
+# Inserts location data from this session into database.
 def location_into_table(ipaddress, city, country, country_code):
     # read in configuration file parameters from dbtool.ini
     config = configparser.ConfigParser()
@@ -34,6 +35,7 @@ def location_into_table(ipaddress, city, country, country_code):
         print("Closing connection...")
         conn.close()
 
+# Inserts user input and OpenAI output into database.
 def mood_into_table(ipaddress, input_mood, mood, valency, danceability, energy, playlist):
     # read in configuration file parameters from dbtool.ini
     config = configparser.ConfigParser()
@@ -71,6 +73,7 @@ def mood_into_table(ipaddress, input_mood, mood, valency, danceability, energy, 
         print("Closing connection...")
         conn.close()
 
+# Returns URI of top recommended song of past 24 hours.
 def song_of_day():
     # read in configuration file parameters from dbtool.ini
     config = configparser.ConfigParser()
@@ -112,7 +115,7 @@ def song_of_day():
 
         return result[0]
 
-# Returns all cities that have used the app in the past 24 hours.
+# Returns all cities (and corresponding country) that have used the app in the past 24 hours.
 def city_clients():
     # read in configuration file parameters from dbtool.ini
     config = configparser.ConfigParser()
@@ -199,6 +202,46 @@ def top_songs(city, country):
         conn.close()
 
         return result[0]
+
+# Returns total number of recommendations made by app.
+def total_recommendations(city, country):
+    # read in configuration file parameters from dbtool.ini
+    config = configparser.ConfigParser()
+    config.read('dbtool.ini')
+
+    if os.getenv("VERCEL"):
+    # Load environment variables from Vercel secrets
+        password = os.environ.get('DATABASE_KEY')
+    else:
+    # Load environment variables from the .env file
+        load_dotenv()
+        password = os.environ.get("DATABASE")
+
+    config['connection']['password'] = password
+
+    conn = db.connect(**config['connection'])
+    curs = conn.cursor()
+
+    try:
+        # Execute the SQL query
+        print("Executing SQL query...")
+        curs.execute("""SELECT COUNT(*)
+                    FROM spotify;"""
+                     )
+
+        # Fetch the result
+        result = curs.fetchone()
+
+        if result:
+            print(result)
+        else:
+            print("No result found")
+    finally:
+        # Close the cursor and connection
+        curs.close()
+        conn.close()
+
+        return result[0];
 
 
 

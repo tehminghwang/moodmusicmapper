@@ -183,6 +183,7 @@ def response_page(input_mood):
         # Process the request and prepare the response here
         # You can use the 'input_mood' parameter to generate the response
         print("Hello, World!")
+        print(input_mood)
         reply = send_request(input_mood)
         valency, danceability, energy, mood, genre, song1, singer1, song2, singer2, song3, singer3 = extract_values(reply)
         print(genre)
