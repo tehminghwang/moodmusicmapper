@@ -243,66 +243,7 @@ def total_recommendations(city, country):
 
         return result[0];
 
-# Returns
-def city_valency_mood(city, country):
-    # read in configuration file parameters from dbtool.ini
-    config = configparser.ConfigParser()
-    config.read('dbtool.ini')
 
-    if os.getenv("VERCEL"):
-    # Load environment variables from Vercel secrets
-        password = os.environ.get('DATABASE_KEY')
-    else:
-    # Load environment variables from the .env file
-        load_dotenv()
-        password = os.environ.get("DATABASE")
-
-    config['connection']['password'] = password
-
-    conn = db.connect(**config['connection'])
-    curs = conn.cursor()
-
-    try:
-        # Execute the SQL query
-        print("Executing SQL query...")
-        curs.execute("""SELECT COUNT(*)
-                    FROM spotify;"""
-                     )
-
-        SELECT
-        DISTINCT
-        city, country, mood, COUNT(mood)
-        OVER(PARTITION
-        BY
-        city, country, mood), ROUND(AVG(valency * 1.0)
-        OVER(PARTITION
-        BY
-        city, country), 1) AS
-        average_val
-        FROM
-        mood
-        JOIN
-        location
-        ON
-        location.ipaddress = mood.ipaddress
-        ORDER
-        BY
-        average_val
-        DESC;
-
-        # Fetch the result
-        result = curs.fetchone()
-
-        if result:
-            print(result)
-        else:
-            print("No result found")
-    finally:
-        # Close the cursor and connection
-        curs.close()
-        conn.close()
-
-        return result[0];
 
 mood_data = {
     "London": {"mood": "Happy", "song": "Here Comes the Sun", "index": 0.2},
