@@ -60,6 +60,47 @@ h3, h4, h5, h6, p {
     line-height: 1.25em;
 }
 
+/* Add keyframes for typing animation */
+
+@keyframes typing {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+/* Apply typing animation to h1 */
+
+h1 {
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typing 2.5s steps(30, end);
+}
+
+/* Top bar */
+
+#MMM {
+    position: absolute;
+    text-align: left;
+    top: 20px;
+    left: 20px;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#counter {
+    position: absolute;
+    text-align: right;
+    top: 20px;
+    right: 20px;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+}
+
 /* Navigation Bar */
 
 #nav {
@@ -333,14 +374,14 @@ input[type="submit"] {
     justify-content: space-between;
     align-items: center;
     gap: 10px;
-    padding: 0px 0;
+    padding: 10px 10px;
     transition: all 0.25s ease-in;
 }
 
 .carousel-view .item-list {
-    #max-width: 1200px;
+    max-width: 1700px;
     width: 100vw;
-    padding: 10px 10px;
+    padding: 0px 0px;
     display: flex;
     gap: 20px; /* May need to be adjusted */
     scroll-behavior: smooth;
@@ -368,21 +409,27 @@ input[type="submit"] {
     display: none; /* Hide scrollbar for Chrome, Safari and Opera */
 }
 
-.prev-btn {
-    background: none;
-    cursor: pointer;
+.prev-btn, .next-btn {
+  height: 100px;
+  width: 100px;
+  padding: 10px 10px 150px 10px;
+  font-family: 'Arial Narrow', sans-serif;
+  font-size: 80px;
+  font-stretch: ultra-condensed;
+  background-color: transparent;
+  color: #fff;
+  border: transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
-.next-btn {
-    cursor: pointer;
-}
+/* Hover effect for button */
 
-.track {
-    scroll-snap-align: center;
-    min-width: 120px;
-    height: 120px;
-    background-color: white;
-    border-radius:2px;
+.prev-btn:hover, .next-btn:hover {
+  background-color: transparent;
+  color: #df7366;
+  border-color: #333333;
 }
 
 .about {

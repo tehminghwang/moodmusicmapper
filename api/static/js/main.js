@@ -1,43 +1,52 @@
-const prev = document.getElementById('prev-btn');
-const next = document.getElementById('next-btn');
-const list = document.getElementById('item-list');
+const itemList = document.getElementById('item-list');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+const items = itemList.querySelectorAll('item');
 
-const itemWidth = 450;
-const padding = 10;
-let autoScrollInterval;
+let scrollingInterval;
+let scrollDirection = 1; // 1 for scrolling right, -1 for scrolling left
 
-function startAutoScroll(direction) {
-  stopAutoScroll(); // Stop existing interval to avoid overlaps
-  autoScrollInterval = setInterval(() => {
-    // Smaller increment for smoother scrolling
-    list.scrollLeft += direction * 15; // Adjust the number for speed control
-  }, 20); // A shorter interval for a smoother transition
+function startScrolling() {
+  scrollingInterval = setInterval(() => {
+    itemList.scrollLeft += scrollDirection * 15; // Adjust the scrolling speed as needed
+  }, 10); // Adjust the interval for smoother scrolling
 }
 
-function stopAutoScroll() {
-  clearInterval(autoScrollInterval);
+function stopScrolling() {
+  clearInterval(scrollingInterval);
 }
 
-// Event listeners for buttons
-prev.addEventListener('click', () => {
-  list.scrollLeft -= itemWidth + padding;
+itemList.addEventListener('mouseenter', stopScrolling);
+itemList.addEventListener('mouseleave', startScrolling);
+
+prevBtn.addEventListener('mouseenter', () => {
+  scrollDirection = -1; // Set direction to left when hovering over prev-btn
 });
 
-next.addEventListener('click', () => {
-  list.scrollLeft += itemWidth + padding;
+prevBtn.addEventListener('mouseleave', () => {
+  scrollDirection = 1; // Set direction back to right when not hovering over prev-btn
 });
 
-// Event listeners for auto-scroll on hover
-list.addEventListener('mouseenter', (event) => {
-  const listRect = list.getBoundingClientRect();
-  const relativeX = event.clientX - listRect.left;
+nextBtn.addEventListener('mouseenter', () => {
+  scrollDirection = 1; // Set direction to right when hovering over next-btn
+});
 
-  // Check if the mouse is in the left or right half of the list
-  if (relativeX < listRect.width / 3) {
-    startAutoScroll(-1); // Scrolls to the left
-  } else if (relativeX > listRect.width * 2/3){
-      startAutoScroll(1); // Scrolls to the right
+function checkScrollPosition() {
+  const scrollPosition = itemList.scrollLeft;
+  const itemWidth = items[0].offsetWidth;
+  const itemListWidth = itemList.scrollWidth;
+
+  if (scrollDirection === 1 && scrollPosition >= itemListWidth - itemList.offsetWidth) {
+    itemList.scrollTo({ left: 0, behavior: 'auto' });
+  } else if (scrollDirection === -1 && scrollPosition <= 0) {
+    itemList.scrollTo({ left: itemListWidth - itemWidth, behavior: 'auto' });
   }
-});
+}
 
-list.addEventListener('mouseleave', stopAutoScroll);
+function startScrollingOnLoad() {
+  startScrolling();
+}
+
+window.onload = startScrollingOnLoad;
+
+itemList.addEventListener('scroll', checkScrollPosition);

@@ -40,34 +40,24 @@ def hello_world():
         except json.JSONDecodeError:
             # Handle the case where the cookie contains invalid JSON
             pass
-
     return render_template("index.html", mood=saved_playlist)
 
 def send_request(mood):
     try:
         response = client.chat.completions.create(
-            #engine="gpt-4",
-            #prompt=f"ONLY generate values for valency, danceability, and energy based on the mood: {mood}",
-            
-            #model='gpt-3.5-turbo',
-            #messages=[
-            #    {'role': 'system', 'content': 'You are a helpful assistant.'},
-            #    {'role': 'user',
-            #     'content': f'I am feeling {mood}. Can you suggest music characteristics like valency (value from 0.0 to 1.0 with 1.0 being more positive (e.g. happy, cheerful, euphoric)), danceability (value of 0.0 is least danceable and 1.0 is most danceable based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity), and energy (from 0.0 to 1.0 and represents a perceptual measure of intensity and activity) that would suit my mood, and describe my mood in 1 word, and recommend 1 song to suit my mood? Reply as [Valency: ??] [Danceability: ??] [Energy: ??] [Mood: ??] [Song: ??] [Singer: ??].'}
-            #],
-            #max_tokens=60
-            
-            #model="ft:gpt-3.5-turbo-0613:personal::8R0aC6w3",
-            #messages=[
-            #{"role": "system", "content": "Assistant to identify valency, energy and danceability index (for song selection) based on description of user's narrative of their sentiment, mood, context, description, feelings, or events. The recommendations should be congruent to the user's current state, and tailored to the emotional tone and energy level described by the user."},
-            #{"role": "user", "content": f'i feel {mood} now'}
-
             model="ft:gpt-3.5-turbo-0613:personal::8S0F2gyx",
             messages=[
-            {"role": "system", "content": "Assistant to recommend valency(songs with high valence sound more positive e.g. Happy, cheerful, euphoric)(0.0 to 1.0), energy(energetic tracks feel fast, loud, and noisy)(0.0 to 1.0), danceability(suitable for dancing based on musical elements including tempo, rhythm stability, beat strength)(0.0 to 1.0) and 3 recommended songs that resonates with a description of user's narrative of their sentiment, mood, context, description, feelings, or events."},
-            {"role": "user", "content": f'{mood}'}
+                {"role": "system",
+                 "content": "Assistant to recommend valency(songs with high valence sound more positive e.g. Happy, "
+                            "cheerful, euphoric)(0.0 to 1.0), energy(energetic tracks feel fast, loud, and noisy)"
+                            "(0.0 to 1.0), danceability(suitable for dancing based on musical elements including tempo, "
+                            "rhythm stability, beat strength)(0.0 to 1.0) and 3 recommended songs that resonates with a "
+                            "description of user's narrative of their sentiment, mood, context, description, feelings, "
+                            "or events."},
+                {"role": "user", "content":  f"i feel {mood} now"}
             ]
         )
+
         last_message = response.choices[0].message.content
 
         return last_message
@@ -76,6 +66,7 @@ def send_request(mood):
         return f"Error: {e}"
 
 # Placeholder for mood data
+"""
 mood_data = {
     "London": {"mood": "Happy", "song": "Here Comes the Sun", "index": 0.2},
     "New York": {"mood": "Energetic", "song": "Here Comes the Sun", "index": 0.8},
@@ -83,7 +74,7 @@ mood_data = {
     "Berlin": {"mood": "Energetic", "song": "Here Comes the Sun", "index": 0.4},
     "Beijing": {"mood": "Energetic", "song": "Here Comes the Sun", "index": 0.3}
 }
-
+"""
 def create_colormap():
     colors = ['green', 'yellow', 'red']
     index = [0, 0.5, 1]  # Points at which colors change
@@ -108,17 +99,17 @@ def create_map(mood_data):
             <div style="width: 250px; height: 150px;">
                 <strong>{city}</strong><br>
                 <br>
-                <iframe src="https://open.spotify.com/embed/track/6kex4EBAj0WHXDKZMEJaaF" width="250" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                <iframe src="https://open.spotify.com/embed/track/{info['song']}" width="250" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                 <br>
                 <div class = "share">  
 			        <div class = "shareto">
-			            <a href="https://www.facebook.com/sharer/sharer.php?quote=Mood Music Mapper recommended me to listen to this!\n\nGet your recommendation:\nhttps://moodmusicmapper.vercel.app/\n&u=https://open.spotify.com/track/6kex4EBAj0WHXDKZMEJaaF" 
-				        target="_blank" class="facebook-button">
+			            <a href="https://www.facebook.com/sharer/sharer.php?quote=Mood Music Mapper recommended me to listen to this!\n\nGet your recommendation:\nhttps://moodmusicmapper.vercel.app/\n&u=https://open.spotify.com/track/{info['song']}" 
+				        target="_blank" class="facebook-button" style="text-decoration:none;">
 				            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30px" height="30px">    
 					            <path d="M15,3C8.373,3,3,8.373,3,15c0,6.016,4.432,10.984,10.206,11.852V18.18h-2.969v-3.154h2.969v-2.099c0-3.475,1.693-5,4.581-5 c1.383,0,2.115,0.103,2.461,0.149v2.753h-1.97c-1.226,0-1.654,1.163-1.654,2.473v1.724h3.593L19.73,18.18h-3.106v8.697 C22.481,26.083,27,21.075,27,15C27,8.373,21.627,3,15,3z"/>
 				            </svg>
 			            </a>
-			            <a href="https://twitter.com/intent/tweet?text=Mood Music Mapper recommended me to listen to this!%0A%0AGet your recommendation:%0Ahttps://moodmusicmapper.vercel.app/%0A%0A&url=https://open.spotify.com/track/6kex4EBAj0WHXDKZMEJaaF" 
+			            <a href="https://twitter.com/intent/tweet?text=Mood Music Mapper recommended me to listen to this!%0A%0AGet your recommendation:%0Ahttps://moodmusicmapper.vercel.app/%0A%0A&url=https://open.spotify.com/track/{info['song']}" 
 				        target="_blank" id = "twitter_x-button"> 
 				            <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 30 30" width="30px" height="30px">
 					            <path d="M26.37,26l-8.795-12.822l0.015,0.012L25.52,4h-2.65l-6.46,7.48L11.28,4H4.33l8.211,11.971L12.54,15.97L3.88,26h2.65 l7.182-8.322L19.42,26H26.37z M10.23,6l12.34,18h-2.1L8.12,6H10.23z"/>
@@ -166,8 +157,11 @@ def submit():
         if location_info['city'] is not None:
             city = location_info['city']
             country = location_info['country']
-            database.location_into_table(ipaddress, city, country)
+            country_code = location_info['country_code']
+            database.location_into_table(ipaddress, city, country, country_code)
             response.set_cookie('city', city, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
+            response.set_cookie('country', country, max_age=60 * 60 * 24 * 30)
+            response.set_cookie('country_code', country_code, max_age=60 * 60 * 24 * 30)
 
     # Simulate a delay (2 seconds) to simulate a background task
     #time.sleep(2)
@@ -178,7 +172,8 @@ def submit():
 @app.route("/loading/<input_mood>")
 def loading_page(input_mood):
     # Render the loading page
-    return render_template("loading.html", input_mood=input_mood)
+    uri = database.song_of_day()
+    return render_template("loading.html", input_mood=input_mood, uri=uri)
 
 
 @app.route("/response/<input_mood>")
@@ -199,7 +194,34 @@ def response_page(input_mood):
         playlist_json = json.dumps(playlist)
         #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
 
+        recent_locations = database.city_clients()
+        mood_data = {}
+        for cities in recent_locations:
+            mood_data[cities[0]] = {"mood": "Happy", "song": database.top_songs(cities[0], cities[1]), "index": 0.2}
+        print(mood_data)
+
+        print(request.cookies)
+
+        
+         
+        city = request.cookies.get('city')
+        
+        if city == None:
+            city = "your area"
+        song_city = city
+
+        """
+        
+        country = request.cookies.get('country')
+        song_country = country
+
+        if song_city != None:
+            song_of_day = database.top_songs(song_city, song_country)
+        else:
+        """
         song_of_day = database.song_of_day()
+        
+        
         #singer_of_day = database.getysinger_of_day()
         #singer_of_day_top_song = spotify_mod.search_artist_top_song(singer_of_day)
         singer_of_day_top_song = None
@@ -216,10 +238,7 @@ def response_page(input_mood):
 
         #country=time=cookies = "123abc" # temp placeholder
         #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
-        city = request.cookies.get('city')
-        if city == None:
-            city = "your area"
-
+        
         response_html = render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, 
                                         city=city, map_html=map_html, song_of_day=song_of_day, singer_of_day_top_song=singer_of_day_top_song)
         # Create a response object from the rendered HTML

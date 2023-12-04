@@ -35,7 +35,6 @@ def get_spotify_recommendations(access_token, seed_genre, valence, danceability,
     }
 
     response = requests.get(recommendations_url, headers=headers, params=params)
-    print(response)
     recommendations = response.json()['tracks']
 
     # Extract relevant information from recommendations
@@ -155,8 +154,6 @@ def search_spotify_song(query_list, access_token):
                 }
                 
                 song_list.append(track_info)
-        
-    
     return song_list
 
 def get_artist_top_song(singer_id):
