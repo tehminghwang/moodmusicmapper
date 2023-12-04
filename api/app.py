@@ -163,6 +163,7 @@ def response_page(input_mood):
         # Process the request and prepare the response here
         # You can use the 'input_mood' parameter to generate the response
         print("Hello, World!")
+        print(input_mood)
         reply = send_request(input_mood)
         valency, danceability, energy, mood, genre, song1, singer1, song2, singer2, song3, singer3 = extract_values(reply)
         print(genre)
@@ -189,7 +190,8 @@ def response_page(input_mood):
         #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
         city = request.cookies.get('city')
         print(city)
-        response_html = render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, city=city, map_html=map_html)
+        response_html = render_template("mood.html", input_mood=input_mood, mood=playlist, response=response,
+                                        reply=reply, city=city, map_html=map_html)
         # Create a response object from the rendered HTML
         response = make_response(response_html)
         # Set a cookie in the response object
