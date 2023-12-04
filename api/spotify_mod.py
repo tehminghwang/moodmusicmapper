@@ -41,7 +41,8 @@ def get_spotify_recommendations(access_token, seed_genre, valence, danceability,
         track_info = {
             'name': track['name'],
             'artist': track['artists'][0]['name'],
-            'uri': track['uri'].partition("spotify:track:")[2]
+            'uri': track['uri'].partition("spotify:track:")[2],
+            'artist_uri': track['artists'][0]['id']
         }
         tracks.append(track_info)
 
@@ -145,11 +146,11 @@ def search_spotify_song(query_list, access_token):
                 track_info = {
                 'name': first_track['name'],
                 'artist': first_track['artists'][0]['name'],
-                'uri': first_track['id']
+                'uri': first_track['id'],
+                'artist_uri': first_track['artists'][0]['id']
                 }
                 
                 song_list.append(track_info)
-        
-    
     return song_list
 
+# def total_recommendations():

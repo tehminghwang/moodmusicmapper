@@ -35,6 +35,11 @@ def get_location_from_ip(ip_address):
         else:
             location_info['country'] = "Country information not found for this IP address"
 
+        if 'country_code' in data:
+            location_info['country_code'] = data['country_code']
+        else:
+            location_info['country_code'] = "Country code not found for this IP address"
+
         return location_info
 
         #if 'city' in data:

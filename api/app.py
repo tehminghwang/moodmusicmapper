@@ -40,7 +40,6 @@ def hello_world():
         except json.JSONDecodeError:
             # Handle the case where the cookie contains invalid JSON
             pass
-
     return render_template("index.html", mood=saved_playlist)
 
 def send_request(mood):
@@ -140,7 +139,8 @@ def submit():
         if location_info['city'] is not None:
             city = location_info['city']
             country = location_info['country']
-            database.location_into_table(ipaddress, city, country)
+            country_code = location_info['country_code']
+            database.location_into_table(ipaddress, city, country, country_code)
             response.set_cookie('city', city, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
 
     # Simulate a delay (2 seconds) to simulate a background task
