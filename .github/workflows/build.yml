@@ -111,7 +111,8 @@ jobs:
         run: flake8 api/
   browser-tests:
     needs:
-      - build-step
+      - homepage-test
+      - submission-test
       - database-connection
       - ipfinder-test
       - spotify-tests
