@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, make_response, current_app
-from dotenv import load_dotenv
+
 from openai import OpenAI
 import os
 import re
@@ -9,8 +9,11 @@ import time
 from branca.colormap import LinearColormap
 if os.getenv("VERCEL"):
     from api import spotify_mod, database, ipfinder
+elif os.getenv("GIT_DATABASE"):
+    from api import spotify_mod, database, ipfinder
 else:
     import spotify_mod, database, ipfinder
+    from dotenv import load_dotenv
 import geopy
 from geopy.geocoders import Nominatim
 app = Flask(__name__)
@@ -19,6 +22,8 @@ app = Flask(__name__)
 if os.getenv("VERCEL"):
     # Load environment variables from Vercel secrets
     open_ai_key=os.environ.get('OPENAI_API_KEY')
+elif os.getenv("GIT_OPENAI"):
+    open_ai_key = os.environ.get('GIT_OPENAI')
 else:
     # Load environment variables from the .env file
     load_dotenv()

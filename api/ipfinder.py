@@ -11,6 +11,8 @@ def get_location_from_ip(ip_address):
     if os.getenv("VERCEL"):
     # Load environment variables from Vercel secrets
         access_key = os.environ.get('IP_KEY')
+    elif os.getenv("GIT_IP"):
+        access_key = os.environ.get('GIT_IP')
     else:
     # Load environment variables from the .env file
         load_dotenv()
