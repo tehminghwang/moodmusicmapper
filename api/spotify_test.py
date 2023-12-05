@@ -35,6 +35,9 @@ def test_spotify_recommendations():
 
     assert len(recommend_songs) == 12 and true_test
 
+"""
+# commented out to avoid frequent spotify API calls
+
 
 # test if a song id is called
 def test_artist_top_song():
@@ -44,7 +47,6 @@ def test_artist_top_song():
     assert song_id != None
 
 
-"""
-# commented out to avoid frequent spotify API calls
+
 
 
