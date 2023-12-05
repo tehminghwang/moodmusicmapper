@@ -358,7 +358,7 @@ def artist_of_day():
         result = curs.fetchone()
 
         if result:
-            print(result)
+            print('Artist', result)
         else:
             print("No result found")
     finally:

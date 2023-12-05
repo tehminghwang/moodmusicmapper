@@ -11,7 +11,7 @@ from branca.colormap import LinearColormap
 if os.getenv("VERCEL"):
     from api import spotify_mod, database, ipfinder
 elif os.getenv("GIT_DATABASE"):
-    from api import spotify_mod, database, ipfinder
+    import spotify_mod, database, ipfinder
 else:
     import spotify_mod, database, ipfinder
     from dotenv import load_dotenv
@@ -84,8 +84,8 @@ mood_data = {
 """
 def create_colormap():
     colors = ['green', 'yellow', 'red']
-    index = [0, 0.5, 1]  # Points at which colors change
-    return LinearColormap(colors, vmin=min(index), vmax=max(index))
+    index = [1, 0.5, 0]  # Points at which colors change
+    return LinearColormap(colors, vmin=min(index), vmax=max(index), caption='Positiveness')
 
 
 def create_map(mood_data):
@@ -99,13 +99,13 @@ def create_map(mood_data):
         lat, lon = get_coordinates(city)
         if lat is not None and lon is not None:
             # Get color from the colormap
-            color = colormap(info['index'])
+            color = colormap(float(info['index']))
 
             # Customize the popup with HTML content
             html_content = f"""
-            <div style="width: 250px; height: 150px;">
+            <div style="width: 250px; height: 150px; font-family: 'Roboto', sans-serif;">
                 <strong>{city}</strong><br>
-                <br>
+                <p>City Mood: {info['mood']}</p>
                 <iframe src="https://open.spotify.com/embed/track/{info['song']}" width="250" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                 <br>
                 <div class = "share">  
@@ -190,52 +190,50 @@ def response_page(input_mood):
         # Process the request and prepare the response here
         # You can use the 'input_mood' parameter to generate the response
         print("Hello, World!")
-        print(input_mood)
         reply = send_request(input_mood)
         valency, danceability, energy, mood, genre, song1, singer1, song2, singer2, song3, singer3 = extract_values(reply)
-        print(genre)
         response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}"
-        song_list = [song1 + " " + singer1, song2 + " " + singer2, song3 + " " + singer3]
-        print(song_list)
+        #song_list = [song1 + " " + singer1, song2 + " " + singer2, song3 + " " + singer3]
+        song_list = [song1 + " " + singer1, song2 + " " + singer2]
         playlist = spotify_mod.spotify_main(valency, danceability, energy, genre, song_list)
-        print(playlist)
         playlist_json = json.dumps(playlist)
 
         # For random generated mood phrase
         integer = random.randint(0, 1)
         mood_phrase = database.display_phrase(valency, integer)
 
+        song_of_day = database.song_of_day()
+        singer_of_day = database.artist_of_day()
+
         recent_locations = database.city_clients()
         mood_data = {}
         for cities in recent_locations:
-            mood_data[cities[0]] = {"mood": "Happy", "song": database.city_country_info(cities[0], cities[1]), "index": 0.2}
-        print(mood_data)
+            print(database.city_country_info(cities[0], cities[1]))
+            mood_data[cities[0]] = {
+                                    "mood": database.city_country_info(cities[0], cities[1]).get('mood', 'neutral'),
+                                    "song": database.city_country_info(cities[0], cities[1]).get('song', song_of_day),
+                                    "index": database.city_country_info(cities[0], cities[1]).get('valency', 0.5),
+                                    "artist": database.city_country_info(cities[0], cities[1]).get('song', singer_of_day)
+                                    }
+
+        print('Mood_data: ',mood_data)
 
         print(request.cookies)
-
-        
          
         city = request.cookies.get('city')
         
         if city == None:
             city = "your area"
-        song_city = city
-
-        """
-        
+            
+        else:
+            song_of_day = mood_data[city].get('song')
+            singer_of_day = mood_data[city].get('artist')
+                    
         country = request.cookies.get('country')
         song_country = country
 
-        if song_city != None:
-            song_of_day = database.top_songs(song_city, song_country)
-        else:
-        """
-        song_of_day = database.song_of_day()
-        
-        
-        #singer_of_day = database.getysinger_of_day()
-        #singer_of_day_top_song = spotify_mod.search_artist_top_song(singer_of_day)
-        singer_of_day_top_song = None
+
+        singer_of_day_top_song = spotify_mod.get_artist_top_song(singer_of_day, song_country)
     
         ipaddress = request.cookies.get('ipaddress')
         print(ipaddress)
@@ -249,8 +247,10 @@ def response_page(input_mood):
 
         #country=time=cookies = "123abc" # temp placeholder
         #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
-        
-        response_html = render_template("mood.html", input_mood=mood, mood=playlist, mood_phrase=mood_phrase, response=response, reply=reply,
+
+        print(singer_of_day_top_song)
+
+        response_html = render_template("mood.html", input_mood = input_mood, mood_phrase=mood_phrase, mood=mood, playlist=playlist, response=response, reply=reply,
                                         city=city, map_html=map_html, song_of_day=song_of_day, singer_of_day_top_song=singer_of_day_top_song)
         # Create a response object from the rendered HTML
         response = make_response(response_html)
