@@ -238,7 +238,6 @@ def response_page(input_mood):
         #country=time=cookies = "123abc" # temp placeholder
         #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
         
-        print(song_of_day)
         print(singer_of_day_top_song)
 
         response_html = render_template("mood.html", input_mood = input_mood, mood=mood, playlist=playlist, response=response, reply=reply, 

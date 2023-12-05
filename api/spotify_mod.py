@@ -139,6 +139,9 @@ def search_spotify_song(query_list, access_token):
 
         response = requests.get(base_url, headers=headers, params=params)
         search_results = response.json()
+        print('search results',search_results)
+
+
 
         # Check if there are tracks in the search results
         if 'tracks' in search_results:
@@ -182,17 +185,15 @@ def get_artist_top_song(singer_id, country):
 
     response = requests.get(base_url, headers=headers, params=params)
     search_results = response.json()
+    print('Artist gte results',search_results)
 
     song_id = None
 
     # Check if there are tracks in the search results
     if 'tracks' in search_results:
-        tracks = search_results['artists']['items']
-
-        if tracks:
-            # Extract information about the first track in the search results
-            first_song = tracks[0]
-            song_id = first_song['id']
+        # Extract information about the first track in the search results
+        first_song = search_results['tracks'][0]
+        song_id = first_song['id']
     
     return song_id
 
