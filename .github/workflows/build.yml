@@ -29,6 +29,8 @@ jobs:
         run: pytest api/app_test.py
       - name: Run spotify tests
         run: pytest api/spotify_test.py
+      - name: Run database tests
+        run: pytest api/database_test.py
   browser-tests:
     needs: build-step
     runs-on: ubuntu-latest

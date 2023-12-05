@@ -375,10 +375,12 @@ def display_phrase(scale, integer):
     config.read('dbtool.ini')
 
     if os.getenv("VERCEL"):
-    # Load environment variables from Vercel secrets
+        # Load environment variables from Vercel secrets
         password = os.environ.get('DATABASE_KEY')
+    elif os.getenv("GIT_DATABASE"):
+        password = os.environ.get('GIT_DATABASE')
     else:
-    # Load environment variables from the .env file
+        # Load environment variables from the .env file
         load_dotenv()
         password = os.environ.get("DATABASE")
 
