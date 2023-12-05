@@ -101,9 +101,9 @@ def create_map(mood_data):
 
             # Customize the popup with HTML content
             html_content = f"""
-            <div style="width: 250px; height: 150px;">
+            <div style="width: 250px; height: 150px; font-family: 'Roboto', sans-serif;">
                 <strong>{city}</strong><br>
-                <br>
+                <p>City Mood: {info['mood']}</p>
                 <iframe src="https://open.spotify.com/embed/track/{info['song']}" width="250" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                 <br>
                 <div class = "share">  
