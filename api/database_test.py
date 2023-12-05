@@ -4,13 +4,18 @@ import configparser
 from dotenv import load_dotenv
 import os
 
+
 # Define your database operations functions directly within the test class or use lambda functions
 def insert_data(conn, curs, data):
     try:
-        curs.execute("""INSERT INTO test VALUES (%s, %s, %s);""", (data['name'], data['age'], data['email']))
+        curs.execute(
+            """INSERT INTO test VALUES (%s, %s, %s);""",
+            (data["name"], data["age"], data["email"]),
+        )
         conn.commit()
     except Exception as e:
         print(f"Error: {e}")
+
 
 def get_data(curs, name):
     try:
@@ -20,46 +25,48 @@ def get_data(curs, name):
         print(f"Error: {e}")
     return result
 
+
 def update_data(conn, curs, data):
     try:
-        curs.execute("""UPDATE test SET age = %s, email = %s WHERE name = %s;""",
-                     (data['age'], data['email'], data['name']))
+        curs.execute(
+            """UPDATE test SET age = %s, email = %s WHERE name = %s;""",
+            (data["age"], data["email"], data["name"]),
+        )
         conn.commit()
     except Exception as e:
         print(f"Error: {e}")
+
 
 def clean_up(conn, curs, data):
     try:
-        curs.execute("""DELETE FROM test WHERE name = %s;""",
-                     (data['name'],))
+        curs.execute("""DELETE FROM test WHERE name = %s;""", (data["name"],))
         conn.commit()
     except Exception as e:
         print(f"Error: {e}")
 
+
 # Define a class for your database tests
 class DatabaseTests(unittest.TestCase):
-
     # Set up a testing database connection before each test
     def setUp(self):
         # Use a separate testing database or create a temporary schema for testing
         config = configparser.ConfigParser()
-        config.read('dbtool.ini')
+        config.read("dbtool.ini")
 
         if os.getenv("VERCEL"):
             # Load environment variables from Vercel secrets
-            password = os.environ.get('DATABASE_KEY')
+            password = os.environ.get("DATABASE_KEY")
         elif os.getenv("GIT_DATABASE"):
-            password = os.environ.get('GIT_DATABASE')
+            password = os.environ.get("GIT_DATABASE")
         else:
             # Load environment variables from the .env file
             load_dotenv()
             password = os.environ.get("DATABASE")
 
-        config['connection']['password'] = password
+        config["connection"]["password"] = password
 
-        self.conn = db.connect(**config['connection'])
+        self.conn = db.connect(**config["connection"])
         self.cursor = self.conn.cursor()
-
 
     # Tear down the testing database connection after each test
     def tearDown(self):
@@ -110,7 +117,11 @@ class DatabaseTests(unittest.TestCase):
         insert_data(self.conn, self.cursor, test_data)
 
         # Update the test data
-        updated_data = {"name": "Bob Smith", "age": 36, "email": "bob.smith.updated@example.com"}
+        updated_data = {
+            "name": "Bob Smith",
+            "age": 36,
+            "email": "bob.smith.updated@example.com",
+        }
         update_data(self.conn, self.cursor, updated_data)
 
         # Query the database to check if the data was updated
@@ -125,5 +136,6 @@ class DatabaseTests(unittest.TestCase):
         self.assertEqual(result[1], updated_data["age"])
         self.assertEqual(result[2], updated_data["email"])
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

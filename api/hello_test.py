@@ -9,9 +9,9 @@ from unittest.mock import patch, MagicMock
 # Test when there is no cookie
 def test_hello_world_no_cookie():
     with app.test_client() as client:
-        with patch('app.render_template') as mock_render:
+        with patch("app.render_template") as mock_render:
             total = database.total_recommendations()
-            response = client.get('/')
+            response = client.get("/")
             mock_render.assert_called_once_with("index.html", mood=None, total=total)
 
 
@@ -19,19 +19,21 @@ def test_hello_world_no_cookie():
 def test_hello_world_valid_cookie():
     valid_playlist = '[{"name": "Christmas Lights", "artist": "Coldplay"}]'
     with app.test_client() as client:
-        with patch('app.render_template') as mock_render:
-            client.set_cookie('playlist', valid_playlist)
+        with patch("app.render_template") as mock_render:
+            client.set_cookie("playlist", valid_playlist)
             total = database.total_recommendations()
-            response = client.get('/')
-            mock_render.assert_called_once_with("index.html", mood=json.loads(valid_playlist), total=total)
+            response = client.get("/")
+            mock_render.assert_called_once_with(
+                "index.html", mood=json.loads(valid_playlist), total=total
+            )
 
 
 # Test with invalid cookie
 def test_hello_world_invalid_cookie():
-    invalid_playlist = '[{......////////.....}]'
+    invalid_playlist = "[{......////////.....}]"
     with app.test_client() as client:
-        with patch('app.render_template') as mock_render:
-            client.set_cookie('playlist', invalid_playlist)
+        with patch("app.render_template") as mock_render:
+            client.set_cookie("playlist", invalid_playlist)
             total = database.total_recommendations()
-            response = client.get('/')
+            response = client.get("/")
             mock_render.assert_called_once_with("index.html", mood=None, total=total)

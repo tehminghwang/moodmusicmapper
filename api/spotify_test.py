@@ -2,17 +2,17 @@ import os
 from dotenv import load_dotenv
 import spotify_mod
 
-client_id = 'e7f726d8be8f4c49820046043edc2e79'
+client_id = "e7f726d8be8f4c49820046043edc2e79"
 
 if os.getenv("VERCEL"):
-# Load environment variables from Vercel secrets
-    client_secret = os.environ.get('SPOTIFY_KEY')
+    # Load environment variables from Vercel secrets
+    client_secret = os.environ.get("SPOTIFY_KEY")
 elif os.getenv("GIT_SPOTIFY"):
-    client_secret = os.environ.get('GIT_SPOTIFY')
+    client_secret = os.environ.get("GIT_SPOTIFY")
 else:
-# Load environment variables from the .env file
+    # Load environment variables from the .env file
     load_dotenv()
-    client_secret= os.environ.get("SPOTIFY")
+    client_secret = os.environ.get("SPOTIFY")
 
 
 """
@@ -41,12 +41,6 @@ def test_spotify_recommendations():
 
 # test if a song id is called
 def test_artist_top_song():
-
-    song_id = spotify_mod.get_artist_top_song('1Hsdzj7Dlq2I7tHP7501T4','GB')
+    song_id = spotify_mod.get_artist_top_song("1Hsdzj7Dlq2I7tHP7501T4", "GB")
 
     assert song_id != None
-
-
-
-
-

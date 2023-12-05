@@ -1,7 +1,7 @@
 name: Build
 on: [push]
 jobs:
-  build-step:
+  homepage-test:
     runs-on: ubuntu-latest
     env:
       GIT_DATABASE: ${{ secrets.DATABASE_KEY }}
@@ -15,18 +15,28 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: 3.9
-      - name: Install flask
-        run: pip install flask
       - name: Install all
         run: pip install -r api/requirements.txt
-      - name: Install pytest
-        run: pip install pytest
-      - name: Install bs4
-        run: pip install bs4
-      - name: Install requests
-        run: pip install requests
       - name: Run unit tests
-        run: pytest api/app_test.py
+        run: pytest api/hello_test.py
+  submission-test:
+    runs-on: ubuntu-latest
+    env:
+      GIT_DATABASE: ${{ secrets.DATABASE_KEY }}
+      GIT_SPOTIFY: ${{ secrets.SPOTIFY_KEY }}
+      GIT_OPENAI: ${{ secrets.OPENAI_API_KEY }}
+      GIT_IP: ${{ secrets.IP_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: Install all
+        run: pip install -r api/requirements.txt
+      - name: Run unit tests
+        run: pytest api/submit_load_test.py
   spotify-tests:
     runs-on: ubuntu-latest
     env:
@@ -72,12 +82,40 @@ jobs:
         run: pip install -r api/requirements.txt
       - name: Run ipfinder tests
         run: pytest api/ipfinder_test.py
+  python-formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: Install black
+        run: pip install black
+      - name: Run black
+        run: black api/
+  formatting-check:
+    needs: python-formatting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: Install flake8
+        run: pip install flake8
+      - name: Run flake8
+        run: flake8 api/
   browser-tests:
     needs:
       - build-step
       - database-connection
       - ipfinder-test
       - spotify-tests
+      - formatting-check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
