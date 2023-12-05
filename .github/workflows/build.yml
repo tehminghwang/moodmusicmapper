@@ -27,6 +27,19 @@ jobs:
         run: pip install requests
       - name: Run unit tests
         run: pytest api/app_test.py
+  spotify-tests:
+    runs-on: ubuntu-latest
+    env:
+      GIT_SPOTIFY: ${{ secrets.SPOTIFY_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: Install all
+        run: pip install -r api/requirements.txt
       - name: Run spotify tests
         run: pytest api/spotify_test.py
   database-connection:
@@ -44,10 +57,27 @@ jobs:
         run: pip install -r api/requirements.txt
       - name: Run database tests
         run: pytest api/database_test.py
+  ipfinder-test:
+    runs-on: ubuntu-latest
+    env:
+      GIT_IP: ${{ secrets.IP_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: Install all
+        run: pip install -r api/requirements.txt
+      - name: Run ipfinder tests
+        run: pytest api/ipfinder_test.py
   browser-tests:
     needs:
       - build-step
       - database-connection
+      - ipfinder-test
+      - spotify-tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
