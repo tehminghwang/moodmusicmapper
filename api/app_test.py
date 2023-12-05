@@ -125,7 +125,7 @@ def test_response_page_invalid_input():
     test_mood = ''
     with app.test_client() as client:
         response = client.get(f'/response/{test_mood}')
-        assert response.status_code == 302 # Redirect status
+        assert response.status_code == 404
 
 
 # test response page with exception handling
