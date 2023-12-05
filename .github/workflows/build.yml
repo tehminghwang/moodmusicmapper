@@ -3,6 +3,11 @@ on: [push]
 jobs:
   build-step:
     runs-on: ubuntu-latest
+    env:
+      GIT_DATABASE: ${{ secrets.DATABASE_KEY }}
+      GIT_SPOTIFY: ${{ secrets.SPOTIFY_KEY }}
+      GIT_OPENAI: ${{ secrets.OPENAI_API_KEY }}
+      GIT_IP: ${{ secrets.IP_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -12,6 +17,8 @@ jobs:
           python-version: 3.9
       - name: Install flask
         run: pip install flask
+      - name: Install all
+        run: pip install -r api/requirements.txt
       - name: Install pytest
         run: pip install pytest
       - name: Install bs4

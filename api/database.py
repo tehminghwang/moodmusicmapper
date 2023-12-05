@@ -12,6 +12,8 @@ def location_into_table(ipaddress, city, country, country_code):
     if os.getenv("VERCEL"):
     # Load environment variables from Vercel secrets
         password = os.environ.get('DATABASE_KEY')
+    elif os.getenv("GIT_DATABASE"):
+        password = os.environ.get('GIT_DATABASE')
     else:
     # Load environment variables from the .env file
         load_dotenv()
@@ -44,6 +46,8 @@ def mood_into_table(ipaddress, input_mood, mood, valency, danceability, energy, 
     if os.getenv("VERCEL"):
     # Load environment variables from Vercel secrets
         password = os.environ.get('DATABASE_KEY')
+    elif os.getenv("GIT_DATABASE"):
+        password = os.environ.get('GIT_DATABASE')
     else:
     # Load environment variables from the .env file
         load_dotenv()
@@ -82,6 +86,8 @@ def song_of_day():
     if os.getenv("VERCEL"):
     # Load environment variables from Vercel secrets
         password = os.environ.get('DATABASE_KEY')
+    elif os.getenv("GIT_DATABASE"):
+        password = os.environ.get('GIT_DATABASE')
     else:
     # Load environment variables from the .env file
         load_dotenv()
@@ -125,6 +131,8 @@ def city_clients():
     if os.getenv("VERCEL"):
     # Load environment variables from Vercel secrets
         password = os.environ.get('DATABASE_KEY')
+    elif os.getenv("GIT_DATABASE"):
+        password = os.environ.get('GIT_DATABASE')
     else:
     # Load environment variables from the .env file
         load_dotenv()
@@ -167,6 +175,8 @@ def city_country_info(city, country):
     if os.getenv("VERCEL"):
     # Load environment variables from Vercel secrets
         password = os.environ.get('DATABASE_KEY')
+    elif os.getenv("GIT_DATABASE"):
+        password = os.environ.get('GIT_DATABASE')
     else:
     # Load environment variables from the .env file
         load_dotenv()
@@ -279,6 +289,8 @@ def total_recommendations(city, country):
     if os.getenv("VERCEL"):
     # Load environment variables from Vercel secrets
         password = os.environ.get('DATABASE_KEY')
+    elif os.getenv("GIT_DATABASE"):
+        password = os.environ.get('GIT_DATABASE')
     else:
     # Load environment variables from the .env file
         load_dotenv()
@@ -319,6 +331,8 @@ def artist_of_day():
     if os.getenv("VERCEL"):
     # Load environment variables from Vercel secrets
         password = os.environ.get('DATABASE_KEY')
+    elif os.getenv("GIT_DATABASE"):
+        password = os.environ.get('GIT_DATABASE')
     else:
     # Load environment variables from the .env file
         load_dotenv()

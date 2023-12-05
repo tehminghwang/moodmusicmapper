@@ -57,6 +57,8 @@ def spotify_main(valence, danceability, energy, genre, song_list):    # Replace 
     if os.getenv("VERCEL"):
     # Load environment variables from Vercel secrets
         client_secret = os.environ.get('SPOTIFY_KEY')
+    elif os.getenv("GIT_SPOTIFY"):
+        client_secret = os.environ.get('GIT_SPOTIFY')
     else:
     # Load environment variables from the .env file
         load_dotenv()
