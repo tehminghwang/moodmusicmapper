@@ -50,10 +50,11 @@ def test_submit_no_ip_cookie():
 
             # Check response and cookies set
             assert response.status_code == 302  # Redirect status
-            assert 'ipaddress' in request.cookies
-            assert request.cookies['city'] == 'TestCity'
-            assert request.cookies['country'] == 'TestCountry'
-            assert request.cookies['country_code'] == 'TC'
+            cookies = response.headers.getlist('Set-Cookie')
+            assert any('ipaddress=123.456.789.0' in cookie for cookie in cookies)
+            assert any('city=TestCity' in cookie for cookie in cookies)
+            assert any('country=TestCountry' in cookie for cookie in cookies)
+            assert any('country_code=TC' in cookie for cookie in cookies)
 
 
 # Test Submit with Existing IP Cookie
