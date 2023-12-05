@@ -1,7 +1,6 @@
 import requests
 import os
 from dotenv import load_dotenv
-from flask import current_app
 
 def get_spotify_access_token(client_id, client_secret):
     # Get Spotify access token using client credentials flow
@@ -13,8 +12,6 @@ def get_spotify_access_token(client_id, client_secret):
     }
     response = requests.post(auth_url, data=auth_data)
     access_token = response.json().get('access_token')
-
-    print(access_token)
 
     return access_token
 

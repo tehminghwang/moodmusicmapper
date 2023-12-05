@@ -225,7 +225,7 @@ def response_page(input_mood):
             song_of_day = mood_data[city].get('song')
             singer_of_day = mood_data[city].get('artist')
                     
-        country = request.cookies.get('country')
+        country = request.cookies.get('country_code')
         song_country = country
 
         singer_of_day_top_song = spotify_mod.get_artist_top_song(singer_of_day, song_country)
