@@ -199,11 +199,13 @@ def response_page(input_mood):
         recent_locations = database.city_clients()
         mood_data = {}
         for cities in recent_locations:
-            mood_data[cities[0]] = {"mood": "Happy", "song": database.top_songs(cities[0], cities[1]), "index": 0.2}
+            mood_data[cities[0]] = {"mood": "Happy", "song": database.city_country_info(cities[0], cities[1]), "index": 0.2}
         print(mood_data)
 
         print(request.cookies)
 
+
+        print(database.artist_of_day())
          
         city = request.cookies.get('city')
         
