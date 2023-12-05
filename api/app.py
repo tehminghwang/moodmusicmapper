@@ -233,7 +233,7 @@ def response_page(input_mood):
     
         ipaddress = request.cookies.get('ipaddress')
         print(ipaddress)
-        input_mood = input_mood.replace("%20", " ")
+        input_mood = input_mood.replace("%2520", " ")
         print(input_mood)
         database.mood_into_table(ipaddress, input_mood, mood, valency, danceability, energy, playlist)
 
