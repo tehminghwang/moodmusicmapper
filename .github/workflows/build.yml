@@ -29,10 +29,23 @@ jobs:
         run: pytest api/app_test.py
       - name: Run spotify tests
         run: pytest api/spotify_test.py
+  database-connection:
+    runs-on: ubuntu-latest
+    env:
+      GIT_DATABASE: ${{ secrets.DATABASE_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: Install all
+        run: pip install -r api/requirements.txt
       - name: Run database tests
         run: pytest api/database_test.py
   browser-tests:
-    needs: build-step
+    needs: build-step, database-connection
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
