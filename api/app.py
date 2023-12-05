@@ -6,6 +6,7 @@ import re
 import folium
 import json
 import time
+import random
 from branca.colormap import LinearColormap
 if os.getenv("VERCEL"):
     from api import spotify_mod, database, ipfinder
@@ -38,6 +39,7 @@ client = OpenAI(
 @app.route("/")
 def hello_world():
     playlist_cookie = request.cookies.get('playlist')
+    total=database.total_recommendations()
     saved_playlist = None  # Initialize saved_playlist to None
     if playlist_cookie:
         try:
@@ -45,7 +47,7 @@ def hello_world():
         except json.JSONDecodeError:
             # Handle the case where the cookie contains invalid JSON
             pass
-    return render_template("index.html", mood=saved_playlist)
+    return render_template("index.html", mood=saved_playlist, total=total)
 
 def send_request(mood):
     try:
@@ -198,7 +200,10 @@ def response_page(input_mood):
         playlist = spotify_mod.spotify_main(valency, danceability, energy, genre, song_list)
         print(playlist)
         playlist_json = json.dumps(playlist)
-        #response.set_cookie('playlist', playlist, max_age=60 * 60 * 24 * 30)  # Cookie expires in 30 days
+
+        # For random generated mood phrase
+        integer = random.randint(0, 1)
+        mood_phrase = database.display_phrase(valency, integer)
 
         recent_locations = database.city_clients()
         mood_data = {}
@@ -245,7 +250,7 @@ def response_page(input_mood):
         #country=time=cookies = "123abc" # temp placeholder
         #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
         
-        response_html = render_template("mood.html", input_mood=mood, mood=playlist, response=response, reply=reply,
+        response_html = render_template("mood.html", input_mood=mood, mood=playlist, mood_phrase=mood_phrase, response=response, reply=reply,
                                         city=city, map_html=map_html, song_of_day=song_of_day, singer_of_day_top_song=singer_of_day_top_song)
         # Create a response object from the rendered HTML
         response = make_response(response_html)
