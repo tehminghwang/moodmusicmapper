@@ -157,9 +157,8 @@ def city_clients():
 
         return result
 
-# Input city and country
-# Returns uri of top recommended song of that location of the past 24 hours
-def top_songs(city, country):
+# Returns info specific to city and country
+def city_country_info(city, country):
     # read in configuration file parameters from dbtool.ini
     config = configparser.ConfigParser()
     config.read('dbtool.ini')
@@ -177,9 +176,13 @@ def top_songs(city, country):
     conn = db.connect(**config['connection'])
     curs = conn.cursor()
 
+    # Dictionary for all data to be returned together.
+    city = {}
+
     try:
         # Execute the SQL query
         print("Executing SQL query...")
+        # This query finds top song of past 24 hours by city and country
         curs.execute("""SELECT DISTINCT uri, title, city, country, 
                     COUNT(uri) OVER (PARTITION BY uri, city, country) AS frequency
                     FROM spotify JOIN (SELECT DISTINCT * FROM location) AS locate
@@ -190,20 +193,87 @@ def top_songs(city, country):
                      )
 
         # Fetch the result
-        result = curs.fetchone()
+        top_song = curs.fetchone()
 
         if result:
-            print(result)
+            print(top_song)
+            city['song'] = top_song[0]
         else:
-            print("No result found")
+            print("No song result found")
+
+    try:
+        # Execute the SQL query
+        print("Executing SQL query...")
+        # This query finds top mood of past 24 hours by city and country
+        curs.execute("""SELECT DISTINCT mood, COUNT(mood) AS frequency, city, country
+                    FROM mood JOIN (SELECT DISTINCT * FROM location) AS locate 
+                    ON mood.ipaddress = locate.ipaddress
+                    WHERE time >= now() - interval '24 hours' AND city = %s AND country = %s
+                    GROUP BY city, country, mood ORDER BY frequency DESC;""",
+                    (city, country)
+                     )
+
+        # Fetch the result
+        mood = curs.fetchone()
+
+        if result:
+            print(mood)
+            city['mood'] = mood[0]
+        else:
+            print("No mood result found")
+
+    try:
+        # Execute the SQL query
+        print("Executing SQL query...")
+        # This query finds top artist of past 24 hours by city and country
+        curs.execute("""SELECT DISTINCT artist_uri, artist, COUNT(artist_uri) AS frequency, city, country
+                    FROM spotify JOIN (SELECT DISTINCT * FROM location) AS locate 
+                    ON spotify.ipaddress = locate.ipaddress
+                    WHERE time >= now() - interval '24 hours' AND city = %s AND country = %s
+                    GROUP BY city, country, artist_uri, artist ORDER BY frequency DESC;""",
+                    (city, country)
+                     )
+
+        # Fetch the result
+        artist = curs.fetchone()
+
+        if result:
+            print(mood)
+            city['artist'] = artist[0]
+        else:
+            print("No artist result found")
+
+    try:
+        # Execute the SQL query
+        print("Executing SQL query...")
+        # This query finds average valency of past 24 hours by city and country
+        curs.execute("""SELECT DISTINCT ROUND(AVG(valency*1.0),1) AS average, city, country
+                    FROM mood JOIN (SELECT DISTINCT * FROM location) AS locate 
+                    ON mood.ipaddress = locate.ipaddress
+                    WHERE time >= now() - interval '24 hours' AND city = %s AND country = %s
+                    GROUP BY city, country;""",
+                    (city, country)
+                     )
+
+        # Fetch the result
+        valency = curs.fetchone()
+
+        if result:
+            print(valency)
+            city['valency'] = valency[0]
+        else:
+            print("No artist result found")
+
     finally:
         # Close the cursor and connection
         curs.close()
         conn.close()
 
-        return result[0]
+        print(city)
+        return city
 
 # Returns total number of recommendations made by app.
+# Should be used by landing page
 def total_recommendations(city, country):
     # read in configuration file parameters from dbtool.ini
     config = configparser.ConfigParser()
@@ -243,6 +313,47 @@ def total_recommendations(city, country):
 
         return result[0];
 
+# Returns uri of top recommended artist of past 24 hours
+def artist_of_day():
+    # read in configuration file parameters from dbtool.ini
+    config = configparser.ConfigParser()
+    config.read('dbtool.ini')
+
+    if os.getenv("VERCEL"):
+    # Load environment variables from Vercel secrets
+        password = os.environ.get('DATABASE_KEY')
+    else:
+    # Load environment variables from the .env file
+        load_dotenv()
+        password = os.environ.get("DATABASE")
+
+    config['connection']['password'] = password
+
+    conn = db.connect(**config['connection'])
+    curs = conn.cursor()
+
+    try:
+        # Execute the SQL query
+        print("Executing SQL query...")
+        curs.execute("""SELECT DISTINCT artist_uri, artist, COUNT(artist) AS frequency 
+                    FROM spotify 
+                    GROUP BY artist 
+                    ORDER BY frequency DESC LIMIT 1;"""
+                     )
+
+        # Fetch the result
+        result = curs.fetchone()
+
+        if result:
+            print(result)
+        else:
+            print("No result found")
+    finally:
+        # Close the cursor and connection
+        curs.close()
+        conn.close()
+
+        return result[0]
 
 
 mood_data = {
