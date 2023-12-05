@@ -10,7 +10,7 @@ from branca.colormap import LinearColormap
 if os.getenv("VERCEL"):
     from api import spotify_mod, database, ipfinder
 elif os.getenv("GIT_DATABASE"):
-    from api import spotify_mod, database, ipfinder
+    import spotify_mod, database, ipfinder
 else:
     import spotify_mod, database, ipfinder
     from dotenv import load_dotenv
