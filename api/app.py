@@ -105,7 +105,7 @@ def create_map(mood_data):
             # Customize the popup with HTML content
             html_content = f"""
             <div style="width: 250px; height: 150px; font-family: 'Roboto', sans-serif;">
-                <strong>{city}</strong><br>
+                <strong>{city[0]}, {city[1]}</strong><br>
                 <p>City Mood: {info['mood']}</p>
                 <iframe src="https://open.spotify.com/embed/track/{info['song']}" width="250" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                 <br>
@@ -216,7 +216,7 @@ def response_page(input_mood):
         mood_data = {}
         for cities in recent_locations:
             print(database.city_country_info(cities[0], cities[1]))
-            mood_data[cities[0]] = {
+            mood_data[cities] = {
                                     "mood": database.city_country_info(cities[0], cities[1]).get('mood', 'neutral'),
                                     "song": database.city_country_info(cities[0], cities[1]).get('song', song_of_day),
                                     "index": database.city_country_info(cities[0], cities[1]).get('valency', 0.5),
@@ -224,18 +224,20 @@ def response_page(input_mood):
                                     }
          
         city = request.cookies.get('city')
+        country = request.cookies.get('country')
         
         if city == None:
             city = "your area"
             
         else:
+            city = (city, country)
             city_info = mood_data.get(city, None)
             if city_info != None: #if city not found from database
                 song_of_day = city_info.get('song')
                 singer_of_day = city_info.get('artist')
                     
-        country = request.cookies.get('country_code')
-        song_country = country
+        country_code = request.cookies.get('country_code')
+        song_country = country_code
 
         singer_of_day_top_song = spotify_mod.get_artist_top_song(singer_of_day, song_country)
         if singer_of_day_top_song == None:
