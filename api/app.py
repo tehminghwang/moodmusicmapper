@@ -223,8 +223,9 @@ def response_page(input_mood):
         country = request.cookies.get('country')
         song_country = country
 
-
         singer_of_day_top_song = spotify_mod.get_artist_top_song(singer_of_day, song_country)
+        if singer_of_day_top_song == None:
+            singer_of_day_top_song = song_of_day
     
         ipaddress = request.cookies.get('ipaddress')
         print(ipaddress)
@@ -239,7 +240,6 @@ def response_page(input_mood):
         #country=time=cookies = "123abc" # temp placeholder
         #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
         
-        print(singer_of_day_top_song)
 
         response_html = render_template("mood.html", input_mood = input_mood, mood=mood, playlist=playlist, response=response, reply=reply, 
                                         city=city, map_html=map_html, song_of_day=song_of_day, singer_of_day_top_song=singer_of_day_top_song)
