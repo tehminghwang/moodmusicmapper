@@ -84,7 +84,6 @@ def test_submit_invalid_form_data():
 def test_loading_page():
     test_mood = 'happy'
     test_uri = 'test_song_uri'
-
     with app.test_client() as client:
         with patch('database.song_of_day') as mock_song_of_day:
             # Mock the return value of the song_of_day function
@@ -93,8 +92,67 @@ def test_loading_page():
             # Make a GET request to the loading page route
             response = client.get(f'/loading/{test_mood}')
 
-            # Check if the status code is 200 (OK)
+            # Test status and response
             assert response.status_code == 200
             assert test_mood in response.get_data(as_text=True)
             assert test_uri in response.get_data(as_text=True)
+
+
+# Test response page with valid input mood
+def test_response_page_valid_input():
+    test_mood = 'happy'
+
+    with app.test_client() as client:
+        with patch('app.send_request') as mock_send_request, \
+             patch('app.extract_values') as mock_extract_values, \
+             patch('spotify_mod.spotify_main') as mock_spotify_main, \
+             patch('database.display_phrase') as mock_display_phrase, \
+             patch('app.create_map') as mock_create_map:
+
+            # Mock responses
+            mock_send_request.return_value = 'mock_reply'
+            mock_extract_values.return_value = (0.5, 0.5, 0.5, 'happy', 'pop', 'Song1', 'Singer1', 'Song2', 'Singer2', 'Song3', 'Singer3')
+            mock_spotify_main.return_value = ['playlist_item1', 'playlist_item2']
+            mock_display_phrase.return_value = 'mood_phrase'
+            mock_create_map.return_value = 'mock_map'
+
+            response = client.get(f'/response/{test_mood}')
+            assert response.status_code == 200
+#add more assertions
+
+# Test response page with invalid mood
+def test_response_page_invalid_input():
+    test_mood = ''
+    with app.test_client() as client:
+        response = client.get(f'/response/{test_mood}')
+        assert response.status_code == 302 # Redirect status
+
+
+# test response page with exception handling
+def test_response_page_exception():
+    test_mood = 'happy'
+    with app.test_client() as client:
+        with patch('app.send_request') as mock_send_request:
+            with patch('app.render_template') as mock_render:
+                mock_send_request.side_effect = Exception("Test exception")
+                response = client.get(f'/response/{test_mood}')
+                assert response.status_code == 200
+                mock_render.assert_called_once_with("error.html")
+
+
+# Test cookie setting in response page
+def test_response_page_cookie_setting():
+    test_mood = 'happy'
+
+    with app.test_client() as client:
+        with patch('app.send_request') as mock_send_request, \
+             patch('app.extract_values') as mock_extract_values:
+
+            mock_send_request.return_value = 'mock_reply'
+            mock_extract_values.return_value = (0.5, 0.5, 0.5, 'happy', 'pop', 'Song1', 'Singer1', 'Song2', 'Singer2', 'Song3', 'Singer3')
+
+            response = client.get(f'/response/{test_mood}')
+            cookies = response.headers.getlist('Set-Cookie')
+            assert any('playlist=' in cookie for cookie in cookies)
+
 
