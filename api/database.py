@@ -334,7 +334,7 @@ def artist_of_day():
         print("Executing SQL query...")
         curs.execute("""SELECT DISTINCT artist_uri, artist, COUNT(artist) AS frequency 
                     FROM spotify 
-                    GROUP BY artist 
+                    GROUP BY artist, artist_uri
                     ORDER BY frequency DESC LIMIT 1;"""
                      )
 
@@ -342,7 +342,7 @@ def artist_of_day():
         result = curs.fetchone()
 
         if result:
-            print(result)
+            print('Artist', result)
         else:
             print("No result found")
     finally:
@@ -350,4 +350,4 @@ def artist_of_day():
         curs.close()
         conn.close()
 
-        return result[0]
+    return result[0]

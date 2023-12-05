@@ -157,7 +157,7 @@ def search_spotify_song(query_list, access_token):
                 song_list.append(track_info)
     return song_list
 
-def get_artist_top_song(singer_id):
+def get_artist_top_song(singer_id, country):
     
     client_id = 'e7f726d8be8f4c49820046043edc2e79'
 
@@ -171,14 +171,19 @@ def get_artist_top_song(singer_id):
 
     access_token = get_spotify_access_token(client_id, client_secret)
     
+    if country == None:
+        country = 'GB'
+
     base_url = f'https://api.spotify.com/v1/artists/{singer_id}/top-tracks'
     headers = {'Authorization': f'Bearer {access_token}'}
     params = {
-        'market': 'GB'  # required
+        'market': country  # required
     }
 
     response = requests.get(base_url, headers=headers, params=params)
     search_results = response.json()
+
+    song_id = None
 
     # Check if there are tracks in the search results
     if 'tracks' in search_results:
