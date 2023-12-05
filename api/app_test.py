@@ -8,7 +8,7 @@ from unittest.mock import patch, MagicMock
 # Test when there is no cookie
 def test_hello_world_no_cookie():
     with app.test_client() as client:
-        with patch('flask.render_template') as mock_render:
+        with patch('app.render_template') as mock_render:
             response = client.get('/')
             mock_render.assert_called_once_with("index.html", mood=None)
 
