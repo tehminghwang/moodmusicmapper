@@ -19,7 +19,7 @@ jobs:
       - name: Install requests
         run: pip install requests
       - name: Run unit tests
-        run: pytest api/*.py
+        run: pytest api/app_test.py
   browser-tests:
     needs: build-step
     runs-on: ubuntu-latest
