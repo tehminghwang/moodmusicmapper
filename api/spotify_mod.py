@@ -163,6 +163,8 @@ def get_artist_top_song(singer_id, country):
     if os.getenv("VERCEL"):
     # Load environment variables from Vercel secrets
         client_secret = os.environ.get('SPOTIFY_KEY')
+    elif os.getenv("GIT_SPOTIFY"):
+        client_secret = os.environ.get('GIT_SPOTIFY')
     else:
     # Load environment variables from the .env file
         load_dotenv()
@@ -181,7 +183,7 @@ def get_artist_top_song(singer_id, country):
 
     response = requests.get(base_url, headers=headers, params=params)
     search_results = response.json()
-    
+
     song_id = None
 
     # Check if there are tracks in the search results
