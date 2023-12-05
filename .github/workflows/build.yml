@@ -129,6 +129,7 @@ jobs:
         run: flake8 api/
   browser-tests:
     needs:
+      - build-test
       - homepage-test
       - submission-test
       - database-connection
