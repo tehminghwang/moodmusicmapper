@@ -16,13 +16,12 @@ def test_hello_world_no_cookie():
 # Test with valid cookie
 def test_hello_world_valid_cookie():
     valid_playlist = '[{"name": "Christmas Lights", "artist": "Coldplay"}]'
+    playlist_json = json.dumps(valid_playlist)
     with app.test_client() as client:
-        with client.session_transaction() as setcookie:
-            setcookie['saved_playlist'] = valid_playlist  # Set the cookie in the session
         with patch('app.render_template') as mock_render:
+            client.set_cookie('localhost', 'saved_playlist', playlist_json)
             response = client.get('/')
             mock_render.assert_called_once_with("index.html", mood=json.loads(valid_playlist))
-
 
 # Test with invalid cookie
 #def test_hello_world_invalid_cookie():

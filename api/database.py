@@ -190,98 +190,99 @@ def city_country_info(city, country):
     # Dictionary for all data to be returned together.
     city_info = dict()
 
+    try:
+        # Execute the SQL query
+        print("Executing SQL query...")
+        # This query finds top song of past 24 hours by city and country
+        curs.execute("""SELECT DISTINCT uri, title, city, country, 
+                    COUNT(uri) OVER (PARTITION BY uri, city, country) AS frequency
+                    FROM spotify JOIN (SELECT DISTINCT * FROM location) AS locate
+                    ON spotify.ipaddress = locate.ipaddress
+                    WHERE time >= now() - interval '24 hours' AND city = %s AND country = %s
+                    ORDER BY frequency DESC;""",
+                    (city, country)
+                     )
 
-    # Execute the SQL query
-    print("Executing SQL query...")
-    # This query finds top song of past 24 hours by city and country
-    curs.execute("""SELECT DISTINCT uri, title, city, country, 
-                COUNT(uri) OVER (PARTITION BY uri, city, country) AS frequency
-                FROM spotify JOIN (SELECT DISTINCT * FROM location) AS locate
-                ON spotify.ipaddress = locate.ipaddress
-                WHERE time >= now() - interval '24 hours' AND city = %s AND country = %s
-                ORDER BY frequency DESC;""",
-                (city, country)
-                 )
+        # Fetch the result
+        top_song = curs.fetchone()
 
-    # Fetch the result
-    top_song = curs.fetchone()
+        if top_song:
+            print(top_song)
+            city_info['song'] = top_song[0]
+        else:
+            print("No song result found")
 
-    if top_song:
-        print(top_song)
-        city_info['song'] = top_song[0]
-    else:
-        print("No song result found")
+        # Execute the SQL query
+        print("Executing SQL query...")
+        # This query finds top mood of past 24 hours by city and country
+        curs.execute("""SELECT DISTINCT mood, COUNT(mood) AS frequency, city, country
+                    FROM mood JOIN (SELECT DISTINCT * FROM location) AS locate 
+                    ON mood.ipaddress = locate.ipaddress
+                    WHERE time >= now() - interval '24 hours' AND city = %s AND country = %s
+                    GROUP BY city, country, mood ORDER BY frequency DESC;""",
+                    (city, country)
+                     )
 
-    # Execute the SQL query
-    print("Executing SQL query...")
-    # This query finds top mood of past 24 hours by city and country
-    curs.execute("""SELECT DISTINCT mood, COUNT(mood) AS frequency, city, country
-                FROM mood JOIN (SELECT DISTINCT * FROM location) AS locate 
-                ON mood.ipaddress = locate.ipaddress
-                WHERE time >= now() - interval '24 hours' AND city = %s AND country = %s
-                GROUP BY city, country, mood ORDER BY frequency DESC;""",
-                (city, country)
-                 )
+        # Fetch the result
+        mood = curs.fetchone()
 
-    # Fetch the result
-    mood = curs.fetchone()
+        if mood:
+            print(mood)
+            city_info['mood'] = mood[0]
+        else:
+            print("No mood result found")
 
-    if mood:
-        print(mood)
-        city_info['mood'] = mood[0]
-    else:
-        print("No mood result found")
+        # Execute the SQL query
+        print("Executing SQL query...")
+        # This query finds top artist of past 24 hours by city and country
+        curs.execute("""SELECT DISTINCT artist_uri, artist, COUNT(artist_uri) AS frequency, city, country
+                    FROM spotify JOIN (SELECT DISTINCT * FROM location) AS locate 
+                    ON spotify.ipaddress = locate.ipaddress
+                    WHERE time >= now() - interval '24 hours' AND city = %s AND country = %s
+                    GROUP BY city, country, artist_uri, artist ORDER BY frequency DESC;""",
+                    (city, country)
+                     )
 
-    # Execute the SQL query
-    print("Executing SQL query...")
-    # This query finds top artist of past 24 hours by city and country
-    curs.execute("""SELECT DISTINCT artist_uri, artist, COUNT(artist_uri) AS frequency, city, country
-                FROM spotify JOIN (SELECT DISTINCT * FROM location) AS locate 
-                ON spotify.ipaddress = locate.ipaddress
-                WHERE time >= now() - interval '24 hours' AND city = %s AND country = %s
-                GROUP BY city, country, artist_uri, artist ORDER BY frequency DESC;""",
-                (city, country)
-                 )
+        # Fetch the result
+        artist = curs.fetchone()
 
-    # Fetch the result
-    artist = curs.fetchone()
+        if artist:
+            print(mood)
+            city_info['artist'] = artist[0]
+        else:
+            print("No artist result found")
 
-    if artist:
-        print(mood)
-        city_info['artist'] = artist[0]
-    else:
-        print("No artist result found")
+        # Execute the SQL query
+        print("Executing SQL query...")
+        # This query finds average valency of past 24 hours by city and country
+        curs.execute("""SELECT DISTINCT ROUND(AVG(valency*1.0),1) AS average, city, country
+                    FROM mood JOIN (SELECT DISTINCT * FROM location) AS locate 
+                    ON mood.ipaddress = locate.ipaddress
+                    WHERE time >= now() - interval '24 hours' AND city = %s AND country = %s
+                    GROUP BY city, country;""",
+                    (city, country)
+                     )
 
-    # Execute the SQL query
-    print("Executing SQL query...")
-    # This query finds average valency of past 24 hours by city and country
-    curs.execute("""SELECT DISTINCT ROUND(AVG(valency*1.0),1) AS average, city, country
-                FROM mood JOIN (SELECT DISTINCT * FROM location) AS locate 
-                ON mood.ipaddress = locate.ipaddress
-                WHERE time >= now() - interval '24 hours' AND city = %s AND country = %s
-                GROUP BY city, country;""",
-                (city, country)
-                 )
+        # Fetch the result
+        valency = curs.fetchone()
 
-    # Fetch the result
-    valency = curs.fetchone()
+        if valency:
+            print(valency)
+            city_info['valency'] = valency[0]
+        else:
+            print("No artist result found")
 
-    if valency:
-        print(valency)
-        city_info['valency'] = valency[0]
-    else:
-        print("No artist result found")
+    finally:
+        # Close the cursor and connection
+        curs.close()
+        conn.close()
 
-    # Close the cursor and connection
-    curs.close()
-    conn.close()
-
-    print(city_info)
-    return city_info
+        print(city_info)
+        return city_info
 
 # Returns total number of recommendations made by app.
 # Should be used by landing page
-def total_recommendations(city, country):
+def total_recommendations():
     # read in configuration file parameters from dbtool.ini
     config = configparser.ConfigParser()
     config.read('dbtool.ini')
@@ -365,4 +366,49 @@ def artist_of_day():
         curs.close()
         conn.close()
 
-    return result[0]
+        return result[0]
+
+# Display phrases that match valency on response page
+def display_phrase(scale, integer):
+    # read in configuration file parameters from dbtool.ini
+    config = configparser.ConfigParser()
+    config.read('dbtool.ini')
+
+    if os.getenv("VERCEL"):
+    # Load environment variables from Vercel secrets
+        password = os.environ.get('DATABASE_KEY')
+    else:
+    # Load environment variables from the .env file
+        load_dotenv()
+        password = os.environ.get("DATABASE")
+
+    config['connection']['password'] = password
+
+    conn = db.connect(**config['connection'])
+    curs = conn.cursor()
+
+    try:
+        # Execute the SQL query
+        print("Executing SQL query...")
+        curs.execute("""SELECT phrase
+                    FROM valency
+                    WHERE valence = %s;""",
+                    (scale,)
+                     )
+
+        # Fetch the result
+        result = curs.fetchall()
+
+        if result:
+            print(result)
+        else:
+            print("No result found")
+
+    finally:
+        # Close the cursor and connection
+        curs.close()
+        conn.close()
+
+        text_only = [item[0] for item in result]
+
+        return text_only[integer]
