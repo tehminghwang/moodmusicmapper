@@ -215,10 +215,6 @@ def response_page(input_mood):
                                     "index": database.city_country_info(cities[0], cities[1]).get('valency', 0.5),
                                     "artist": database.city_country_info(cities[0], cities[1]).get('song', singer_of_day)
                                     }
-
-        print('Mood_data: ',mood_data)
-
-        print(request.cookies)
          
         city = request.cookies.get('city')
         
