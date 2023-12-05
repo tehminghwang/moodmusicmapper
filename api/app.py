@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, make_response, current_app
+from flask import Flask, flash, render_template, request, redirect, url_for, make_response, current_app
 
 from openai import OpenAI
 import os
@@ -18,6 +18,7 @@ else:
 import geopy
 from geopy.geocoders import Nominatim
 app = Flask(__name__)
+app.secret_key = 'secret'
 
 # Check if running on Vercel
 if os.getenv("VERCEL"):
@@ -152,6 +153,12 @@ def create_map(mood_data):
 @app.route("/submit", methods=["POST"])
 def submit():
     input_mood = request.form.get("mood")
+
+    # Check if input_mood is None or empty
+    if not input_mood:
+        # Option 1: Redirect back to form with an error message
+        flash("Please provide some inputs before submitting.", "error")
+        return redirect(url_for("hello_world"))
 
     if request.cookies.get('ipaddress') is not None:
         print("IP address in Cookie")
