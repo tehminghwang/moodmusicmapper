@@ -1,5 +1,5 @@
 import json
-import app
+from app import app
 #from app import hello_world
 from flask import request, render_template
 from unittest.mock import patch, MagicMock
