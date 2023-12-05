@@ -45,7 +45,8 @@ jobs:
       - name: Run database tests
         run: pytest api/database_test.py
   browser-tests:
-    needs: build-step, database-connection
+    needs: build-step
+    needs: database-connection
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
