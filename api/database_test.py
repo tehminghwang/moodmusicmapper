@@ -31,7 +31,7 @@ def update_data(conn, curs, data):
 def clean_up(conn, curs, data):
     try:
         curs.execute("""DELETE FROM test WHERE name = %s;""",
-                     (data['name']))
+                     (data['name'],))
         conn.commit()
     except Exception as e:
         print(f"Error: {e}")
