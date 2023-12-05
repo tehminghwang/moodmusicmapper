@@ -36,3 +36,49 @@ def test_hello_world_invalid_cookie():
             response = client.get('/')
             mock_render.assert_called_once_with("index.html", mood=None, total=total)
 
+
+# Test Submit with No IP Cookie and Valid Form Data
+def test_submit_no_ip_cookie():
+    with app.test_client() as client:
+        with patch('app.ipfinder.get_ip') as mock_get_ip, \
+                patch('app.ipfinder.get_location_from_ip') as mock_get_location, \
+                patch('app.database.location_into_table') as mock_location_db:
+            mock_get_ip.return_value = '123.456.789.0'
+            mock_location_info = {'city': 'TestCity', 'country': 'TestCountry', 'country_code': 'TC'}
+            mock_get_location.return_value = mock_location_info
+
+            form_data = {'mood': 'happy'}
+            response = client.post('/submit', data=form_data)
+
+            # Check response and cookies set
+            assert response.status_code == 302  # Redirect status
+            assert 'ipaddress' in request.cookies
+            assert request.cookies['city'] == 'TestCity'
+            assert request.cookies['country'] == 'TestCountry'
+            assert request.cookies['country_code'] == 'TC'
+
+
+# Test Submit with Existing IP Cookie
+def test_submit_with_ip_cookie():
+    with app.test_client() as client:
+        client.set_cookie('ipaddress', '123.456.789.0')
+        form_data = {'mood': 'sad'}
+        response = client.post('/submit', data=form_data)
+
+        # Check for redirect and no additional IP address cookie set
+        assert response.status_code == 302  # Redirect status
+        assert 'ipaddress' in request.cookies
+        assert request.cookies['ipaddress'] == '123.456.789.0'
+
+
+# Test Submit with Invalid Form Data
+def test_submit_invalid_form_data():
+    with app.test_client() as client:
+        form_data = {}  # Empty form data or invalid data
+        response = client.post('/submit', data=form_data)
+
+        # Check response
+        assert response.status_code == 302  # Assuming redirect behavior even for invalid data
+
+
+
