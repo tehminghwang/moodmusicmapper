@@ -3,7 +3,7 @@
     { "source": "/(.*)", "destination": "/api/app" }
   ],
   "functions": {
-    "app/api/**/*": {
+    "api/**/*": {
       "maxDuration": 300
     }
   }
