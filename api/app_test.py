@@ -21,6 +21,7 @@ def test_response_page_valid_input():
                 patch('app.render_template') as mock_render:
             # Mock responses
             client.set_cookie('city', 'test_city')
+            client.set_cookie('ipaddress', '123.456.789.0')
             mock_send_request.return_value = 'mock_reply'
             mock_extract_values.return_value = (0.5, 0.5, 0.5, 'happy', 'pop', 'Song1', 'Singer1', 'Song2', 'Singer2', 'Song3', 'Singer3')
             mock_spotify_main.return_value = ['playlist_item1', 'playlist_item2']
