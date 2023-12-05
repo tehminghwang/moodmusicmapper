@@ -2,6 +2,7 @@ import json
 import pytest
 from flask import Flask, request, render_template
 from app import app
+import database
 from unittest.mock import patch, MagicMock
 
 
@@ -20,8 +21,10 @@ def test_hello_world_valid_cookie():
     with app.test_client() as client:
         with patch('app.render_template') as mock_render:
             client.set_cookie('localhost', 'saved_playlist', playlist_json)
+            total = database.total_recommendations()
             response = client.get('/')
-            mock_render.assert_called_once_with("index.html", mood=json.loads(valid_playlist))
+            mock_render.assert_called_once_with("index.html", mood=json.loads(valid_playlist), total=total)
+
 
 # Test with invalid cookie
 #def test_hello_world_invalid_cookie():
