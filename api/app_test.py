@@ -70,14 +70,31 @@ def test_submit_with_ip_cookie():
         assert request.cookies['ipaddress'] == '123.456.789.0'
 
 
-# Test Submit with Invalid Form Data
+# Test Submit with Empty Form Data
 def test_submit_invalid_form_data():
     with app.test_client() as client:
-        form_data = {}  # Empty form data or invalid data
+        form_data = {}  # Empty form data
         response = client.post('/submit', data=form_data)
 
         # Check response
-        assert response.status_code == 302  # Assuming redirect behavior even for invalid data
+        assert response.status_code == 302 # Redirect status
 
 
+# Test loading page with a specific mood
+def test_loading_page():
+    test_mood = 'happy'
+    test_uri = 'test_song_uri'
+
+    with app.test_client() as client:
+        with patch('database.song_of_day') as mock_song_of_day:
+            # Mock the return value of the song_of_day function
+            mock_song_of_day.return_value = test_uri
+
+            # Make a GET request to the loading page route
+            response = client.get(f'/loading/{test_mood}')
+
+            # Check if the status code is 200 (OK)
+            assert response.status_code == 200
+            assert test_mood in response.get_data(as_text=True)
+            assert test_uri in response.get_data(as_text=True)
 
