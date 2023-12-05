@@ -14,7 +14,7 @@ def insert_data(conn, curs, data):
 
 def get_data(curs, name):
     try:
-        curs.execute("""SELECT * FROM test WHERE name = %s;""", (name))
+        curs.execute("""SELECT * FROM test WHERE name = %s;""", (name,))
         result = curs.fetchone()
     except Exception as e:
         print(f"Error: {e}")
@@ -114,7 +114,7 @@ class DatabaseTests(unittest.TestCase):
         update_data(self.conn, self.cursor, updated_data)
 
         # Query the database to check if the data was updated
-        self.cursor.execute("SELECT * FROM your_table WHERE name = 'Bob Smith'")
+        self.cursor.execute("SELECT * FROM test WHERE name = 'Bob Smith'")
         result = self.cursor.fetchone()
 
         # Assert that the result matches the updated data
