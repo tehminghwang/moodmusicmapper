@@ -18,7 +18,6 @@ def test_hello_world_no_cookie():
 # Test with valid cookie
 def test_hello_world_valid_cookie():
     valid_playlist = '[{"name": "Christmas Lights", "artist": "Coldplay"}]'
-    #playlist_python = json.loads(valid_playlist)
     with app.test_client() as client:
         with patch('app.render_template') as mock_render:
             client.set_cookie('playlist', valid_playlist)
@@ -28,9 +27,12 @@ def test_hello_world_valid_cookie():
 
 
 # Test with invalid cookie
-#def test_hello_world_invalid_cookie():
-#    with app.test_request_context('/'):
-#        with patch('flask.request.cookies', new=MagicMock(return_value={'playlist': 'invalid json'})):
-#            with patch('flask.render_template') as mock_render:
-#                app.hello_world()
-#                mock_render.assert_called_once_with("index.html", mood=None)
+def test_hello_world_invalid_cookie():
+    invalid_playlist = '[{......////////.....}]'
+    with app.test_client() as client:
+        with patch('app.render_template') as mock_render:
+            client.set_cookie('playlist', invalid_playlist)
+            total = database.total_recommendations()
+            response = client.get('/')
+            mock_render.assert_called_once_with("index.html", mood=None, total=total)
+
