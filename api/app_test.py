@@ -4,7 +4,6 @@ from flask import Flask, request, render_template
 from app import app
 from unittest.mock import patch, MagicMock
 
-app = Flask(__name__)
 
 # Test when there is no cookie
 def test_hello_world_no_cookie():
