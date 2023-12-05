@@ -6,7 +6,6 @@ from flask import (
     redirect,
     url_for,
     make_response,
-    current_app,
 )
 
 from openai import OpenAI
@@ -14,7 +13,6 @@ import os
 import re
 import folium
 import json
-import time
 import random
 from branca.colormap import LinearColormap
 
@@ -25,7 +23,6 @@ elif os.getenv("GIT_DATABASE"):
 else:
     import spotify_mod, database, ipfinder
     from dotenv import load_dotenv
-import geopy
 from geopy.geocoders import Nominatim
 
 app = Flask(__name__)
