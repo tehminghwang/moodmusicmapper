@@ -77,8 +77,8 @@ mood_data = {
 """
 def create_colormap():
     colors = ['green', 'yellow', 'red']
-    index = [0, 0.5, 1]  # Points at which colors change
-    return LinearColormap(colors, vmin=min(index), vmax=max(index))
+    index = [1, 0.5, 0]  # Points at which colors change
+    return LinearColormap(colors, vmin=min(index), vmax=max(index), caption='Positiveness')
 
 
 def create_map(mood_data):
@@ -188,7 +188,8 @@ def response_page(input_mood):
         valency, danceability, energy, mood, genre, song1, singer1, song2, singer2, song3, singer3 = extract_values(reply)
         print(genre)
         response = f"Valency: {valency}, Danceability: {danceability}, Energy: {energy}, Mood: {mood}"
-        song_list = [song1 + " " + singer1, song2 + " " + singer2, song3 + " " + singer3]
+        #song_list = [song1 + " " + singer1, song2 + " " + singer2, song3 + " " + singer3]
+        song_list = [song1 + " " + singer1, song2 + " " + singer2]
         print(song_list)
         playlist = spotify_mod.spotify_main(valency, danceability, energy, genre, song_list)
         print(playlist)
@@ -203,24 +204,21 @@ def response_page(input_mood):
 
         print(request.cookies)
 
-        
          
         city = request.cookies.get('city')
         
         if city == None:
             city = "your area"
-        song_city = city
-
-        """
+            song_city = None
         
         country = request.cookies.get('country')
         song_country = country
 
-        if song_city != None:
+        
+        if not song_city is None:
             song_of_day = database.top_songs(song_city, song_country)
         else:
-        """
-        song_of_day = database.song_of_day()
+            song_of_day = database.song_of_day()
         
         
         #singer_of_day = database.getysinger_of_day()
@@ -240,7 +238,7 @@ def response_page(input_mood):
         #country=time=cookies = "123abc" # temp placeholder
         #insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
         
-        response_html = render_template("mood.html", input_mood = input_mood, mood=playlist, response=response, reply=reply, 
+        response_html = render_template("mood.html", input_mood = input_mood, mood=mood, playlist=playlist, response=response, reply=reply, 
                                         city=city, map_html=map_html, song_of_day=song_of_day, singer_of_day_top_song=singer_of_day_top_song)
         # Create a response object from the rendered HTML
         response = make_response(response_html)

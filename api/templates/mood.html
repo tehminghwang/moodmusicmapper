@@ -21,7 +21,7 @@
 	<!-- Inner -->
 	<div class="inner">
 	  <header><center>
-	      <h1>You are feeling {{ input_mood }} today.</h1>
+	      <h1>You are feeling {{ mood }} today.</h1>
 		  <h2><br>Would you have a new feeling?</h2>
 	  </header>
 	  <footer>
@@ -59,7 +59,7 @@
 	      </svg>
 	    </button>
 	    <div id="item-list" class="item-list">
-	      {% for track in mood %}
+	      {% for track in playlist %}
 		  <div class = "song">
 	      	<iframe id="item" class="item" style="border-radius12px"
 		      src="https://open.spotify.com/embed/track/{{ track.uri }}"

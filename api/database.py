@@ -241,7 +241,7 @@ def total_recommendations(city, country):
         curs.close()
         conn.close()
 
-        return result[0];
+        return result[0]
 
 
 
