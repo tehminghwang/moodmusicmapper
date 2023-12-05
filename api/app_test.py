@@ -2,7 +2,7 @@ import json
 import pytest
 from flask import Flask, request, render_template
 from app import app
-import database
+import database, ipfinder
 from unittest.mock import patch, MagicMock
 
 
@@ -40,12 +40,10 @@ def test_hello_world_invalid_cookie():
 # Test Submit with No IP Cookie and Valid Form Data
 def test_submit_no_ip_cookie():
     with app.test_client() as client:
-        with patch('app.ipfinder.get_ip') as mock_get_ip, \
-                patch('app.ipfinder.get_location_from_ip') as mock_get_location, \
-                patch('app.database.location_into_table') as mock_location_db:
+        with patch('ipfinder.get_ip') as mock_get_ip, \
+                patch('ipfinder.get_location_from_ip') as mock_get_location:
             mock_get_ip.return_value = '123.456.789.0'
-            mock_location_info = {'city': 'TestCity', 'country': 'TestCountry', 'country_code': 'TC'}
-            mock_get_location.return_value = mock_location_info
+            mock_get_location.return_value = {'city': 'TestCity', 'country': 'TestCountry', 'country_code': 'TC'}
 
             form_data = {'mood': 'happy'}
             response = client.post('/submit', data=form_data)
