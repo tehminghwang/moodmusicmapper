@@ -229,8 +229,10 @@ def response_page(input_mood):
             city = "your area"
             
         else:
-            song_of_day = mood_data[city].get('song')
-            singer_of_day = mood_data[city].get('artist')
+            city_info = mood_data.get(city, None)
+            if city_info != None: #if city not found from database
+                song_of_day = city_info.get('song')
+                singer_of_day = city_info.get('artist')
                     
         country = request.cookies.get('country_code')
         song_country = country
