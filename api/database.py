@@ -332,9 +332,10 @@ def artist_of_day():
     try:
         # Execute the SQL query
         print("Executing SQL query...")
-        curs.execute("""SELECT DISTINCT artist_uri, artist, COUNT(artist) AS frequency 
+        curs.execute("""SELECT DISTINCT artist_uri, artist, COUNT(artist) AS frequency
                     FROM spotify 
-                    GROUP BY artist 
+                    WHERE time >= now() - interval '24 hours'
+                    GROUP BY artist, artist_uri
                     ORDER BY frequency DESC LIMIT 1;"""
                      )
 
