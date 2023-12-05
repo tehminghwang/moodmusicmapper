@@ -14,7 +14,7 @@ def insert_data(conn, curs, data):
 
 def get_data(curs, name):
     try:
-        curs.execute("""SELECT * FROM test WHERE name = %s;""", (name))
+        curs.execute("""SELECT * FROM test WHERE name = %s;""", (name,))
         result = curs.fetchone()
     except Exception as e:
         print(f"Error: {e}")
@@ -78,13 +78,13 @@ class DatabaseTests(unittest.TestCase):
         self.cursor.execute("""SELECT * FROM test WHERE name = 'John Doe';""")
         result = self.cursor.fetchone()
 
+        clean_up(self.conn, self.cursor, test_data)
+
         # Assert that the result matches the inserted data
         self.assertIsNotNone(result)
         self.assertEqual(result[0], test_data["name"])
         self.assertEqual(result[1], test_data["age"])
         self.assertEqual(result[2], test_data["email"])
-
-        clean_up(self.conn, self.cursor, test_data)
 
     # Test the get_data function
     def test_get_data(self):
@@ -95,13 +95,13 @@ class DatabaseTests(unittest.TestCase):
         # Call the provided get_data function
         result = get_data(self.cursor, "Jane Doe")
 
+        clean_up(self.conn, self.cursor, test_data)
+
         # Assert that the result matches the expected data
         self.assertIsNotNone(result)
         self.assertEqual(result[0], test_data["name"])
         self.assertEqual(result[1], test_data["age"])
         self.assertEqual(result[2], test_data["email"])
-
-        clean_up(self.conn, self.cursor, test_data)
 
     # Test the update_data function
     def test_update_data(self):
@@ -114,16 +114,16 @@ class DatabaseTests(unittest.TestCase):
         update_data(self.conn, self.cursor, updated_data)
 
         # Query the database to check if the data was updated
-        self.cursor.execute("SELECT * FROM your_table WHERE name = 'Bob Smith'")
+        self.cursor.execute("SELECT * FROM test WHERE name = 'Bob Smith'")
         result = self.cursor.fetchone()
+
+        clean_up(self.conn, self.cursor, test_data)
 
         # Assert that the result matches the updated data
         self.assertIsNotNone(result)
         self.assertEqual(result[0], updated_data["name"])
         self.assertEqual(result[1], updated_data["age"])
         self.assertEqual(result[2], updated_data["email"])
-
-        clean_up(self.conn, self.cursor, test_data)
 
 if __name__ == '__main__':
     unittest.main()
