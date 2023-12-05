@@ -14,6 +14,8 @@ else:
     load_dotenv()
     client_secret= os.environ.get("SPOTIFY")
 
+
+"""
 # test if access token if retrieved
 def test_access_token():
     
@@ -42,6 +44,7 @@ def test_artist_top_song():
     assert song_id != None
 
 
-
+"""
+# commented out to avoid frequent spotify API calls
 
 
