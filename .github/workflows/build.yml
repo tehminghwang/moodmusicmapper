@@ -116,7 +116,6 @@ jobs:
       - database-connection
       - ipfinder-test
       - spotify-tests
-      - formatting-check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
