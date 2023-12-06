@@ -305,6 +305,8 @@ def response_page(input_mood):
 
         # country=time=cookies = "123abc" # temp placeholder
         # insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
+        
+        total = database.total_recommendations()
 
         response_html = render_template(
             "mood.html",
@@ -318,6 +320,7 @@ def response_page(input_mood):
             map_html=map_html,
             song_of_day=song_of_day,
             singer_of_day_top_song=singer_of_day_top_song,
+            total=total,
         )
 
         # Create a response object from the rendered HTML
