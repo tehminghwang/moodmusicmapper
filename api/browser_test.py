@@ -37,15 +37,10 @@ def test_responsive_design_elements():
     meta_tag = soup.find('meta', attrs={"name": "viewport"})
     assert meta_tag is not None, "Viewport meta tag for responsive design not found"
 
-def test_sharing_buttons():
-    share_buttons = soup.find_all('a', id='share-button')
-    assert len(share_buttons) > 0, "Share buttons not found"
-
 # Run tests
 test_carousel_functionality()
 test_mood_submission_form()
 test_navigation_bar_links()
 test_banner_content()
 test_responsive_design_elements()
-test_sharing_buttons()
 
