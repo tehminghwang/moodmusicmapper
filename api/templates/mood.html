@@ -11,7 +11,7 @@
     <!-- Header -->
     <div id="header">
       <h3 id="MMM">Magic Music Mapper</h3>
-      <h3 id="counter"> Songs Discovered: {{ number }}</h3>
+      <h3 id="counter"> Songs Discovered: {{ total }}</h3>
 
       <!-- Inner -->
       <div class="inner">
@@ -126,7 +126,7 @@
 	      </a>
 	    </div>
 	  </div>
-	  <br><br>
+	  <br>
 	  <h3 style="font-size: 20px;"><br>Today's top artist in {{ city }}<br><br></h3>
 	  <iframe id="item" class="item" style="border-radius:12px" 
 		  src="https://open.spotify.com/embed/track/{{singer_of_day_top_song}}" 
