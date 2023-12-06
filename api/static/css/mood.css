@@ -406,9 +406,9 @@ button{
   scroll-snap-align: center;
 } */
 
-/* .carousel-view .item:hover {
+.item:hover {
   transform: scale(1.1); */ /* Adjust the scale value as needed */
-/* } */
+}
 
 .item-list::-webkit-scrollbar {
   display: none; /* Hide scrollbar for Chrome, Safari and Opera */
@@ -418,7 +418,7 @@ button{
 .prev-btn, .next-btn {
   height: 100px;
   width: 100px;
-  padding: 10px 10px 100px 10px;
+  padding: 10px 10px 200px 10px;
   font-family: 'Arial Narrow', sans-serif;
   font-size: 80px;
   font-stretch: ultra-condensed;
