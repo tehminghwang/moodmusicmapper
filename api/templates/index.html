@@ -6,38 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}" />
 
-    <style>
-        /* Add keyframes for typing animation */
-        @keyframes typing {
-            from {
-                width: 0;
-            }
-            to {
-                width: 100%;
-            }
-        }
-        /* Apply typing animation to h1 */
-        h1 {
-            overflow: hidden;
-            white-space: nowrap;
-            animation: typing 2.5s steps(30, end);
-        }
-
-    </style>
   </head>
-  <body class="homepage is-preload">
-    <div id="page-wrapper">
-
+  
       <!-- Header -->
-      <div id="header">
-	    <h3 id="MMM">Magic Music Mapper</h3>
-    <h3 id="counter">Songs Discovered: {{ total }}</h3>
+  <div id="header">
+    <h3 id="MMM">Magic Music Mapper</h3>
+    <h3 id="counter"> Songs Discovered: {{ number }}</h3>
     
-
 	<!-- Inner -->
 	<div class="inner">
-	  <header><center>
-
+	  <header>
+	    <center>
           <h1>Rediscover your music with AI</h1>
 	      <h2><br>Share a glimpse of your day and unveil a personalized
 		Spotify playlist<h2>
@@ -47,18 +26,18 @@
 	      <p>
 		<label for="moodfield"></label>
 		<input type="text" id="moodfield" name="mood">
-		<br><input type="submit" value="Click Me!">
+		<br><input type="submit" value="Generate my playlist!">
 	      </p>
 	      <br><br><br><br><br>
 	  </form></center>
 	  </footer>
 	</div>
-	
+
 	<!-- Navigation Bar -->
 	<nav id="nav">
 	  <ul>
-	    <li><a href="/">Home</a></li>
-	    <li><a href="/#about">About</a></li>
+	    <li><a href="index.html">Home</a></li>
+	    <li><a href="#about">About</a></li>
 	  </ul>
 	</nav>
 
@@ -75,26 +54,82 @@
 	    <button id="prev-btn" class="prev-btn"><</button>
 	    <div id="item-list" class="item-list">
 	      {% if mood %}
-            {% for track in mood %}
-                <iframe id="item" class="item" style="border-radius12px"
-		        src="https://open.spotify.com/embed/track/{{ track.uri }}"
-		        width="100%" height="200px" frameBorder="0"
-		        allowfullscreen="" allow="autoplay; clipboard-write;
+	      {% for track in mood %}
+	      <iframe id="item" class="item" style="border-radius12px"
+		      src="https://open.spotify.com/embed/track/{{ track.uri }}"
+		      width="100%" height="200px" frameBorder="0"
+		      allowfullscreen="" allow="autoplay; clipboard-write;
 						encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-	        {% endfor %}
-          {% else %}
-              <p><center>No recommendations available.</center></p>
-          {% endif %}
+	      {% endfor %}
+	      {% else %}
+	      <p><center>No recommendations available.</center></p>
+	      {% endif %}
+	      <iframe id="item" class="item" style="border-radius12px"
+		      src="https://open.spotify.com/embed/track/{{ track.uri }}"
+		      width="100%" height="200px" frameBorder="0"
+		      allowfullscreen="" allow="autoplay; clipboard-write;
+						encrypted-media;
+						fullscreen; picture-in-picture"
+		      loading="lazy"></iframe>
+	      <iframe id="item" class="item" style="border-radius12px"
+		      src="https://open.spotify.com/embed/track/{{ track.uri }}"
+		      width="100%" height="200px" frameBorder="0"
+		      allowfullscreen="" allow="autoplay; clipboard-write;
+						encrypted-media;
+						fullscreen; picture-in-picture"
+		      loading="lazy"></iframe>
+	      <iframe id="item" class="item" style="border-radius12px"
+		      src="https://open.spotify.com/embed/track/{{ track.uri }}"
+		      width="100%" height="200px" frameBorder="0"
+		      allowfullscreen="" allow="autoplay; clipboard-write;
+						encrypted-media;
+						fullscreen; picture-in-picture"
+		      loading="lazy"></iframe>
+	      <iframe id="item" class="item" style="border-radius12px"
+		      src="https://open.spotify.com/embed/track/{{ track.uri }}"
+		      width="100%" height="200px" frameBorder="0"
+		      allowfullscreen="" allow="autoplay; clipboard-write;
+						encrypted-media;
+						fullscreen; picture-in-picture"
+		      loading="lazy"></iframe>
+	      <iframe id="item" class="item" style="border-radius12px"
+		      src="https://open.spotify.com/embed/track/{{ track.uri }}"
+		      width="100%" height="200px" frameBorder="0"
+		      allowfullscreen="" allow="autoplay; clipboard-write;
+						encrypted-media;
+						fullscreen; picture-in-picture"
+		      loading="lazy"></iframe>
+	      <iframe id="item" class="item" style="border-radius12px"
+		      src="https://open.spotify.com/embed/track/{{ track.uri }}"
+		      width="100%" height="200px" frameBorder="0"
+		      allowfullscreen="" allow="autoplay; clipboard-write;
+						encrypted-media;
+						fullscreen; picture-in-picture"
+		      loading="lazy"></iframe>
+	      <iframe id="item" class="item" style="border-radius12px"
+		      src="https://open.spotify.com/embed/track/{{ track.uri }}"
+		      width="100%" height="200px" frameBorder="0"
+		      allowfullscreen="" allow="autoplay; clipboard-write;
+						encrypted-media;
+						fullscreen; picture-in-picture"
+		      loading="lazy"></iframe>
+	      <iframe id="item" class="item" style="border-radius12px"
+		      src="https://open.spotify.com/embed/track/{{ track.uri }}"
+		      width="100%" height="200px" frameBorder="0"
+		      allowfullscreen="" allow="autoplay; clipboard-write;
+						encrypted-media;
+						fullscreen; picture-in-picture"
+		      loading="lazy"></iframe>
 	    </div>
 	    <button id="next-btn" class="next-btn">></button>
 	  </div>
 	</div>
-	
+
 	<!-- About -->
 	<div class="about">
 	  <section id="about">
-	    <img src="{{ url_for('static', filename='css/logo.png')
-		      }}" alt="Magic Music Mapper Logo" width="200" height = "200">
+	    <img src="logo.png" alt="Magic Music Mapper Logo"
+		 width="300" height = "300">
 	    <br><br>
 	  <header>
 	    <h3 style="color: white; font-size: 50px;">Magic Music Mapper</h3>
@@ -132,7 +167,8 @@
 	    ever-changing emotions.
 	  </p>
 	  </section>
-	</div>	
-	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+	</div>
+	
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}" />
   </body>
 </html>
