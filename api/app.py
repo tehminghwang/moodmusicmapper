@@ -105,7 +105,11 @@ def create_colormap():
 
 def create_map(mood_data):
     # Start with a world map
-    m = folium.Map(location=[20, 0], zoom_start=2)
+    m = folium.Map(location=[20, 0], zoom_start=2, 
+                   tiles='https://{s}.tile.thunderforest.com/mobile-atlas/{z}/{x}/{y}.png?apikey=28ed3c40c2ba42dcbe6120ebc98d563a',
+                   attr='&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                   min_zoom=2)
+    
 
     # Define a linear color map
     colormap = create_colormap()
@@ -118,7 +122,7 @@ def create_map(mood_data):
 
             # Customize the popup with HTML content
             html_content = f"""
-            <div style="width: 250px; height: 150px; font-family: 'Roboto', sans-serif;">
+            <div style="width: 250px; height: 150px; font-family: 'Roboto', sans-serif,";>
                 <strong>{city[0]}, {city[1]}</strong><br>
                 <p>City Mood: {info['mood']}</p>
                 <iframe src="https://open.spotify.com/embed/track/{info['song']}" width="250" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
@@ -264,7 +268,7 @@ def response_page(input_mood):
         country = request.cookies.get("country")
 
         if city == None:
-            city = "your area"
+            output_city = "your area"
 
         else:
             city = (city, country)
@@ -272,6 +276,7 @@ def response_page(input_mood):
             if city_info != None:  # if city not found from database
                 song_of_day = city_info.get("song")
                 singer_of_day = city_info.get("artist")
+            output_city = (city[0] + ", " + city[1])
 
         country_code = request.cookies.get("country_code")
         song_country = country_code
@@ -305,8 +310,7 @@ def response_page(input_mood):
             playlist=playlist,
             response=response,
             reply=reply,
-            city=city[0], 
-            conutry=city[1],
+            city=output_city,
             map_html=map_html,
             song_of_day=song_of_day,
             singer_of_day_top_song=singer_of_day_top_song,
