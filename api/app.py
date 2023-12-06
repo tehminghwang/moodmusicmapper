@@ -276,7 +276,7 @@ def response_page(input_mood):
             if city_info != None:  # if city not found from database
                 song_of_day = city_info.get("song")
                 singer_of_day = city_info.get("artist")
-            if country != None:
+            if city != None and country != None:
                 output_city = (city[0] + ", " + city[1])    
             else:
                 output_city = (city[0])
