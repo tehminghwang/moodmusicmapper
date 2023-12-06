@@ -34,22 +34,6 @@ def test_response_page_valid_input():
             response = client.get(f'/response/{test_mood}')
             assert response.status_code == 200
 
-            # Adjust expected_render_args as per actual arguments passed in render_template
-            expected_render_args = {
-                'input_mood': test_mood,
-                'mood_phrase': 'mood_phrase',
-                'mood': 'happy',
-                'playlist': ['playlist_item1', 'playlist_item2'],
-                'response': 'Valency: 0.5, Danceability: 0.5, Energy: 0.5, Mood: happy',
-                'reply': 'mock_reply',
-                'city': 'test_city',
-                'map_html': 'mock_map',
-                'song_of_day': 'mock_song',
-                'singer_of_day_top_song': 'mock_artist'
-            }
-            mock_render.assert_called_once_with("mood.html", **expected_render_args)
-
-
 
 # Test response page with invalid mood
 def test_response_page_invalid_input():

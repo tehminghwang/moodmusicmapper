@@ -15,16 +15,19 @@
       }
 
       #header {
-        position: relative;
+          position: relative;
+	  height: 100vh;
+	  line-height: 100vh;
         background-image: url("{{ url_for('static', filename='header.jpg') }}");
         background-size: cover;
         background-position: center center;
         background-attachment: fixed;
         color: #fff;
         text-align: center;
+	vertical-align: middle;
         font-size: 2em;
         font-family: 'Roboto', sans-serif;
-        padding: 10em 0 15em 0;
+        padding: 0em 0 0em 0;
         cursor: default;
       }
 
@@ -79,12 +82,16 @@
         padding-left: 1.25em;
         padding-right: 1.25em;
       }
-
-
+      errormsg {
+	  display: inline-block;
+	  vertical-align: middle;
+	  line-height: normal;
+      }
+      
     </style>
   </head>
   <body>
-    <header id="header">Sorry, we are not able to recommend you any music currently. Please try again later.</header>
+    <div id="header"><errormsg>Sorry, we are not able to recommend you any music currently. Please try again later.</errormsg></div>
     <!-- Navigation Bar -->
     <nav id="nav">
       <ul>
