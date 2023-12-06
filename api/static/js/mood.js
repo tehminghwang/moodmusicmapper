@@ -1,46 +1,93 @@
-const prev = document.getElementById('prev-btn');
-const next = document.getElementById('next-btn');
-const list = document.getElementById('item-list');
+/* window.onload = function() {
+    startScrolling;
+} */
 
-const itemWidth = 450;
-const padding = 10;
-let autoScrollInterval;
+document.addEventListener('readystatechange', (event) => {
+    if (document.readyState === 'complete') {
+        startScrolling();
+    }
+});
 
-function startAutoScroll(direction) {
-  stopAutoScroll(); // Stop existing interval to avoid overlaps
-  autoScrollInterval = setInterval(() => {
-    // Smaller increment for smoother scrolling
-    list.scrollLeft += direction * 15; // Adjust the number for speed control
-  }, 20); // A shorter interval for a smoother transition
+/* document.addEventListener('DOMContentLoaded', (event) => {
+    startScrolling();
+}); */
+
+const itemList = document.getElementById('item-list');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+// const items = itemList.querySelectorAll('.item');
+
+let scrollingInterval;
+let scrollDirection = 1; // 1 for scrolling right, -1 for scrolling left
+
+function startScrolling() {
+    if (scrollingInterval) return; // Prevent multiple intervals
+    scrollingInterval = setInterval(() => {
+	itemList.scrollLeft += scrollDirection * 10; // Adjust the scrolling speed as needed
+    }, 50); // Adjust the interval for smoother scrolling
 }
 
-function stopAutoScroll() {
-  clearInterval(autoScrollInterval);
+/* function stopScrolling() {
+    clearInterval(scrollingInterval);
+    scrollingInterval = null; // Clear the interval reference
+} */
+
+function stopScrolling() {
+    if (scrollingInterval) {
+        clearInterval(scrollingInterval);
+        scrollingInterval = null; // Clear the interval reference
+    }
 }
 
-// Event listeners for buttons
-prev.addEventListener('click', () => {
-  list.scrollLeft -= itemWidth + padding;
+// window.onload = startScrolling;
+
+// Stop scrolling when the mouse enters the item list
+itemList.addEventListener('mouseenter', stopScrolling);
+
+// Resume scrolling when the mouse leaves the item list
+itemList.addEventListener('mouseleave', () => {
+    scrollDirection = 1; // Ensure direction is set to right when resuming
+    startScrolling();
 });
 
-next.addEventListener('click', () => {
-  list.scrollLeft += itemWidth + padding;
+// Change direction and start scrolling left when hovering over the prev button
+prevBtn.addEventListener('mouseenter', () => {
+    scrollDirection = -1; // Set direction to left when hovering over prev-btn
+    startScrolling(); // Start scrolling immediately
 });
 
-// Event listeners for auto-scroll on hover
-list.addEventListener('mouseenter', (event) => {
-  const listRect = list.getBoundingClientRect();
-  const relativeX = event.clientX - listRect.left;
-
-  // Check if the mouse is in the left or right half of the list
-  if (relativeX < listRect.width / 2) {
-    startAutoScroll(-1); // Scrolls to the left
-  } else {
-    startAutoScroll(1); // Scrolls to the right
-  }
+// Resume scrolling to the right when the mouse leaves the prev button
+prevBtn.addEventListener('mouseleave', () => {
+    scrollDirection = 1; // Set direction back to right when not hovering over prev-btn
+    startScrolling(); // Start scrolling immediately
 });
 
-list.addEventListener('mouseleave', stopAutoScroll);
+
+// Change direction and start scrolling right when hovering over the next button
+nextBtn.addEventListener('mouseenter', () => {
+    scrollDirection = 1; // Set direction to right when hovering over next-btn
+    startScrolling(); // Start scrolling immediately
+});
+
+
+
+// Stop any ongoing scrolling and manually scroll left when the prev button is clicked
+prevBtn.addEventListener('click', () => {
+    stopScrolling(); // Stop scrolling before manual scroll
+    itemList.scrollBy({
+	left: -500, // Scroll left by 500 px, adjust as needed
+	behavior: 'smooth' // Add smooth scrolling behavior
+    });
+});
+
+// Stop any ongoing scrolling and manually scroll right when the next button is clicked
+nextBtn.addEventListener('click', () => {
+    stopScrolling(); // Stop scrolling before manual scroll
+    itemList.scrollBy({
+	left: 500, // Scroll right by 500 px, adjust as needed
+	behavior: 'smooth' // Add smooth scrolling behavior
+  });
+});
 
 /*
 
