@@ -266,6 +266,7 @@ def response_page(input_mood):
 
         city = request.cookies.get("city")
         country = request.cookies.get("country")
+        print ('cookies city: ', city, country)
 
         if city == None:
             output_city = "your area"
