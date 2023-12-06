@@ -43,6 +43,7 @@ def test_response_page_valid_input():
                 'response': 'Valency: 0.5, Danceability: 0.5, Energy: 0.5, Mood: happy',
                 'reply': 'mock_reply',
                 'city': 'test_city',
+                'country': 'test_country',
                 'map_html': 'mock_map',
                 'song_of_day': 'mock_song',
                 'singer_of_day_top_song': 'mock_artist'
