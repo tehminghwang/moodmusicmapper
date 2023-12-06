@@ -164,7 +164,7 @@ form input[type="text"]{
     border: 0;
     background: #fafafa;
     width: 100%;
-    border-radius: 0.5em;
+    border-radius: 2em;
     border: solid 1px #E5E5E5;
     padding: 1em;
     -moz-transition: background-color 0.35s ease-in-out, border-color 0.35s ease-in-out;
@@ -194,7 +194,7 @@ input[type="submit"]{
     background: #df7366;
     color: #fff;
     text-align: center;
-    border-radius: 0.5em;
+    border-radius: 2em;
     text-decoration: none;
     padding: 0.65em 2em 0.65em 2em;
     border: 0;

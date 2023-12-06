@@ -11,7 +11,7 @@
       <!-- Header -->
   <div id="header">
     <h3 id="MMM">Magic Music Mapper</h3>
-    <h3 id="counter"> Songs Discovered: {{ number }}</h3>
+    <h3 id="counter"> Songs Discovered: {{ total }}</h3>
     
 	<!-- Inner -->
 	<div class="inner">
@@ -25,7 +25,8 @@
 	    <form action="/submit" method="post">
 	      <p>
 		<label for="moodfield"></label>
-		<input type="text" id="moodfield" name="mood">
+		<input type="text" id="moodfield" name="mood" required
+		       min length="1" maxlength="100">
 		<br><input type="submit" value="Generate my playlist!">
 	      </p>
 	      <br><br><br><br><br>
@@ -62,7 +63,8 @@
 						encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 	      {% endfor %}
 	      {% else %}
-	      <p><center>No recommendations available.</center></p>
+	      <p><center>This may be your first visit. Generate your
+	      playlist now!</center></p>
 	      {% endif %}
 	    </div>
 	    <button id="next-btn" class="next-btn">></button>
@@ -72,8 +74,8 @@
 	<!-- About -->
 	<div class="about">
 	  <section id="about">
-	    <img src="logo.png" alt="Magic Music Mapper Logo"
-		 width="300" height = "300">
+	    <img src="{{ url_for('static', filename='css/logo.png')
+		      }}" alt="Magic Music Mapper Logo" width="300" height = "300">
 	    <br><br>
 	  <header>
 	    <h3 style="color: white; font-size: 50px;">Magic Music Mapper</h3>
@@ -93,7 +95,7 @@
 	    deciphers your mood and translates it into a handcrafted
 	    musical experience.
 	    <br><br>
-	    Powered by cutting-edge algorithms, our app discerns the intricate
+	    Powered by Artificial Intelligence, our app discerns the intricate
 	    nuances of your emotions, translating them into a curated
 	    selection of tracks from Spotify's extensive library. Each
 	    playlist is a symphony of emotions, a musical portrayal

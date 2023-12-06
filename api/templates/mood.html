@@ -99,7 +99,7 @@
     <div class="two_col_container">
       <div class="left-column">
  	<div class = "song">
-	  <h3 style="font-size: 20px;">Today's top hit in {{ city }}<br><br></h3>
+	  <h3 style="font-size: 20px;">Today's top hit in {{ city }}, {{ country }}<br><br></h3>
 	  <iframe id="item" class="item" style="border-radius:12px" 
 		  src="https://open.spotify.com/embed/track/{{song_of_day}}" 
 		  width="50%" height="200px" frameBorder="0" allowfullscreen="" 
@@ -157,11 +157,17 @@
 	</div>	
       </div>
       <div class="right-column">
-	<h3 style="font-size: 20px;">Top hits geospatial explorer: <br><br></h3>
+	<h3 style="font-size: 20px;">Top hits geospatial explorer<br><br></h3>
 	<div id="map">
 	  {{ map_html|safe }}
 	</div>
       </div>  
+    </div>
+    <div class="btmlogo">
+      <center>
+	<img src="{{ url_for('static', filename='css/logo.png') }}"
+	     alt="Magic Music Mapper Logo" width="150" height = "150"><br><br>
+      </center>
     </div>
     <script src="{{ url_for('static', filename='js/mood.js') }}"></script>
   </body>

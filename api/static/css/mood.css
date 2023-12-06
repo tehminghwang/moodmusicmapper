@@ -143,7 +143,7 @@ ul {
 		border: 0;
 		background: #fafafa;
 		width: 100%;
-		border-radius: 0.5em;
+		border-radius: 2em;
 		border: solid 1px #E5E5E5;
 		padding: 1em;
 		-moz-transition: background-color 0.35s ease-in-out, border-color 0.35s ease-in-out;
@@ -174,7 +174,7 @@ ul {
 		color: #fff;
 		font-size: 18px;
 		text-align: center;
-		border-radius: 0.7em;
+		border-radius: 2em;
 		text-decoration: none;
 		padding: 0.35em 1.5em 0.35em 1.5em;
 		border: 0;
@@ -450,7 +450,7 @@ button{
 	grid-template-columns: repeat(2, 1fr);
 	grid-template-rows: repeat(2, 1fr);
 	height: auto; /* Adjust the height as needed */
-	background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 1.0));
+	background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
 	/* background-color: rgba(255, 255, 255, 0.1); */
   }
 
@@ -464,4 +464,11 @@ button{
 	grid-column: 2 / 3;
 	grid-row: 1 / 3;
 	padding: 20px;
+  }
+
+/* Bottom logo */
+
+  .btmlogo {
+     	height: auto;
+	background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 1.0)); 
   }
