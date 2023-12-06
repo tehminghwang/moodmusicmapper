@@ -371,17 +371,18 @@ input[type="submit"] {
 
 .carousel-view {
     display: flex;
+    height: auto;
     justify-content: space-between;
     align-items: center;
     gap: 10px;
     padding: 40px 10px;
-    overflow-y: hidden;
     /*  transition: all 0.25s ease-in; */
 }
 
 .carousel-view .item-list {
     /* max-width: 85em; */
     width: 100vw;
+    height: auto;
     padding: 0em 0em;
     display: flex;
     gap: 20px; /* May need to be adjusted */
@@ -390,7 +391,6 @@ input[type="submit"] {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
     overflow-x: auto;
-    overflow-y: hidden;
     /*  scroll-snap-type: x mandatory; */
     background-color: transparent;
 }
