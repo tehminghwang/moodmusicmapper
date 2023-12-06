@@ -333,7 +333,7 @@ button{
     position: relative;
     /* width: 100%; */
     overflow-x: auto; /* Allows horizontal scrolling */
-    overflow-y: hidden;
+    overflow-y: visible;
     height: auto;
     /*  display: flex; */
     justify-content: center;
@@ -347,7 +347,8 @@ button{
     justify-content: space-between;
     align-items: center;
     gap: 10px;
-    padding: 40px 10px;
+    padding: 50px 10px;
+    overflow-y: visible
     /*  transition: all 0.25s ease-in; */
 }
 
@@ -363,6 +364,7 @@ button{
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
     overflow-x: auto;
+    overflow-y: visible;
     /*  scroll-snap-type: x mandatory; */
     background-color: transparent;
 }
@@ -399,7 +401,7 @@ button{
     width: 300px; /* Adjust based on design */
     margin: 0 5px; /* Optional, for spacing between items */
     transition: transform 0.3s ease-in-out;
-    overflow-y: hidden;
+    overflow-y: visible;
 }
 
 /* .item {
