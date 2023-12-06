@@ -1,7 +1,21 @@
 name: Build
 on: [push]
 jobs:
-  build-step:
+  python-formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: Install black
+        run: pip install black
+      - name: Run black
+        run: black api/
+  build-test:
+    needs: python-formatting
     runs-on: ubuntu-latest
     env:
       GIT_DATABASE: ${{ secrets.DATABASE_KEY }}
@@ -15,19 +29,50 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: 3.9
-      - name: Install flask
-        run: pip install flask
       - name: Install all
         run: pip install -r api/requirements.txt
-      - name: Install pytest
-        run: pip install pytest
-      - name: Install bs4
-        run: pip install bs4
-      - name: Install requests
-        run: pip install requests
       - name: Run unit tests
         run: pytest api/app_test.py
+  homepage-test:
+    needs: python-formatting
+    runs-on: ubuntu-latest
+    env:
+      GIT_DATABASE: ${{ secrets.DATABASE_KEY }}
+      GIT_SPOTIFY: ${{ secrets.SPOTIFY_KEY }}
+      GIT_OPENAI: ${{ secrets.OPENAI_API_KEY }}
+      GIT_IP: ${{ secrets.IP_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: Install all
+        run: pip install -r api/requirements.txt
+      - name: Run unit tests
+        run: pytest api/hello_test.py
+  submission-test:
+    needs: python-formatting
+    runs-on: ubuntu-latest
+    env:
+      GIT_DATABASE: ${{ secrets.DATABASE_KEY }}
+      GIT_SPOTIFY: ${{ secrets.SPOTIFY_KEY }}
+      GIT_OPENAI: ${{ secrets.OPENAI_API_KEY }}
+      GIT_IP: ${{ secrets.IP_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: Install all
+        run: pip install -r api/requirements.txt
+      - name: Run unit tests
+        run: pytest api/submit_load_test.py
   spotify-tests:
+    needs: python-formatting
     runs-on: ubuntu-latest
     env:
       GIT_SPOTIFY: ${{ secrets.SPOTIFY_KEY }}
@@ -43,6 +88,7 @@ jobs:
       - name: Run spotify tests
         run: pytest api/spotify_test.py
   database-connection:
+    needs: python-formatting
     runs-on: ubuntu-latest
     env:
       GIT_DATABASE: ${{ secrets.DATABASE_KEY }}
@@ -58,6 +104,7 @@ jobs:
       - name: Run database tests
         run: pytest api/database_test.py
   ipfinder-test:
+    needs: python-formatting
     runs-on: ubuntu-latest
     env:
       GIT_IP: ${{ secrets.IP_KEY }}
@@ -74,7 +121,9 @@ jobs:
         run: pytest api/ipfinder_test.py
   browser-tests:
     needs:
-      - build-step
+      - build-test
+      - homepage-test
+      - submission-test
       - database-connection
       - ipfinder-test
       - spotify-tests

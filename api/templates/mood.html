@@ -7,176 +7,162 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mood.css') }}" />
   </head>
   <body class="homepage is-preload">
-    <div id="page-wrapper">
 
-      <!-- Header -->
-      <div id="header">
+    <!-- Header -->
+    <div id="header">
+      <h3 id="MMM">Magic Music Mapper</h3>
+      <h3 id="counter"> Songs Discovered: {{ number }}</h3>
 
-	<!-- Banner -->
-	<section id="banner">
-		<header>
-		</header>
-	  </section>
+      <!-- Inner -->
+      <div class="inner">
+	<header><center>
+	    <h1>You are feeling {{ mood }} today.</h1>
+            <h1>{{ mood_phrase }}</h1>
+	    <h2><br>Share something else from your day?</h2>
+	</header>
+	<footer>
+	  <form action="/submit" method="post">
+	    <p>
+	      <label for="moodfield"></label>
+	      <input type="text" id="moodfield" name="mood">
+	      <br><input type="submit" value="Generate my playlist!">
+	    </p>
+	    <br><br>
+	</form></center>
+	</footer>
+      </div>
 
-	<!-- Inner -->
-	<div class="inner">
-	  <header><center>
-	      <h1>You are feeling {{ mood }} today.</h1>
-          <h1>{{ mood_phrase }}</h1>
-		  <h2><br>Share something else from your day?</h2>
-	  </header>
-	  <footer>
-	    <form action="/submit" method="post">
-	      <p>
-		<label for="moodfield"></label>
-		<input type="text" id="moodfield" name="mood">
-		<br><input type="submit" value="Submit">
-	      </p>
-	  </form></center>
-	  </footer>
-	</div>
+      <!-- Navigation Bar -->
+      <nav id="nav">
+	<ul>
+	  <li><a href="/">Home</a></li>
+	  <li><a href="/#about">About</a></li>
+	</ul>
+      </nav>
+    
+    <!-- Banner -->
+    <section id="banner">
+      <header>
+	<h3 style="font-size: 40px;">Feeling {{ mood }}? Tune in to your personalised playlist:</h3>
+      </header>
+    </section>
 
-	<!-- Navigation Bar -->
-	<nav id="nav">
-		<ul>
-			<li><a href="/">Home</a></li>
-			<li><a href="/#about">About</a></li>
-		</ul>
-		</nav>
-
-	<!-- Banner -->
-	<section id="banner">
-	  <header>
-	    <h3 style="font-size: 40px;">Feeling {{ mood }}? Tune in to your personalised playlist:</h3>
-	  </header>
-	</section>
-
-	<!-- Carousel -->
-	<div class="container">
-	  <div class="carousel-view">
-	    <button id="prev-btn" class="prev-btn">
-	      <svg viewBox="0 0 512 512" width="20" title="chevron-circle-left">
-		<path d="M256 504C119 504 8 393 8 256S119 8 256 8s248 111 248 248-111 248-248 248zM142.1 273l135.5 135.5c9.4 9.4 24.6 9.4 33.9 0l17-17c9.4-9.4 9.4-24.6 0-33.9L226.9 256l101.6-101.6c9.4-9.4 9.4-24.6 0-33.9l-17-17c-9.4-9.4-24.6-9.4-33.9 0L142.1 239c-9.4 9.4-9.4 24.6 0 34z" />
-	      </svg>
-	    </button>
-	    <div id="item-list" class="item-list">
-	      {% for track in playlist %}
-		  <div class = "song">
-	      	<iframe id="item" class="item" style="border-radius12px"
-		      src="https://open.spotify.com/embed/track/{{ track.uri }}"
-		      width="100%" height="200px" frameBorder="0"
-		      allowfullscreen="" allow="autoplay; clipboard-write;
-						encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-			<div class = "share">  
-			  <a href="" id="share-button">
-			    <svg id = "share" xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-share">
-				  <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"/>
-			    </svg>
-			  </a>
-			  <div class = "shareto">
-			    <a href="https://www.facebook.com/sharer/sharer.php?quote=Mood Music Mapper recommended me to listen to this!\n\nGet your recommendation:\nhttps://moodmusicmapper.vercel.app/\n&u=https://open.spotify.com/track/{{ track.uri }}" 
-			     target="_blank"id="facebook-button">
-			      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30px" height="30px">    
-				    <path d="M15,3C8.373,3,3,8.373,3,15c0,6.016,4.432,10.984,10.206,11.852V18.18h-2.969v-3.154h2.969v-2.099c0-3.475,1.693-5,4.581-5 c1.383,0,2.115,0.103,2.461,0.149v2.753h-1.97c-1.226,0-1.654,1.163-1.654,2.473v1.724h3.593L19.73,18.18h-3.106v8.697 C22.481,26.083,27,21.075,27,15C27,8.373,21.627,3,15,3z"/>
-			      </svg>
-			    </a>
-				
-			    <a href="https://twitter.com/intent/tweet?text=Mood Music Mapper recommended me to listen to this!%0A%0AGet your recommendation:%0Ahttps://moodmusicmapper.vercel.app/%0A%0A&url=https://open.spotify.com/track/{{ track.uri }}" 
-			      target="_blank" id = "twitter_x-button"> 
-			      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30px" height="30px">
-				    <path d="M26.37,26l-8.795-12.822l0.015,0.012L25.52,4h-2.65l-6.46,7.48L11.28,4H4.33l8.211,11.971L12.54,15.97L3.88,26h2.65 l7.182-8.322L19.42,26H26.37z M10.23,6l12.34,18h-2.1L8.12,6H10.23z"/>
-			      </svg>
-		        </a>
-		      </div>
-			</div>
-		  </div>
-	      {% endfor %}
+    <!-- Carousel -->
+    <div class="container">
+      <div class="carousel-view">
+	<button id="prev-btn" class="prev-btn"><</button>
+	<div id="item-list" class="item-list">
+	  {% for track in playlist %}
+	  <div class = "song">
+	    <iframe id="item" class="item" style="border-radius12px"
+		    src="https://open.spotify.com/embed/track/{{ track.uri }}"
+		    width="100%" height="200px" frameBorder="0"
+		    allowfullscreen="" allow="autoplay; clipboard-write;
+					      encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+	    <div class = "share">  
+	      <a href="" id="share-button">
+		<svg id = "share" xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-share">
+		  <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"/>
+		</svg>
+	      </a>
+	      <div class = "shareto">
+		<a href="https://www.facebook.com/sharer/sharer.php?quote=Mood Music Mapper recommended me to listen to this!\n\nGet your recommendation:\nhttps://moodmusicmapper.vercel.app/\n&u=https://open.spotify.com/track/{{ track.uri }}" 
+		   target="_blank"id="facebook-button">
+		  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30px" height="30px">    
+		    <path d="M15,3C8.373,3,3,8.373,3,15c0,6.016,4.432,10.984,10.206,11.852V18.18h-2.969v-3.154h2.969v-2.099c0-3.475,1.693-5,4.581-5 c1.383,0,2.115,0.103,2.461,0.149v2.753h-1.97c-1.226,0-1.654,1.163-1.654,2.473v1.724h3.593L19.73,18.18h-3.106v8.697 C22.481,26.083,27,21.075,27,15C27,8.373,21.627,3,15,3z"/>
+		  </svg>
+		</a>
+		
+		<a href="https://twitter.com/intent/tweet?text=Mood Music Mapper recommended me to listen to this!%0A%0AGet your recommendation:%0Ahttps://moodmusicmapper.vercel.app/%0A%0A&url=https://open.spotify.com/track/{{ track.uri }}" 
+		   target="_blank" id = "twitter_x-button"> 
+		  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30px" height="30px">
+		    <path d="M26.37,26l-8.795-12.822l0.015,0.012L25.52,4h-2.65l-6.46,7.48L11.28,4H4.33l8.211,11.971L12.54,15.97L3.88,26h2.65 l7.182-8.322L19.42,26H26.37z M10.23,6l12.34,18h-2.1L8.12,6H10.23z"/>
+		  </svg>
+		</a>
+	      </div>
 	    </div>
-	    <button id="next-btn" class="next-btn">
-	      <svg viewBox="0 0 512 512" width="20" title="chevron-circle-right">
-		<path d="M256 8c137 0 248 111 248 248S393 504 256 504 8 393 8 256 119 8 256 8zm113.9 231L234.4 103.5c-9.4-9.4-24.6-9.4-33.9 0l-17 17c-9.4 9.4-9.4 24.6 0 33.9L285.1 256 183.5 357.6c-9.4 9.4-9.4 24.6 0 33.9l17 17c9.4 9.4 24.6 9.4 33.9 0L369.9 273c9.4-9.4 9.4-24.6 0-34z" />
+	  </div>
+	  {% endfor %}
+	</div>
+	<button id="next-btn" class="next-btn">></button>
+      </div>
+    </div>
+
+    <!-- Banner -->
+    <section id="banner">
+      <header>
+	<h3 style="font-size: 40px;">Musical pulse resonator:</h3>
+      </header>
+    </section>
+
+    <!-- two columns -->
+    <div class="two_col_container">
+      <div class="left-column">
+ 	<div class = "song">
+	  <h3 style="font-size: 20px;">Today's top hit in {{ city }}<br><br></h3>
+	  <iframe id="item" class="item" style="border-radius:12px" 
+		  src="https://open.spotify.com/embed/track/{{song_of_day}}" 
+		  width="50%" height="200px" frameBorder="0" allowfullscreen="" 
+		  allow="autoplay; clipboard-write; 
+			 encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+	  <div class = "share">  
+	    <a id="share-button">
+	      <svg id = "share" xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-share">
+		<path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"/>
 	      </svg>
-	    </button>
+	    </a>
+	    <div class = "shareto">
+	      <a href="https://www.facebook.com/sharer/sharer.php?quote=Mood Music Mapper recommended me to listen to this!\n\nGet your recommendation:\nhttps://moodmusicmapper.vercel.app/\n&u=https://open.spotify.com/track/{{song_of_day}}" 
+		 target="_blank" class="facebook-button">
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30px" height="30px">    
+		  <path d="M15,3C8.373,3,3,8.373,3,15c0,6.016,4.432,10.984,10.206,11.852V18.18h-2.969v-3.154h2.969v-2.099c0-3.475,1.693-5,4.581-5 c1.383,0,2.115,0.103,2.461,0.149v2.753h-1.97c-1.226,0-1.654,1.163-1.654,2.473v1.724h3.593L19.73,18.18h-3.106v8.697 C22.481,26.083,27,21.075,27,15C27,8.373,21.627,3,15,3z"/>
+		</svg>
+	      </a>
+	      <a href="https://twitter.com/intent/tweet?text=Mood Music Mapper recommended me to listen to this!%0A%0AGet your recommendation:%0Ahttps://moodmusicmapper.vercel.app/%0A%0A&url=https://open.spotify.com/track/{{song_of_day}}" 
+		 target="_blank" id = "twitter_x-button"> 
+		<svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 30 30" width="30px" height="30px">
+		  <path d="M26.37,26l-8.795-12.822l0.015,0.012L25.52,4h-2.65l-6.46,7.48L11.28,4H4.33l8.211,11.971L12.54,15.97L3.88,26h2.65 l7.182-8.322L19.42,26H26.37z M10.23,6l12.34,18h-2.1L8.12,6H10.23z"/>
+		</svg>
+	      </a>
+	    </div>
 	  </div>
-	</div>
-
-	<!-- Banner -->
-	<section id="banner">
-		<header>
-			<h3 style="font-size: 30px;">Musical pulse resonator:</h3>
-		</header>
-		</section>
-
-	<!-- two columns -->
-	<div class="two_col_container">
-	  <div class="left-column">
- 	    <div class = "song">
-		  <h3 style="font-size: 20px;">Today's top hit in {{ city }}<br><br></h3>
-		  <iframe id="item" class="item" style="border-radius:12px" 
-			src="https://open.spotify.com/embed/track/{{song_of_day}}" 
-			width="50%" height="200px" frameBorder="0" allowfullscreen="" 
-			allow="autoplay; clipboard-write; 
-			encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-			<div class = "share">  
-			  <a id="share-button">
-			    <svg id = "share" xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-share">
-				  <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"/>
-			    </svg>
-			  </a>
-			  <div class = "shareto">
-			    <a href="https://www.facebook.com/sharer/sharer.php?quote=Mood Music Mapper recommended me to listen to this!\n\nGet your recommendation:\nhttps://moodmusicmapper.vercel.app/\n&u=https://open.spotify.com/track/{{song_of_day}}" 
-				target="_blank" class="facebook-button">
-				  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30px" height="30px">    
-					<path d="M15,3C8.373,3,3,8.373,3,15c0,6.016,4.432,10.984,10.206,11.852V18.18h-2.969v-3.154h2.969v-2.099c0-3.475,1.693-5,4.581-5 c1.383,0,2.115,0.103,2.461,0.149v2.753h-1.97c-1.226,0-1.654,1.163-1.654,2.473v1.724h3.593L19.73,18.18h-3.106v8.697 C22.481,26.083,27,21.075,27,15C27,8.373,21.627,3,15,3z"/>
-				  </svg>
-			    </a>
-			    <a href="https://twitter.com/intent/tweet?text=Mood Music Mapper recommended me to listen to this!%0A%0AGet your recommendation:%0Ahttps://moodmusicmapper.vercel.app/%0A%0A&url=https://open.spotify.com/track/{{song_of_day}}" 
-				target="_blank" id = "twitter_x-button"> 
-				  <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 30 30" width="30px" height="30px">
-					<path d="M26.37,26l-8.795-12.822l0.015,0.012L25.52,4h-2.65l-6.46,7.48L11.28,4H4.33l8.211,11.971L12.54,15.97L3.88,26h2.65 l7.182-8.322L19.42,26H26.37z M10.23,6l12.34,18h-2.1L8.12,6H10.23z"/>
-				  </svg>
-			    </a>
-			  </div>
-			</div>
-		  <br><br>
-		  <h3 style="font-size: 20px;">Today's top artist in {{ city }}<br><br></h3>
-		  <iframe id="item" class="item" style="border-radius:12px" 
-			src="https://open.spotify.com/embed/track/{{singer_of_day_top_song}}" 
-			width="50%" height="200px" frameBorder="0" allowfullscreen="" 
-			allow="autoplay; clipboard-write; 
-			encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-			<div class = "share">  
-			  <a id="share-button">
-			    <svg id = "share" xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-share">
-				  <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"/>
-			    </svg>
-			  </a>
-			  <div class = "shareto">
-			    <a href="https://www.facebook.com/sharer/sharer.php?quote=Mood Music Mapper recommended me to listen to this!\n\nGet your recommendation:\nhttps://moodmusicmapper.vercel.app/\n&u=https://open.spotify.com/track/{{singer_of_day_top_song}}" 
-				target="_blank" class="facebook-button">
-				  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30px" height="30px">    
-					<path d="M15,3C8.373,3,3,8.373,3,15c0,6.016,4.432,10.984,10.206,11.852V18.18h-2.969v-3.154h2.969v-2.099c0-3.475,1.693-5,4.581-5 c1.383,0,2.115,0.103,2.461,0.149v2.753h-1.97c-1.226,0-1.654,1.163-1.654,2.473v1.724h3.593L19.73,18.18h-3.106v8.697 C22.481,26.083,27,21.075,27,15C27,8.373,21.627,3,15,3z"/>
-				  </svg>
-			    </a>
-			    <a href="https://twitter.com/intent/tweet?text=Mood Music Mapper recommended me to listen to this!%0A%0AGet your recommendation:%0Ahttps://moodmusicmapper.vercel.app/%0A%0A&url=https://open.spotify.com/track/{{singer_of_day_top_song}}" 
-				target="_blank" id = "twitter_x-button"> 
-				  <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 30 30" width="30px" height="30px">
-					<path d="M26.37,26l-8.795-12.822l0.015,0.012L25.52,4h-2.65l-6.46,7.48L11.28,4H4.33l8.211,11.971L12.54,15.97L3.88,26h2.65 l7.182-8.322L19.42,26H26.37z M10.23,6l12.34,18h-2.1L8.12,6H10.23z"/>
-				  </svg>
-			    </a>
-			  </div>
-			</div>
-		</div>	
+	  <br><br>
+	  <h3 style="font-size: 20px;">Today's top artist in {{ city }}<br><br></h3>
+	  <iframe id="item" class="item" style="border-radius:12px" 
+		  src="https://open.spotify.com/embed/track/{{singer_of_day_top_song}}" 
+		  width="50%" height="200px" frameBorder="0" allowfullscreen="" 
+		  allow="autoplay; clipboard-write; 
+			 encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+	  <div class = "share">  
+	    <a id="share-button">
+	      <svg id = "share" xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="bi bi-share">
+		<path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"/>
+	      </svg>
+	    </a>
+	    <div class = "shareto">
+	      <a href="https://www.facebook.com/sharer/sharer.php?quote=Mood Music Mapper recommended me to listen to this!\n\nGet your recommendation:\nhttps://moodmusicmapper.vercel.app/\n&u=https://open.spotify.com/track/{{singer_of_day_top_song}}" 
+		 target="_blank" class="facebook-button">
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30px" height="30px">    
+		  <path d="M15,3C8.373,3,3,8.373,3,15c0,6.016,4.432,10.984,10.206,11.852V18.18h-2.969v-3.154h2.969v-2.099c0-3.475,1.693-5,4.581-5 c1.383,0,2.115,0.103,2.461,0.149v2.753h-1.97c-1.226,0-1.654,1.163-1.654,2.473v1.724h3.593L19.73,18.18h-3.106v8.697 C22.481,26.083,27,21.075,27,15C27,8.373,21.627,3,15,3z"/>
+		</svg>
+	      </a>
+	      <a href="https://twitter.com/intent/tweet?text=Mood Music Mapper recommended me to listen to this!%0A%0AGet your recommendation:%0Ahttps://moodmusicmapper.vercel.app/%0A%0A&url=https://open.spotify.com/track/{{singer_of_day_top_song}}" 
+		 target="_blank" id = "twitter_x-button"> 
+		<svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 30 30" width="30px" height="30px">
+		  <path d="M26.37,26l-8.795-12.822l0.015,0.012L25.52,4h-2.65l-6.46,7.48L11.28,4H4.33l8.211,11.971L12.54,15.97L3.88,26h2.65 l7.182-8.322L19.42,26H26.37z M10.23,6l12.34,18h-2.1L8.12,6H10.23z"/>
+		</svg>
+	      </a>
+	    </div>
 	  </div>
-	  <div class="right-column">
-		<h3 style="font-size: 20px;">Top hits geospatial explorer: <br><br></h3>
-		<div id="map">
-			{{ map_html|safe }}
-		</div>
-	  </div>  
+	</div>	
+      </div>
+      <div class="right-column">
+	<h3 style="font-size: 20px;">Top hits geospatial explorer: <br><br></h3>
+	<div id="map">
+	  {{ map_html|safe }}
 	</div>
-
-	
-	<script src="{{ url_for('static', filename='js/mood.js') }}"></script>
+      </div>  
+    </div>
+    <script src="{{ url_for('static', filename='js/mood.js') }}"></script>
   </body>
 </html>
