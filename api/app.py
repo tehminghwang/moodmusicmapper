@@ -12,6 +12,7 @@ from openai import OpenAI
 import os
 import re
 import folium
+import folium.plugins
 import json
 import random
 from branca.colormap import LinearColormap
@@ -114,6 +115,16 @@ def create_map(mood_data):
     # Define a linear color map
     colormap = create_colormap()
 
+    custom_marker = '''function(cluster) {
+    return L.divIcon({html: '<div style="background-color: rgba(75, 75, 75, 0.6);"><span style = "color: white;">' + cluster.getChildCount() + '</span></div>',
+                      className: 'marker-cluster marker-cluster-small',
+                      iconSize: new L.Point(40, 40)});
+    }
+'''
+
+    marker_cluster = folium.plugins.MarkerCluster(icon_create_function=custom_marker, options={'show_coverage_on_hover':False})
+    marker_cluster.add_to(m)
+
     for city, info in mood_data.items():
         lat, lon = get_coordinates(city)
         if lat is not None and lon is not None:
@@ -150,15 +161,15 @@ def create_map(mood_data):
             popup = folium.Popup(iframe, parse_html=False)
 
             # Add a Circle marker with the color
-            folium.Circle(
+            folium.CircleMarker(
                 location=[lat, lon],
-                radius=300000,  # Adjust the radius as needed
+                radius=10,  # Adjust the radius as needed
                 color=color,
                 fill=True,
                 fill_color=color,
                 fill_opacity=1,
                 popup=popup,
-            ).add_to(m)
+            ).add_to(marker_cluster)
 
     # Optionally, add the colormap to the map for reference
     colormap.add_to(m)

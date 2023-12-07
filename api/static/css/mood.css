@@ -468,6 +468,14 @@ button{
     padding: 20px;
 }
 
+/* map */
+.marker-cluster-small {
+    background-color: rgba(121, 121, 121, 0.6);
+    }
+.marker-cluster-small div {
+    background-color: rgba(75, 75, 75, 0.6);
+    }
+
 /* Bottom logo */
 
 .btmlogo {
