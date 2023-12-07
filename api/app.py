@@ -47,7 +47,9 @@ client = OpenAI(api_key=open_ai_key)
 @app.route("/")
 def hello_world():
     playlist_cookie = request.cookies.get("playlist")
-    total = database.total_recommendations()
+    conn, curs = database.setUp()
+    total = database.total_recommendations(curs)
+    database.tearDown(conn, curs)
     saved_playlist = None  # Initialize saved_playlist to None
     if playlist_cookie:
         try:
@@ -187,11 +189,11 @@ def submit():
         flash("Please provide some inputs before submitting.", "error")
         return redirect(url_for("hello_world"))
 
-    if request.cookies.get("ipaddress") is not None:
+    ipaddress = ipfinder.get_ip()
+    if request.cookies.get("ipaddress") == ipaddress:
         print("IP address in Cookie")
         return redirect(url_for("loading_page", input_mood=input_mood))
     else:
-        ipaddress = ipfinder.get_ip()
         response = make_response(
             redirect(url_for("loading_page", input_mood=input_mood))
         )
@@ -201,7 +203,9 @@ def submit():
             city = location_info["city"]
             country = location_info["country"]
             country_code = location_info["country_code"]
-            database.location_into_table(ipaddress, city, country, country_code)
+            conn, curs = database.setUp()
+            database.location_into_table(conn, curs, ipaddress, city, country, country_code)
+            database.tearDown(conn, curs)
             response.set_cookie(
                 "city", city, max_age=60 * 60 * 24 * 30
             )  # Cookie expires in 30 days
@@ -217,13 +221,17 @@ def submit():
 @app.route("/loading/<input_mood>")
 def loading_page(input_mood):
     # Render the loading page
-    uri = database.song_of_day()
+    conn, curs = database.setUp()
+    uri = database.song_of_day(curs)
+    database.tearDown(conn, curs)
     return render_template("loading.html", input_mood=input_mood, uri=uri)
 
 
 @app.route("/response/<input_mood>")
 def response_page(input_mood):
     try:
+        conn, curs = database.setUp()
+
         # Process the request and prepare the response here
         # You can use the 'input_mood' parameter to generate the response
         print("Hello, World!")
@@ -251,26 +259,26 @@ def response_page(input_mood):
 
         # For random generated mood phrase
         integer = random.randint(0, 1)
-        mood_phrase = database.display_phrase(valency, integer)
+        mood_phrase = database.display_phrase(curs, valency, integer)
 
-        song_of_day = database.song_of_day()
-        singer_of_day = database.artist_of_day()
+        song_of_day = database.song_of_day(curs)
+        singer_of_day = database.artist_of_day(curs)
 
-        recent_locations = database.city_clients()
+        recent_locations = database.city_clients(curs)
         mood_data = {}
         for cities in recent_locations:
-            print(database.city_country_info(cities[0], cities[1]))
+            print(database.city_country_info(curs, cities[0], cities[1]))
             mood_data[cities] = {
-                "mood": database.city_country_info(cities[0], cities[1]).get(
+                "mood": database.city_country_info(curs, cities[0], cities[1]).get(
                     "mood", "neutral"
                 ),
-                "song": database.city_country_info(cities[0], cities[1]).get(
+                "song": database.city_country_info(curs, cities[0], cities[1]).get(
                     "song", song_of_day
                 ),
-                "index": database.city_country_info(cities[0], cities[1]).get(
+                "index": database.city_country_info(curs, cities[0], cities[1]).get(
                     "valency", 0.5
                 ),
-                "artist": database.city_country_info(cities[0], cities[1]).get(
+                "artist": database.city_country_info(curs, cities[0], cities[1]).get(
                     "song", singer_of_day
                 ),
             }
@@ -307,7 +315,7 @@ def response_page(input_mood):
         input_mood = input_mood.replace("%2520", " ")
         print(input_mood)
         database.mood_into_table(
-            ipaddress, input_mood, mood, valency, danceability, energy, playlist
+            conn, curs, ipaddress, input_mood, mood, valency, danceability, energy, playlist
         )
 
         # Generate the map with mood data
@@ -317,7 +325,10 @@ def response_page(input_mood):
         # country=time=cookies = "123abc" # temp placeholder
         # insert_into_database(cookies, valency, danceability, energy, mood, time, ipaddress, city, country)
         
-        total = database.total_recommendations()
+        total = database.total_recommendations(curs)
+
+        # Close database connection
+        database.tearDown(conn, curs)
 
         response_html = render_template(
             "mood.html",
