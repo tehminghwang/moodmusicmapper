@@ -92,7 +92,16 @@ def spotify_main(
 
     playlist = search_result + recommendations
 
-    return playlist
+    unique_uris = set()
+    unique_playlist = []
+
+    for track in playlist:
+        uri = track.get("uri")
+        if uri not in unique_uris:
+            unique_uris.add(uri)
+            unique_playlist.append(track)
+
+    return unique_playlist
 
     # Print the recommendations
     # for i, track in enumerate(recommendations, start=1):
