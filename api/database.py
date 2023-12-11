@@ -78,10 +78,29 @@ def song_of_day(curs):
     if song:
         print(song)
     else:
-        print("No result found")
+        print("No song of day, running song of all time query")
+        song = song_of_all_time(curs)
 
     return song[0]
 
+def song_of_all_time(curs):
+    # Execute the SQL query
+    print("Executing SQL query...")
+    curs.execute(
+        """SELECT DISTINCT uri, title, artist, COUNT(uri) OVER (PARTITION BY uri) AS frequency 
+                FROM spotify
+                ORDER BY frequency DESC LIMIT 1;"""
+    )
+
+    # Fetch the result
+    song = curs.fetchone()
+
+    if song:
+        print(song)
+    else:
+        print("No result found")
+
+    return song
 
 # Returns all cities (and corresponding country) that have used the app in the past 24 hours.
 def city_clients(curs):
@@ -238,10 +257,30 @@ def artist_of_day(curs):
     if result:
         print("Artist", result)
     else:
-        print("No result found")
+        print("No artist of day, running artist of all time query")
+        result = artist_of_all_time(curs)
 
     return result[0]
 
+def artist_of_all_time(curs):
+    # Execute the SQL query
+    print("Executing SQL query...")
+    curs.execute(
+        """SELECT DISTINCT artist_uri, artist, COUNT(artist) AS frequency
+                FROM spotify 
+                GROUP BY artist, artist_uri
+                ORDER BY frequency DESC LIMIT 1;"""
+    )
+
+    # Fetch the result
+    result = curs.fetchone()
+
+    if result:
+        print("Artist", result)
+    else:
+        print("No result found")
+
+    return result
 
 # Display phrases that match valency on response page
 def display_phrase(curs, scale, integer):
