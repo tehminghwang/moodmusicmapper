@@ -1,16 +1,8 @@
-/* window.onload = function() {
-    startScrolling;
-} */
-
 document.addEventListener('readystatechange', (event) => {
     if (document.readyState === 'complete') {
         startScrolling();
     }
 });
-
-/* document.addEventListener('DOMContentLoaded', (event) => {
-    startScrolling();
-}); */
 
 const itemList = document.getElementById('item-list');
 const prevBtn = document.getElementById('prev-btn');
@@ -27,19 +19,12 @@ function startScrolling() {
     }, 50); // Adjust the interval for smoother scrolling
 }
 
-/* function stopScrolling() {
-    clearInterval(scrollingInterval);
-    scrollingInterval = null; // Clear the interval reference
-} */
-
 function stopScrolling() {
     if (scrollingInterval) {
         clearInterval(scrollingInterval);
         scrollingInterval = null; // Clear the interval reference
     }
 }
-
-// window.onload = startScrolling;
 
 // Stop scrolling when the mouse enters the item list
 itemList.addEventListener('mouseenter', stopScrolling);
@@ -62,14 +47,11 @@ prevBtn.addEventListener('mouseleave', () => {
     startScrolling(); // Start scrolling immediately
 });
 
-
 // Change direction and start scrolling right when hovering over the next button
 nextBtn.addEventListener('mouseenter', () => {
     scrollDirection = 1; // Set direction to right when hovering over next-btn
     startScrolling(); // Start scrolling immediately
 });
-
-
 
 // Stop any ongoing scrolling and manually scroll left when the prev button is clicked
 prevBtn.addEventListener('click', () => {

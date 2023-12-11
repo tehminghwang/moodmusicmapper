@@ -1,21 +1,12 @@
-/* window.onload = function() {
-    startScrolling;
-} */
-
 document.addEventListener('readystatechange', (event) => {
     if (document.readyState === 'complete') {
         startScrolling();
     }
 });
 
-/* document.addEventListener('DOMContentLoaded', (event) => {
-    startScrolling();
-}); */
-
 const itemList = document.getElementById('item-list');
 const prevBtn = document.getElementById('prev-btn');
 const nextBtn = document.getElementById('next-btn');
-// const items = itemList.querySelectorAll('.item');
 
 let scrollingInterval;
 let scrollDirection = 1; // 1 for scrolling right, -1 for scrolling left
@@ -27,19 +18,12 @@ function startScrolling() {
     }, 50); // Adjust the interval for smoother scrolling
 }
 
-/* function stopScrolling() {
-    clearInterval(scrollingInterval);
-    scrollingInterval = null; // Clear the interval reference
-} */
-
 function stopScrolling() {
     if (scrollingInterval) {
         clearInterval(scrollingInterval);
         scrollingInterval = null; // Clear the interval reference
     }
 }
-
-// window.onload = startScrolling;
 
 // Stop scrolling when the mouse enters the item list
 itemList.addEventListener('mouseenter', stopScrolling);
